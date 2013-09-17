@@ -1,5 +1,6 @@
 
 default['rogue']['web_server'] = 'nginx'
+default['rogue']['debug'] = false
 
 default['rogue']['geonode']['branch'] = 'master'
 default['rogue']['geonode']['location'] = '/var/lib/geonode/'

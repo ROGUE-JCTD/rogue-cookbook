@@ -2,6 +2,7 @@
 
 # The geonode location.
 SITEURL = '<%= node['rogue']['rogue_geonode']['settings']['SITEURL'] %>'
+DEBUG = <%= node['rogue']['debug'] ? "True":"False" %>
 
 #DATABASES = {
 #    'default': {
