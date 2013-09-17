@@ -1,6 +1,6 @@
-Rogue Cookbook
+ROGUE Cookbook
 ===============
-A stand-alone cookbook for the ROGUE JCTD project.
+A stand-alone chef cookbook for the ROGUE JCTD project.
 
 Requirements
 ------------
@@ -31,6 +31,16 @@ The default recipe will:
 - install ROGUE Geonode from the `master` branch into `/var/lib/geonode/rogue_geonode.`
 - install python dependencies
 - serve the the application through nginx.
+
+#### rogue::java
+The java recipe will:
+
+- install the orcale java jdk
+
+#### rogue::tomcat
+The tomcat recipe will:
+
+- install tomcat7
 
 Contributing
 ------------
