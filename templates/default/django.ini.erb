@@ -1,0 +1,33 @@
+[uwsgi]
+
+virtualenv = <%= node['rogue']['geonode']['location'] %>
+
+#uid = www-data
+#gid = www-data
+
+# master
+master                  = true
+#master-as-root          = true
+
+# maximum number of processes
+processes               = 10
+
+# the socket (use the full path to be safe)
+socket          = /tmp/uwsgi.sock
+
+# with appropriate permissions - *may* be needed
+#chmod-socket    = 644
+
+chown-socket    = www-data
+
+# the base directory
+chdir           = <%= node['rogue']['rogue_geonode']['location'] %>
+
+# Django's wsgi file
+module          = rogue_geonode.wsgi
+
+# the virtualenv
+home            = <%= node['rogue']['geonode']['location'] %>
+
+# clear environment on exit
+vacuum          = true

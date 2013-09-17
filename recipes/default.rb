@@ -60,6 +60,10 @@ template "#{node['nginx']['dir']}/sites-enabled/nginx.conf" do
   variables ({:proxy_conf => "#{node['nginx']['dir']}/proxy.conf"})
 end
 
+template "#{node['rogue']['rogue_geonode']['location']}/django.ini" do
+  source "django.ini.erb"
+end
+
 service "nginx" do
   action :restart
 end
@@ -75,11 +79,9 @@ execute "change permissions" do
   command "chmod -R 755 #{node['rogue']['geonode']['location']}"
 end
 
-log "sudo #{node['rogue']['interpreter']}/uwsgi --ini #{node['rogue']['rogue_geonode']['location']}/django.ini &"
-
 execute "runserver" do
-  command "sudo #{node['rogue']['interpreter']}/uwsgi --ini #{node['rogue']['rogue_geonode']['location']}/django.ini &"
-  user 'vagrant'
+  command "#{node['rogue']['geonode']['location']}/bin/uwsgi --ini #{node['rogue']['rogue_geonode']['location']}/django.ini &"
+  user 'root'
 end
 
 log "Rogue is now runnning on #{node['ipaddress']}."
