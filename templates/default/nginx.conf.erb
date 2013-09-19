@@ -57,6 +57,15 @@ server {
                 include          <%= @proxy_conf %>;
         }
 
+
+        <% if node['rogue']['DEBUG'] ? %>
+
+        location /uploaded {
+                alias <%=File.join(node['rogue']['rogue_geonode']['location'], 'rogue_geonode/uploaded')%>;
+        }
+        <% end %>
+
+
       #  location ~ ^/proxy/(.*) {
       #          include         /etc/nginx/proxy.conf;
       #          #set_unescape_uri $new_url $arg_url;
