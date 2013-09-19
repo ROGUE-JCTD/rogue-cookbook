@@ -4,6 +4,8 @@ A stand-alone chef cookbook for the ROGUE JCTD project.
 
 Requirements
 ------------
+Chef community cookbook requirements.
+
 - apt
 - git
 - java
@@ -22,6 +24,9 @@ Attributes
 - `node['rogue']['rogue_geonode']['url']` - The git repository to use for ROGUE.
 - `node['rogue']['rogue_geonode']['branch']` - The branch to use for ROGUE.
 - `node['rogue']['rogue_geonode']['settings']` - ROGUE_GEONODE settings (loaded into local_settings.py).
+- `node['rogue']['geogit']['branch']` = The geogit branch to during the installation. 
+- `node['rogue']['geogit']['location']` = The geogit installation location.
+- `node['rogue']['geogit']['url']` = The git repository url for geogit.
 
 Usage
 -----
@@ -42,11 +47,16 @@ The tomcat recipe will:
 
 - install tomcat7
 
+#### rogue::geogit
+The geogit recipe will:
+
+- install geogit
+
 Contributing
 ------------
 - Fork the repository on Github
 - Create a named feature branch (like `add_component_x`)
-- Write you change
+- Write your change
 - Write tests for your change (if applicable)
 - Run the tests, ensuring they all pass
 - Submit a Pull Request using Github
