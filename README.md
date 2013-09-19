@@ -4,6 +4,8 @@ A stand-alone chef cookbook for the ROGUE JCTD project.
 
 Requirements
 ------------
+Chef community cookbook requirements.
+
 - apt
 - git
 - java
@@ -42,11 +44,16 @@ The tomcat recipe will:
 
 - install tomcat7
 
+#### rogue::geogit
+The geogit recipe will:
+
+- install geogit
+
 Contributing
 ------------
 - Fork the repository on Github
 - Create a named feature branch (like `add_component_x`)
-- Write you change
+- Write your change
 - Write tests for your change (if applicable)
 - Run the tests, ensuring they all pass
 - Submit a Pull Request using Github
