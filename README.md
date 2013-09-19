@@ -24,6 +24,9 @@ Attributes
 - `node['rogue']['rogue_geonode']['url']` - The git repository to use for ROGUE.
 - `node['rogue']['rogue_geonode']['branch']` - The branch to use for ROGUE.
 - `node['rogue']['rogue_geonode']['settings']` - ROGUE_GEONODE settings (loaded into local_settings.py).
+- `node['rogue']['geogit']['branch']` = The geogit branch to during the installation. 
+- `node['rogue']['geogit']['location']` = The geogit installation location.
+- `node['rogue']['geogit']['url']` = The git repository url for geogit.
 
 Usage
 -----
