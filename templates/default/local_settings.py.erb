@@ -4,6 +4,13 @@
 SITEURL = '<%= node['rogue']['rogue_geonode']['settings']['SITEURL'] %>'
 DEBUG = <%= node['rogue']['debug'] ? "True":"False" %>
 
+ALLOWED_HOSTS = (
+<%node['rogue']['settings']['ALLOWED_HOSTS'].each do |host|%>
+'<%= host %>',
+<%end%>
+
+)
+
 #DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.postgresql_psycopg2',

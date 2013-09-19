@@ -84,4 +84,4 @@ execute "runserver" do
   user 'root'
 end
 
-log "Rogue is now runnning on #{node['ipaddress']}."
+log "Rogue is now runnning on #{node['rogue']['host_only']}."
