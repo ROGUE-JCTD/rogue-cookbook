@@ -49,3 +49,14 @@ end
 node.set["tomcat"]["java_options"] = "-Djava.awt.headless=true -Xmx512m -XX:MaxPermSize=256m -XX:+UseConcMarkSweepGC"
 
 include_recipe 'tomcat::default'
+
+template "#{node["tomcat"]["config_dir"]}/server.xml" do
+  source "server.xml.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  notifies :restart, "service[tomcat]"
+end
+
+
+
