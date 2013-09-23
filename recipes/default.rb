@@ -11,11 +11,6 @@ python_virtualenv node['rogue']['geonode']['location'] do
   action :create
 end
 
-python_pip node['rogue']['geonode']['url'] do
-  virtualenv node['rogue']['geonode']['location']
-  options "-e"
-end
-
 git node['rogue']['rogue_geonode']['location'] do
   repository node['rogue']['rogue_geonode']['url']
   revision node['rogue']['rogue_geonode']['branch']
