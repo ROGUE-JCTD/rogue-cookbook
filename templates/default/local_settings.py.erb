@@ -45,6 +45,7 @@ OGC_SERVER = {
         # This replaces DB_DATASTORE=True
         # If DATASTORE != '' then geonode will use the datastore backend
         'DATASTORE': '<DB_DATASTORE_NAME>',
+        'GEOGIT_DATASTORE_DIR':'<%=node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATASTORE_DIR'] %>',
         }
     }
 
