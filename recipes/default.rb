@@ -1,4 +1,4 @@
-geonode_pkgs =  "build-essential libxml2-dev libxslt-dev".split
+geonode_pkgs =  "build-essential libxml2-dev libxslt-dev libjpeg-dev zlib1g-dev libpng12-dev".split
 
 geonode_pkgs.each do |pkg|
   package pkg do
