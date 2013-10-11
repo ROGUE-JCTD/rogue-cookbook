@@ -6,12 +6,13 @@ geonode_pkgs.each do |pkg|
   end
 end
 
-libjpeg = "/usr/lib/x86_64-linux-gnu/libjpeg.so"
+source = "/usr/lib/x86_64-linux-gnu/libjpeg.so"
+target = "/usr/lib/libjpeg.so"
 # This fixes https://github.com/ROGUE-JCTD/rogue_geonode/issues/17
-link "/usr/lib/libjpeg.so" do
-  to libjpeg
+link target do
+  to source
   not_if do
-    File.exists?("/usr/lib/libjpeg.so") or !File.exists?(libjpeg)
+    File.exists?(target) or !File.exists?(source)
   end
   action :create
 end
