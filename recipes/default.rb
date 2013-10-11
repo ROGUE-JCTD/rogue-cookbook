@@ -43,25 +43,16 @@ template File.join(node['nginx']['dir'], 'proxy.conf') do
   source 'proxy.conf.erb'
 end
 
-# This is what we used to do.
-#link "#{node['nginx']['dir']}/sites-enabled/nginx.conf" do
-#  link_type :symbolic
-#  action :create
-#  to File.join(node['rogue']['rogue_geonode']['location'], 'nginx.conf')
-#end
-
 template "#{node['nginx']['dir']}/sites-enabled/nginx.conf" do
   source "nginx.conf.erb"
   variables ({:proxy_conf => "#{node['nginx']['dir']}/proxy.conf"})
+  notifies :reload, "service[nginx]"
 end
 
 template "#{node['rogue']['rogue_geonode']['location']}/django.ini" do
   source "django.ini.erb"
 end
 
-service "nginx" do
-  action :restart
-end
 
 ["collectstatic --noinput", "syncdb --all --noinput", "loaddata sample_admin.json"].each do |cmd|
   execute "#{node['rogue']['interpreter']} manage.py #{cmd}" do
@@ -74,9 +65,11 @@ execute "change permissions" do
   command "chmod -R 755 #{node['rogue']['geonode']['location']}"
 end
 
+runserver = "#{node['rogue']['geonode']['location']}bin/uwsgi --ini #{node['rogue']['rogue_geonode']['location']}/django.ini &"
+
 execute "runserver" do
-  command "#{node['rogue']['geonode']['location']}/bin/uwsgi --ini #{node['rogue']['rogue_geonode']['location']}/django.ini &"
+  command runserver
   user 'root'
 end
 
-log "Rogue is now runnning on #{node['rogue']['host_only']}."
+log "Rogue is now running on #{node['rogue']['host_only']}."
