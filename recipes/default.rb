@@ -1,4 +1,4 @@
-geonode_pkgs =  "build-essential libxml2-dev libxslt-dev libjpeg-dev zlib1g-dev libpng12-dev".split
+geonode_pkgs =  "build-essential libxml2-dev libxslt-dev libjpeg-dev zlib1g-dev libpng12-dev libpq-dev python-dev".split
 
 geonode_pkgs.each do |pkg|
   package pkg do
@@ -32,13 +32,7 @@ python_pip node['rogue']['rogue_geonode']['location'] do
   virtualenv node['rogue']['geonode']['location']
 end
 
-for pkg in "libpq-dev python-dev".split do
-  apt_package pkg do
-    action :install
-  end
-end
-
-for pkg in "uwsgi psycopg2" do
+for pkg in "uwsgi psycopg2".split do
   python_pip pkg do
     virtualenv node['rogue']['geonode']['location']
   end  

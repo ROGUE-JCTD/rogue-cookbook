@@ -6,3 +6,4 @@ version          '0.1.0'
 depends "nginx"
 depends "java"
 depends "tomcat"
+depends "hostsfile"

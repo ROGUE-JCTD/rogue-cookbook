@@ -1,6 +1,17 @@
 
 default['rogue']['web_server'] = 'nginx'
 default['rogue']['debug'] = false
+
+default['rogue']['networking']['application']['hostname'] = 'rogue-geoserver'
+default['rogue']['networking']['application']['address'] = nil
+default['rogue']['networking']['application']['gateway'] = nil
+default['rogue']['networking']['application']['netmask'] = nil
+
+default['rogue']['networking']['database']['hostname'] = 'rogue-database'
+default['rogue']['networking']['database']['address'] = nil
+default['rogue']['networking']['database']['gateway'] = nil
+default['rogue']['networking']['database']['netmask'] = nil
+
 default['rogue']['host_only'] = node[:network][:interfaces][:eth1][:addresses].detect{|k,v| v[:family] == "inet" }[0]
 default['rogue']['settings']['ALLOWED_HOSTS'] = [node['rogue']['host_only'], 'localhost']
 

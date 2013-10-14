@@ -16,7 +16,6 @@ Attributes
 ----------
 #### rogue::default
 
-- `node['rogue']['interpreter']` = The path to the ROGUE python interpreter.
 - `node['rogue']['geonode']['branch']` = The branch to use for ROGUE.
 - `node['rogue']['geonode']['location']` = The path on the node where Geonode is installed.
 - `node['rogue']['geonode']['url']` = The git repository to use for ROGUE.
@@ -27,6 +26,15 @@ Attributes
 - `node['rogue']['geogit']['branch']` = The geogit branch to during the installation. 
 - `node['rogue']['geogit']['location']` = The geogit installation location.
 - `node['rogue']['geogit']['url']` = The git repository url for geogit.
+- `node['rogue']['interpreter']` = The path to the ROGUE python interpreter.
+- `node['rogue']['networking']['application']['hostname']` = The application server's hostname.
+- `node['rogue']['networking']['application']['address']` = The application server's ip address (if static).
+- `node['rogue']['networking']['application']['gateway']` = The application server's gateway (if applicable).
+- `node['rogue']['networking']['application']['netmask']` = The application server's netmask (if applicable).
+- `node['rogue']['networking']['database']['hostname']` = The database server's hostname.
+- `node['rogue']['networking']['database']['address']` = The database server's address (if static).
+- `node['rogue']['networking']['database']['gateway']` = The database server's gateway (if applicable).
+- `node['rogue']['networking']['database']['netmask']` = The database server's netmask (if applicable)
 
 Usage
 -----
