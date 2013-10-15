@@ -1,4 +1,3 @@
-
 git node['rogue']['geogit']['location'] do
   repository node['rogue']['geogit']['url']
   revision node['rogue']['geogit']['branch']
@@ -15,7 +14,7 @@ execute "install GeoGIT" do
   user 'root'
 end
 
-execute "set GeoGIT environmental variable" do
-  command "echo GEOGIT_HOME="   + ::File.join(node['rogue']['geogit']['location'], 'src/cli-app/target/geogit') +" >> /etc/profile  && export PATH=$PATH:GEOGIT_HOME/bin >> /etc/profile"
+file "/etc/profile.d/geogit.sh" do
+  content "export GEOGIT_HOME=#{::File.join(node['rogue']['geogit']['location'], 'src/cli-app/target/geogit')} && PATH=$PATH:GEOGIT_HOME/bin"
+  mode 00755
 end
-

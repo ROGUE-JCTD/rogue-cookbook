@@ -1,24 +1,14 @@
 node.set['java']['oracle']['accept_oracle_download_terms'] = true
 node.set['java']['install_flavor']= "oracle"
+node.set['java']['jdk_version'] = '6'
+node.set['java']['java_home']='/usr/lib/jvm/jdk1.6.0_45'
 
 include_recipe "java::default"
 include_recipe "java::oracle"
 
-# clean this up
-jdk = '/usr/lib/jvm/jdk1.6.0_45'
-#File.join(node['java']['java_home'], 'jdk1.6.0_45')
-
-execute "Setting JAVA_HOME environmental variable." do
-  command 'echo JAVA_HOME="'+ jdk +'" >> /etc/environment; echo PATH=$PATH:'+ jdk +'/bin >> /etc/environment'
+link "/usr/bin/java" do
+  to node['java']['java_home'] + '/bin/java'
   user 'root'
 end
 
-link "/etc/alternatives/java" do
-  to jdk + '/bin'
-  user 'root'
-end
-
-bash "Source /etc/environment" do
-  code "source /etc/environment"
-end
 
