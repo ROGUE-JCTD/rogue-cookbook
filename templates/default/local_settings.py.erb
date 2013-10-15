@@ -44,7 +44,7 @@ OGC_SERVER = {
         'WMST_ENABLED': False,
         # This replaces DB_DATASTORE=True
         # If DATASTORE != '' then geonode will use the datastore backend
-        'DATASTORE': '<DB_DATASTORE_NAME>',
+        'DATASTORE': '<%node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['DATASTORE']%>',
         'GEOGIT_DATASTORE_DIR':'<%=node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATASTORE_DIR'] %>',
         }
     }
@@ -56,7 +56,7 @@ GEOGIT_DATASTORE_NAME = 'geogit-repo'
 PRINTNG_ENABLED = True
 
 UPLOADER = {
-    'BACKEND' : 'geonode.importer',
+    'BACKEND' : '<%=node['rogue']['rogue_geonode']['settings']['UPLOADER']['BACKEND'] or 'geonode.rest'%>',
     'OPTIONS' : {
         'TIME_ENABLED' : True,
         'GEOGIT_ENABLED' : True,

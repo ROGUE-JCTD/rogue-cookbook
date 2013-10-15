@@ -26,7 +26,9 @@ default['rogue']['rogue_geonode']['url'] = 'https://github.com/ROGUE-JCTD/rogue_
 
 default['rogue']['rogue_geonode']['settings']['SITEURL'] = "http://localhost:8000/"
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['LOCATION'] = "http://#{node['rogue']['host_only']}/geoserver"
+default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['DATASTORE'] = ""
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATASTORE_DIR'] = "/data/geogit/"
+default['rogue']['rogue_geonode']['settings']['UPLOADER']['BACKEND'] = 'geonode.rest'
 
 default['rogue']['rogue_geonode']['settings']['DATABASES'] = {:default=>{:NAME=>'geonode', :USER=>'geonode', :PASSWORD=>'geonode', :HOST=>'', :PORT=>'5432'}}
 
