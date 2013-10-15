@@ -15,6 +15,6 @@ execute "install GeoGIT" do
 end
 
 file "/etc/profile.d/geogit.sh" do
-  content "export GEOGIT_HOME=#{::File.join(node['rogue']['geogit']['location'], 'src/cli-app/target/geogit')} && PATH=$PATH:GEOGIT_HOME/bin"
+  content "export GEOGIT_HOME=#{::File.join(node['rogue']['geogit']['location'], 'src/cli-app/target/geogit')} && PATH=$PATH:$GEOGIT_HOME/bin"
   mode 00755
 end
