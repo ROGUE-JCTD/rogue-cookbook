@@ -41,7 +41,9 @@ end
 #TODO work on this.
 template "#{node['rogue']['rogue_geonode']['location']}/rogue_geonode/local_settings.py" do
   source "local_settings.py.erb"
-  variables ({:database => node['rogue']['rogue_geonode']['settings']['DATABASES']['default']})
+  variables ({:database => node['rogue']['rogue_geonode']['settings']['DATABASES']['default'],
+              :data_store => node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports']
+            })
 end
 
 template File.join(node['nginx']['dir'], 'proxy.conf') do

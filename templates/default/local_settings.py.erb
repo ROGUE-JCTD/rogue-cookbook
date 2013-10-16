@@ -11,24 +11,27 @@ ALLOWED_HOSTS = (
 
 )
 
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#        'NAME': '<%= @database[:NAME] %>',
-#        'USER': '<%= @database[:USER] %>',
-#        'PASSWORD': '<%= @database[:PASSWORD] %>',
-#        'HOST': '<%= @database[:HOST] %>',
-#        'PORT': '<%= @database[:PORT] %>',
-#    },
-#    '<DB_DATASTORE_NAME>': {
-#        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-#        'NAME': '<DB_DATASTORE_NAME>',
-#        'USER': '<DB_DATASTORE_USER>',
-#        'PASSWORD': '<DB_DATASTORE_PASSWORD>',
-#        'HOST': '<DB_DATASTORE_HOST>',
-#        'PORT': '<DB_DATASTORE_PORT>',
-#    },
-#}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': '<%= @database[:name] %>',
+        'USER': '<%= @database[:user] %>',
+        'PASSWORD': '<%= @database[:password] %>',
+        'HOST': '<%= @database[:host] %>',
+        'PORT': '<%= @database[:port] %>',
+    },
+
+    <% if @data_store[:name] -%>
+    '<%= @data_store[:name] %>': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': '<%= @data_store[:name] %>',
+        'USER': '<%= @data_store[:user] %>',
+        'PASSWORD': '<%= @data_store[:password] %>',
+        'HOST': '<%= @data_store[:host] %>',
+        'PORT': '<%= @data_store[:port] %>',
+    },
+    <% end -%>
+}
 
 # OGC (WMS/WFS/WCS) Server Settings
 OGC_SERVER = {
@@ -44,7 +47,7 @@ OGC_SERVER = {
         'WMST_ENABLED': False,
         # This replaces DB_DATASTORE=True
         # If DATASTORE != '' then geonode will use the datastore backend
-        'DATASTORE': '<%node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['DATASTORE']%>',
+        'DATASTORE': '<%= @data_store[:name] %>',
         'GEOGIT_DATASTORE_DIR':'<%=node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATASTORE_DIR'] %>',
         }
     }
