@@ -1,6 +1,6 @@
 
 default['rogue']['web_server'] = 'nginx'
-default['rogue']['debug'] = false
+default['rogue']['debug'] = true
 
 default['rogue']['networking']['application']['hostname'] = 'rogue-geoserver'
 default['rogue']['networking']['application']['address'] = nil
