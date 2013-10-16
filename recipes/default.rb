@@ -60,6 +60,12 @@ template "#{node['rogue']['rogue_geonode']['location']}/django.ini" do
   source "django.ini.erb"
 end
 
+# Create the GeoGIT datastore directory
+directory node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATASTORE_DIR'] do
+    owner node["tomcat"]["user"]
+    recursive true
+    mode 755
+end
 
 ["collectstatic --noinput", "syncdb --all --noinput", "loaddata sample_admin.json"].each do |cmd|
   execute "#{node['rogue']['interpreter']} manage.py #{cmd}" do
