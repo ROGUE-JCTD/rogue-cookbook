@@ -37,7 +37,7 @@ DATABASES = {
 OGC_SERVER = {
     'default': {
         'BACKEND': 'geonode.geoserver',
-        'LOCATION': 'http://localhost/geoserver/',
+        'LOCATION': '<%=node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['LOCATION'] %>',
         'USER': 'admin',
         'PASSWORD': 'geoserver',
         'MAPFISH_PRINT_ENABLED': True,
