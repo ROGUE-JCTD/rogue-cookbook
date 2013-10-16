@@ -11,4 +11,10 @@ node.set['nginx']['source']['default_configure_flags'] = [
   "--sbin-path=#{node['nginx']['source']['sbin_path']}"
 ]
 
+# Set sendfile to off when in development mode.
+# http://smotko.si/nginx-static-file-problem/
+if node['rogue']['debug']
+    node.set['nginx']['sendfile'] = 'off'
+end
+
 include_recipe 'nginx::default'
