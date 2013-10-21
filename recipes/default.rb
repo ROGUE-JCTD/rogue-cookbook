@@ -78,8 +78,8 @@ execute "change permissions" do
   command "chmod -R 755 #{node['rogue']['geonode']['location']}"
 end
 
-file "/etc/cron.d/geonode_restart.sh" do
-  content "@reboot /bin/bash #{node['rogue']['rogue_geonode']['location']}/start_geonode.sh"
+file "/etc/cron.d/geonode_restart" do
+  content "@reboot root /bin/bash #{node['rogue']['rogue_geonode']['location']}/start_geonode.sh\n"
   mode 00755
   action :create_if_missing
 end
