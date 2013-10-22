@@ -53,7 +53,7 @@ end
 template "#{node['nginx']['dir']}/sites-enabled/nginx.conf" do
   source "nginx.conf.erb"
   variables ({:proxy_conf => "#{node['nginx']['dir']}/proxy.conf"})
-  notifies :reload, "service[nginx]"
+  notifies :reload, "service[nginx]", :immediately
 end
 
 template "#{node['rogue']['rogue_geonode']['location']}/django.ini" do
@@ -90,5 +90,29 @@ execute "runserver" do
   command runserver
   user 'root'
 end
+
+http_request "create the geonode_imports datastore" do
+  url node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['LOCATION'] + '/rest/workspaces/geonode/datastores.xml'
+  message :"dataStore"=>
+    {"name"=>node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports'][:name],
+    "type"=>"PostGIS",
+    "enabled"=>true,
+    "workspace"=>{
+        "name"=>"geonode",
+        "href"=> node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['LOCATION'] + "/rest/workspaces/geonode.xml"},
+        "connectionParameters"=>{
+            "entry"=>[{"@key"=>"port","$"=>node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports'][:port]},
+                    {"@key"=>"passwd","$"=>node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports'][:password]},
+                    {"@key"=>"dbtype","$"=>"postgis"},
+                    {"@key"=>"host","$"=> node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports'][:host]},
+                    {"@key"=>"user","$"=>node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports'][:user]},
+                    {"@key"=>"database","$"=>node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports'][:name]},
+                    ]},
+        "_default"=>false,
+        }
+  action :post
+  headers({"AUTHORIZATION" => "Basic #{Base64.encode64("#{node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['USER']}:#{node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['PASSWORD']}")}"})
+  ignore_failure true
+ end
 
 log "Rogue is now running on #{node['rogue']['host_only']}."

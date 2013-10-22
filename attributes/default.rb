@@ -28,6 +28,8 @@ default['rogue']['rogue_geonode']['settings']['SITEURL'] = "http://localhost:800
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['LOCATION'] = "http://#{node['rogue']['host_only']}/geoserver"
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['DATASTORE'] = ""
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATASTORE_DIR'] = "/data/geogit/"
+default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['USER'] = "admin"
+default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['PASSWORD'] = "geoserver"
 default['rogue']['rogue_geonode']['settings']['UPLOADER']['BACKEND'] = 'geonode.importer'
 
 default['rogue']['rogue_geonode']['settings']['DATABASES'] = {
@@ -38,4 +40,3 @@ default['rogue']['rogue_geonode']['settings']['DATABASES'] = {
 default['rogue']['geogit']['branch'] = 'SprintRelease'
 default['rogue']['geogit']['location'] = '/var/lib/geogit'
 default['rogue']['geogit']['url'] = 'https://github.com/ROGUE-JCTD/GeoGit.git'
-
