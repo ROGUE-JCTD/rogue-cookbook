@@ -25,7 +25,7 @@ default['rogue']['rogue_geonode']['location'] = File.join(node['rogue']['geonode
 default['rogue']['rogue_geonode']['url'] = 'https://github.com/ROGUE-JCTD/rogue_geonode.git'
 
 default['rogue']['rogue_geonode']['settings']['SITEURL'] = "http://localhost:8000/"
-default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['LOCATION'] = "http://#{node['rogue']['host_only']}/geoserver"
+default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['LOCATION'] = "http://#{node['rogue']['host_only']}/geoserver/"
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['DATASTORE'] = ""
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATASTORE_DIR'] = "/data/geogit/"
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['USER'] = "admin"
@@ -40,3 +40,7 @@ default['rogue']['rogue_geonode']['settings']['DATABASES'] = {
 default['rogue']['geogit']['branch'] = 'SprintRelease'
 default['rogue']['geogit']['location'] = '/var/lib/geogit'
 default['rogue']['geogit']['url'] = 'https://github.com/ROGUE-JCTD/GeoGit.git'
+
+default[:postgis][:version] = '2.0.4'
+default['postgis']['template_name'] = 'template_postgis'
+default['postgis']['locale'] = 'en_US.utf8'
