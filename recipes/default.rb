@@ -91,8 +91,8 @@ execute "runserver" do
   user 'root'
 end
 
-http_request "create the geonode_imports datastore" do
-  url node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['LOCATION'] + '/rest/workspaces/geonode/datastores.xml'
+http_request "create_geonode_imports_datastore" do
+  url node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['LOCATION'] + 'rest/workspaces/geonode/datastores.xml'
   message :"dataStore"=>
     {"name"=>node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports'][:name],
     "type"=>"PostGIS",
