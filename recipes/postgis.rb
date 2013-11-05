@@ -1,5 +1,5 @@
 apt_repository "opengeo" do
-  uri 'http://apt.opengeo.org/ubuntu'
+  uri 'http://apt.opengeo.org/suite/v4/ubuntu/'
   distribution 'lucid'
   components ['main']
   key 'http://apt.opengeo.org/gpg.key'
@@ -11,9 +11,6 @@ apt_package 'libgdal'
 pkgs = "libgdal-dev libproj-dev libxml2-dev libgeos-dev".split
 pkgs.each { |pkg| package pkg }
 
-# Add the postgres dev server to the installation
-node.set['postgresql']['server']['packages'] = ["postgresql-#{node['postgresql']['version']} postgresql-server-dev-#{node['postgresql']['version']}"]
-include_recipe 'postgresql::server'
 
 # Download PostGIS
 remote_file "#{Chef::Config[:file_cache_path]}/postgis-#{node[:postgis][:version]}.tar.gz" do

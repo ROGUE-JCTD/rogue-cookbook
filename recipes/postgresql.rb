@@ -7,6 +7,10 @@ node.set['postgresql']['pg_hba'] = [
   {:type => 'host', :db => 'all', :user => 'all', :addr => '::1/128', :method => 'md5'}
 ]
 
+# Add the postgres dev server to the installation
+node.set['postgresql']['server']['packages'] = ["postgresql-#{node['postgresql']['version']} postgresql-server-dev-#{node['postgresql']['version']}"]
+
+include_recipe 'postgresql::server'
 include_recipe 'rogue::postgis'
 
 gem_package "pg" do
