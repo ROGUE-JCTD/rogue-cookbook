@@ -117,6 +117,7 @@ http_request "create_geonode_imports_datastore" do
   action :post
   headers({"AUTHORIZATION" => "Basic #{Base64.encode64("#{node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['USER']}:#{node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['PASSWORD']}")}"})
   ignore_failure true
+  retries 5
  end
 
 log "Rogue is now running on #{node['rogue']['host_only']}."
