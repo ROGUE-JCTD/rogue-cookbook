@@ -1,4 +1,5 @@
 node.set['postgresql']['password']['postgres'] = 'rogue'
+node.set['postgresql']['config']['shared_buffers'] = '1GB'
 node.set['postgresql']['pg_hba'] = [
   {:type => 'local', :db => 'all', :user => 'postgres', :addr => nil, :method => 'ident'},
   {:type => 'local', :db => 'all', :user => 'all', :method => 'md5'},
