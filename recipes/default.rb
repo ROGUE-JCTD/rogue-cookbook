@@ -128,4 +128,4 @@ http_request "create_geonode_imports_datastore" do
   retries 5
  end
 
-log "Rogue is now running on #{node['rogue']['host_only']}."
+log "Rogue is now running on #{node['rogue']['networking']['application']['address']}."

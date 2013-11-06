@@ -3,7 +3,7 @@ default['rogue']['web_server'] = 'nginx'
 default['rogue']['debug'] = true
 
 default['rogue']['networking']['application']['hostname'] = 'rogue-geoserver'
-default['rogue']['networking']['application']['address'] = nil
+default['rogue']['networking']['application']['address'] = node[:network][:interfaces][:eth1][:addresses].detect{|k,v| v[:family] == "inet" }[0]
 default['rogue']['networking']['application']['gateway'] = nil
 default['rogue']['networking']['application']['netmask'] = nil
 
@@ -12,8 +12,8 @@ default['rogue']['networking']['database']['address'] = nil
 default['rogue']['networking']['database']['gateway'] = nil
 default['rogue']['networking']['database']['netmask'] = nil
 
-default['rogue']['host_only'] = node[:network][:interfaces][:eth1][:addresses].detect{|k,v| v[:family] == "inet" }[0]
-default['rogue']['settings']['ALLOWED_HOSTS'] = [node['rogue']['host_only'], 'localhost']
+
+default['rogue']['settings']['ALLOWED_HOSTS'] = [node['rogue']['networking']['application']['address'], 'localhost']
 
 default['rogue']['geonode']['branch'] = 'master'
 default['rogue']['geonode']['location'] = '/var/lib/geonode/'
@@ -25,7 +25,7 @@ default['rogue']['rogue_geonode']['location'] = File.join(node['rogue']['geonode
 default['rogue']['rogue_geonode']['url'] = 'https://github.com/ROGUE-JCTD/rogue_geonode.git'
 
 default['rogue']['rogue_geonode']['settings']['SITEURL'] = "http://localhost:8000/"
-default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['LOCATION'] = "http://#{node['rogue']['host_only']}/geoserver/"
+default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['LOCATION'] = "http://#{node['rogue']['networking']['application']['address']}/geoserver/"
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['DATASTORE'] = ""
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATASTORE_DIR'] = "/data/geogit/"
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['USER'] = "admin"
