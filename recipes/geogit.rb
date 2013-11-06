@@ -4,10 +4,6 @@ git node['rogue']['geogit']['location'] do
   action :sync
 end
 
-package "maven" do
-    action :install
-end
-
 execute "install GeoGIT" do
   command "mvn clean install -DskipTests"
   cwd ::File.join(node['rogue']['geogit']['location'], 'src/parent')
@@ -19,12 +15,14 @@ file "/etc/profile.d/geogit.sh" do
   mode 00755
 end
 
-file ::File.join(node["tomcat"]["home"], '.geogitconfig') do
-content <<-EOH
+file "gitconfig" do
+  path ::File.join(node["tomcat"]["home"], '.geogitconfig')
+  content <<-EOH
 [user]
 name = Rogue
 email = rogue@lmnsolutions.com
   EOH
  mode 00755
  only_if do node["tomcat"]["home"] end
+ action :create_if_missing
 end

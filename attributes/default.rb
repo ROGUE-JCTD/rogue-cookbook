@@ -44,3 +44,9 @@ default['rogue']['geogit']['url'] = 'https://github.com/ROGUE-JCTD/GeoGit.git'
 default[:postgis][:version] = '2.0.4'
 default['postgis']['template_name'] = 'template_postgis'
 default['postgis']['locale'] = 'en_US.utf8'
+
+default['rogue']['geoserver']['base_url'] = '/geoserver'
+default['rogue']['geoserver']['data_dir'] = '/var/lib/geoserver_data'
+default['rogue']['geoserver']['geowebcache']['url'] = "http://sourceforge.net/projects/geowebcache/files/geowebcache/1.4.0/geowebcache-1.4.0-war.zip"
+default['rogue']['geoserver']['jai']['url'] = "http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64-jdk.bin"
+default['rogue']['geoserver']['jai_io']['url'] = "http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64-jdk.bin"

@@ -1,4 +1,4 @@
-geonode_pkgs =  "build-essential libxml2-dev libxslt-dev libjpeg-dev zlib1g-dev libpng12-dev libpq-dev python-dev".split
+geonode_pkgs =  "build-essential libxml2-dev libxslt-dev libjpeg-dev zlib1g-dev libpng12-dev libpq-dev python-dev maven".split
 
 geonode_pkgs.each do |pkg|
   package pkg do
@@ -6,14 +6,18 @@ geonode_pkgs.each do |pkg|
   end
 end
 
+include_recipe 'rogue::java'
+include_recipe 'rogue::tomcat'
+include_recipe 'rogue::nginx'
+include_recipe 'rogue::geogit'
+include_recipe 'rogue::networking'
+
 source = "/usr/lib/x86_64-linux-gnu/libjpeg.so"
 target = "/usr/lib/libjpeg.so"
 # This fixes https://github.com/ROGUE-JCTD/rogue_geonode/issues/17
 link target do
   to source
-  not_if do
-    File.exists?(target) or !File.exists?(source)
-  end
+  not_if do File.exists?(target) or !File.exists?(source) end
   action :create
 end
 
@@ -37,6 +41,8 @@ for pkg in "uwsgi psycopg2".split do
     virtualenv node['rogue']['geonode']['location']
   end  
 end
+
+include_recipe 'rogue::geoserver'
 
 #TODO work on this.
 template "#{node['rogue']['rogue_geonode']['location']}/rogue_geonode/local_settings.py" do
