@@ -44,25 +44,27 @@ end
 
 include_recipe 'rogue::geoserver'
 
-#TODO work on this.
-template "#{node['rogue']['rogue_geonode']['location']}/rogue_geonode/local_settings.py" do
+template "rogue_geonode_config" do
+  path "#{node['rogue']['rogue_geonode']['location']}/rogue_geonode/local_settings.py"
   source "local_settings.py.erb"
   variables ({:database => node['rogue']['rogue_geonode']['settings']['DATABASES']['default'],
-              :data_store => node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports']
-            })
+              :data_store => node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports']})
 end
 
-template File.join(node['nginx']['dir'], 'proxy.conf') do
+template "nginx_proxy_config" do
+  path File.join(node['nginx']['dir'], 'proxy.conf')
   source 'proxy.conf.erb'
 end
 
-template "#{node['nginx']['dir']}/sites-enabled/nginx.conf" do
+template "rogue_geonode_nginx_config" do
+  path "#{node['nginx']['dir']}/sites-enabled/nginx.conf"
   source "nginx.conf.erb"
   variables ({:proxy_conf => "#{node['nginx']['dir']}/proxy.conf"})
   notifies :reload, "service[nginx]", :immediately
 end
 
-template "#{node['rogue']['rogue_geonode']['location']}/django.ini" do
+template "rogue_geonode_uwsgi_config" do
+  path "#{node['rogue']['rogue_geonode']['location']}/django.ini"
   source "django.ini.erb"
 end
 
