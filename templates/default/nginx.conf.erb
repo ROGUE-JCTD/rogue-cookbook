@@ -57,11 +57,12 @@ server {
         }
 
 
-        <% if not node['rogue']['DEBUG'] %>
+        <% if not node['rogue']['debug'] %>
 
         location /uploaded {
                 alias <%=File.join(node['rogue']['rogue_geonode']['location'], 'rogue_geonode/uploaded')%>;
         }
+
         <% end %>
 
 
