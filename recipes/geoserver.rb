@@ -66,17 +66,3 @@ service 'tomcat' do
   action :start
 end
 
-tmp_geowebcache_war = File.join('/tmp/', 'geowebcache.war')
-
-remote_file tmp_geowebcache_war do
-  source node['rogue']['geoserver']['geowebcache']['url']
-  action :create
-end
-
-log "Downloaded geowebcache"
-
-execute "copy_geowebcache_war" do
-  command "mv #{tmp_geowebcache_war} #{node['tomcat']['webapp_dir']}"
-  action :run
-  notifies :restart, resources(:service => "tomcat")
-end
