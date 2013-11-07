@@ -50,11 +50,14 @@ node.set["tomcat"]["java_options"] = "-Djava.awt.headless=true -Xmx512m -XX:MaxP
 
 include_recipe 'tomcat::default'
 
-template "#{node["tomcat"]["config_dir"]}/server.xml" do
+# Overwrite the default server.xml
+template "tomcat_config" do
+  path "#{node["tomcat"]["config_dir"]}/server.xml"
   source "server.xml.erb"
   owner "root"
   group "root"
   mode "0644"
+  action :create
   notifies :restart, "service[tomcat]"
 end
 
