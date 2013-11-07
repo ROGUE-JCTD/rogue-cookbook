@@ -26,6 +26,12 @@ python_virtualenv node['rogue']['geonode']['location'] do
   action :create
 end
 
+for pkg in "uwsgi psycopg2".split do
+  python_pip pkg do
+    virtualenv node['rogue']['geonode']['location']
+  end
+end
+
 git node['rogue']['rogue_geonode']['location'] do
   repository node['rogue']['rogue_geonode']['url']
   revision node['rogue']['rogue_geonode']['branch']
@@ -34,12 +40,7 @@ end
 
 python_pip node['rogue']['rogue_geonode']['location'] do
   virtualenv node['rogue']['geonode']['location']
-end
-
-for pkg in "uwsgi psycopg2".split do
-  python_pip pkg do
-    virtualenv node['rogue']['geonode']['location']
-  end  
+  notifies :run, "execute[collect_static]"
 end
 
 include_recipe 'rogue::geoserver'
@@ -50,6 +51,8 @@ template "rogue_geonode_config" do
   variables ({:database => node['rogue']['rogue_geonode']['settings']['DATABASES']['default'],
               :data_store => node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports']})
 end
+
+include_recipe 'rogue::database'
 
 template "nginx_proxy_config" do
   path File.join(node['nginx']['dir'], 'proxy.conf')
@@ -75,11 +78,27 @@ directory node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATAS
     mode 755
 end
 
-["collectstatic --noinput", "syncdb --all --noinput", "loaddata sample_admin.json"].each do |cmd|
-  execute "#{node['rogue']['interpreter']} manage.py #{cmd}" do
+execute "collect_static" do
+  command "#{node['rogue']['interpreter']} manage.py collectstatic --noinput"
+  cwd node['rogue']['rogue_geonode']['location']
+  user 'root'
+  action :nothing
+end
+
+execute "sync_db" do
+    command "#{node['rogue']['interpreter']} manage.py syncdb --all --noinput"
     cwd node['rogue']['rogue_geonode']['location']
     user 'root'
-  end
+    ignore_failure true
+    action :nothing
+end
+
+execute "load_sample_data" do
+    command "#{node['rogue']['interpreter']} manage.py loaddata sample_admin.json"
+    cwd node['rogue']['rogue_geonode']['location']
+    user 'root'
+    ignore_failure true
+    action :nothing
 end
 
 execute "change permissions" do
@@ -122,7 +141,7 @@ http_request "create_geonode_imports_datastore" do
                     ]},
         "_default"=>false,
         }
-  action :post
+  action :nothing
   headers({"AUTHORIZATION" => "Basic #{Base64.encode64("#{node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['USER']}:#{node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['PASSWORD']}")}"})
   ignore_failure true
   retries 5

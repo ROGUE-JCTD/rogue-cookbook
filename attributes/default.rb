@@ -8,7 +8,7 @@ default['rogue']['networking']['application']['gateway'] = nil
 default['rogue']['networking']['application']['netmask'] = nil
 
 default['rogue']['networking']['database']['hostname'] = 'rogue-database'
-default['rogue']['networking']['database']['address'] = nil
+default['rogue']['networking']['database']['address'] = '127.0.0.1'
 default['rogue']['networking']['database']['gateway'] = nil
 default['rogue']['networking']['database']['netmask'] = nil
 
@@ -24,7 +24,7 @@ default['rogue']['rogue_geonode']['branch'] = 'master'
 default['rogue']['rogue_geonode']['location'] = File.join(node['rogue']['geonode']['location'], 'rogue_geonode')
 default['rogue']['rogue_geonode']['url'] = 'https://github.com/ROGUE-JCTD/rogue_geonode.git'
 
-default['rogue']['rogue_geonode']['settings']['SITEURL'] = "http://localhost:8000/"
+default['rogue']['rogue_geonode']['settings']['SITEURL'] = "http://#{node['rogue']['networking']['application']['address']}:8000/"
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['LOCATION'] = "http://#{node['rogue']['networking']['application']['address']}/geoserver/"
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['DATASTORE'] = ""
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATASTORE_DIR'] = "/data/geogit/"
@@ -33,8 +33,8 @@ default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['PASSWORD'] = "geose
 default['rogue']['rogue_geonode']['settings']['UPLOADER']['BACKEND'] = 'geonode.importer'
 
 default['rogue']['rogue_geonode']['settings']['DATABASES'] = {
-    :default=>{:name=>'geonode', :user=>'geonode', :password=>'geonode', :host=>'localhost', :port=>'5432'},
-    :geonode_imports=>{:name=>'geonode_imports', :user=>'geonode', :password=>'geonode', :host=>'localhost', :port=>'5432'}
+    :default=>{:name=>'geonode', :user=>'geonode', :password=>'geonode', :host=>'rogue-database', :port=>'5432'},
+    :geonode_imports=>{:name=>'geonode_imports', :user=>'geonode', :password=>'geonode', :host=>'rogue-database', :port=>'5432'}
     }
 
 default['rogue']['geogit']['branch'] = 'SprintRelease'
