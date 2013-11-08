@@ -66,6 +66,10 @@ template "rogue_geonode_nginx_config" do
   notifies :reload, "service[nginx]", :immediately
 end
 
+directory node['rogue']['logging']['location'] do
+  action :create
+end
+
 template "rogue_geonode_uwsgi_config" do
   path "#{node['rogue']['rogue_geonode']['location']}/django.ini"
   source "django.ini.erb"
