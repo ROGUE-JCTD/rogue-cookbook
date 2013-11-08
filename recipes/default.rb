@@ -87,6 +87,7 @@ execute "collect_static" do
   cwd node['rogue']['rogue_geonode']['location']
   user 'root'
   action :nothing
+  notifies :run, "execute[set_rogue_geonode_permissions]"
 end
 
 execute "sync_db" do
@@ -105,8 +106,9 @@ execute "load_sample_data" do
     action :nothing
 end
 
-execute "change permissions" do
+execute "set_rogue_geonode_permissions" do
   command "chmod -R 755 #{node['rogue']['geonode']['location']}"
+  action :nothing
 end
 
 file "/etc/cron.d/geonode_restart" do
