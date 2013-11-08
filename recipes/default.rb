@@ -75,7 +75,7 @@ end
 directory node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATASTORE_DIR'] do
     owner node["tomcat"]["user"]
     recursive true
-    mode 755
+    mode 00755
 end
 
 execute "collect_static" do
