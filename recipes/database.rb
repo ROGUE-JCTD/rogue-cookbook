@@ -3,7 +3,7 @@ gem_package "pg" do
 end
 
 postgresql_connection_info = {
-  :host     => 'localhost',
+  :host     => node['rogue']['networking']['database']['hostname'],
   :port     => node['postgresql']['config']['port'],
   :username => 'postgres',
   :password => node['postgresql']['password']['postgres']
