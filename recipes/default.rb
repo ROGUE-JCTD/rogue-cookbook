@@ -44,6 +44,7 @@ python_pip node['rogue']['rogue_geonode']['location'] do
 end
 
 include_recipe 'rogue::geoserver'
+include_recipe 'rogue::fileservice'
 
 template "rogue_geonode_config" do
   path "#{node['rogue']['rogue_geonode']['location']}/rogue_geonode/local_settings.py"
