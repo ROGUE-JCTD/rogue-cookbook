@@ -1,4 +1,4 @@
-execute "install geoserver" do
+execute "install_geoserver" do
   command "mvn clean install -DskipTests"
   cwd File.join(node['rogue']['rogue_geonode']['location'], 'geoserver_ext')
   user 'root'
