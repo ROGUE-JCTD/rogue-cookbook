@@ -2,6 +2,7 @@ execute "install_geoserver" do
   command "mvn clean install -DskipTests"
   cwd File.join(node['rogue']['rogue_geonode']['location'], 'geoserver_ext')
   user 'root'
+  notifies :stop, "service[tomcat]", :immediately
   notifies :run, "execute[remove_old_geoserver_directory]", :immediately
   notifies :run, "execute[copy_geoserver_war]", :immediately
 end
