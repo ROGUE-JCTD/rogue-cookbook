@@ -2,24 +2,34 @@ execute "install_geoserver" do
   command "mvn clean install -DskipTests"
   cwd File.join(node['rogue']['rogue_geonode']['location'], 'geoserver_ext')
   user 'root'
+  notifies :run, "execute[remove_old_geoserver_directory]", :immediately
   notifies :run, "execute[copy_geoserver_war]", :immediately
+end
+
+execute "remove_old_geoserver_directory" do
+  command "rm -rf #{File.join(node['tomcat']['webapp_dir'],'geoserver')}"
+  only_if { File.exists? File.join(node['tomcat']['webapp_dir'],'geoserver') }
+  action :nothing
 end
 
 execute "copy_geoserver_war" do
   command "mv #{::File.join(node['rogue']['rogue_geonode']['location'], 'geoserver_ext/target/geoserver.war')} #{node['tomcat']['webapp_dir']}"
   action :nothing
   notifies :restart, resources(:service => "tomcat"), :immediate
+  notifies :create, "template[geoserver_config]", :immediate
 end
 
 geoserver_data_dir = File.join(node['tomcat']['webapp_dir'],'geoserver', 'data')
 
-template File.join(node['tomcat']['webapp_dir'], 'geoserver', 'WEB-INF', 'web.xml') do
+template "geoserver_config" do
+  path File.join(node['tomcat']['webapp_dir'], 'geoserver', 'WEB-INF', 'web.xml')
   source 'web.xml.erb'
   retry_delay 15
   retries 6
   owner node['tomcat']['user']
   group node['tomcat']['group']
   notifies :restart, resources(:service => "tomcat"), :immediate
+  action :nothing
 end
 
 # move the geoserver data dir to correct location
