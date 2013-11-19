@@ -43,6 +43,14 @@ python_pip node['rogue']['rogue_geonode']['location'] do
   notifies :run, "execute[collect_static]"
 end
 
+if node['rogue']['rogue_geonode']['branch'] == 'maploom'
+    python_pip node['rogue']['django_maploom']['url'] do
+      virtualenv node['rogue']['geonode']['location']
+      action :upgrade
+      options "--no-deps"
+    end
+end
+
 include_recipe 'rogue::geoserver'
 include_recipe 'rogue::fileservice'
 

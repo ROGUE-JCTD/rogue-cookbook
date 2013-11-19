@@ -35,6 +35,8 @@ default['rogue']['geonode']['location'] = '/var/lib/geonode/'
 default['rogue']['geonode']['url'] = 'git+https://github.com/GeoNode/geonode.git@' + node['rogue']['geonode']['branch'] + '#egg=geonode'
 default['rogue']['interpreter'] = ::File.join(node['rogue']['geonode']['location'], 'bin/python')
 
+default['rogue']['django_maploom']['url'] = "git+https://github.com/ROGUE-JCTD/django-maploom.git#egg=django-maploom"
+
 default['rogue']['rogue_geonode']['branch'] = 'master'
 default['rogue']['rogue_geonode']['location'] = File.join(node['rogue']['geonode']['location'], 'rogue_geonode')
 default['rogue']['rogue_geonode']['url'] = 'https://github.com/ROGUE-JCTD/rogue_geonode.git'
