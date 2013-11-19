@@ -48,6 +48,7 @@ default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATASTORE_DI
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['USER'] = "admin"
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['PASSWORD'] = "geoserver"
 default['rogue']['rogue_geonode']['settings']['UPLOADER']['BACKEND'] = 'geonode.importer'
+default['rogue']['nginx']['locations'] = {}
 
 default['rogue']['rogue_geonode']['settings']['DATABASES'] = {
     :default=>{:name=>'geonode', :user=>'geonode', :password=>'geonode', :host=>'rogue-database', :port=>'5432'},

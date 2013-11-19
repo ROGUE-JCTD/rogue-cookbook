@@ -66,6 +66,16 @@ server {
         <% end %>
 
 
+    <% node['rogue']['nginx']['locations'].each do |location| %>
+
+      location <%= location['query'] %> {
+        <% location['keys'].each do |key, value| %>
+                 <%= key %> <%= value %>;
+        <%end%>
+      }
+
+    <%end%>
+
       #  location ~ ^/proxy/(.*) {
       #          include         /etc/nginx/proxy.conf;
       #          #set_unescape_uri $new_url $arg_url;
