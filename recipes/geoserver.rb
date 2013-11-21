@@ -20,8 +20,6 @@ execute "copy_geoserver_war" do
   notifies :create, "template[geoserver_config]", :immediate
 end
 
-geoserver_data_dir = File.join(node['tomcat']['webapp_dir'],'geoserver', 'data')
-
 template "geoserver_config" do
   path File.join(node['tomcat']['webapp_dir'], 'geoserver', 'WEB-INF', 'web.xml')
   source 'web.xml.erb'
@@ -33,9 +31,17 @@ template "geoserver_config" do
   action :nothing
 end
 
+geoserver_data_dir = '/opt/geoserver_data'
+git geoserver_data_dir do
+  repository "https://github.com/ROGUE-JCTD/geoserver_data.git"
+  user 'root'
+  action :export
+  not_if do File.exists? node['rogue']['geoserver']['data_dir'] end
+end
+
 # move the geoserver data dir to correct location
 execute "copy geoserver data dir" do
- command "mv #{geoserver_data_dir} #{node['rogue']['geoserver']['data_dir']}"
+ command "mv #{geoserver_data_dir} #{node['rogue']['geoserver']['data_dir']}  && chown -R #{node['tomcat']['user']} #{node['rogue']['geoserver']['data_dir']}"
  action :run
  only_if  do !geoserver_data_dir.eql? node['rogue']['geoserver']['data_dir'] and File.exists? geoserver_data_dir and !File.exists? node['rogue']['geoserver']['data_dir'] end
 end
