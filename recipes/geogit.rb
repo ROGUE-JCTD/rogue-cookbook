@@ -2,15 +2,13 @@ git node['rogue']['geogit']['location'] do
   repository node['rogue']['geogit']['url']
   revision node['rogue']['geogit']['branch']
   action :sync
-  notifies :run, "execute[install_GeoGIT]", :immediately
 end
 
 execute "install_GeoGIT" do
   command "mvn clean install -DskipTests"
   cwd ::File.join(node['rogue']['geogit']['location'], 'src/parent')
   user 'root'
-  action :nothing
-  notifies :run, "execute[install_geoserver]"
+  action :run
 end
 
 file "/etc/profile.d/geogit.sh" do
