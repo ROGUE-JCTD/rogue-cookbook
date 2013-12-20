@@ -162,4 +162,11 @@ http_request "create_geonode_imports_datastore" do
   retries 5
  end
 
+ execute "update_layers" do
+  command "#{node['rogue']['interpreter']} manage.py updatelayers --ignore-errors"
+  cwd node['rogue']['rogue_geonode']['location']
+  user 'root'
+  action :run
+end
+
 log "Rogue is now running on #{node['rogue']['networking']['application']['address']}."
