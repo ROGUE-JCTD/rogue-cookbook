@@ -26,6 +26,10 @@ python_virtualenv node['rogue']['geonode']['location'] do
   action :create
 end
 
+bash "downgrade_pip" do
+  code "#{node['rogue']['geonode']['location']}/bin/easy_install pip==1.4.1"
+end
+
 for pkg in "uwsgi psycopg2".split do
   python_pip pkg do
     virtualenv node['rogue']['geonode']['location']
@@ -39,7 +43,7 @@ git node['rogue']['rogue_geonode']['location'] do
 end
 
 python_pip node['rogue']['rogue_geonode']['location'] do
-  virtualenv node['rogue']['geonode']['location']
+  virtualenv node['rogue']['geonode']['location']   
   notifies :run, "execute[collect_static]"
 end
 
