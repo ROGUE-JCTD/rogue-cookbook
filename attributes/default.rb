@@ -29,6 +29,7 @@ default['rogue']['geoserver']['url']= "http://#{node['rogue']['networking']['app
 
 
 default['rogue']['settings']['ALLOWED_HOSTS'] = [node['rogue']['networking']['application']['address'], 'localhost']
+default['rogue']['settings']['PROXY_ALLOWED_HOSTS'] = [node['rogue']['networking']['application']['address'], 'geoserver.rogue.lmnsolutions.com']
 
 default['rogue']['geonode']['branch'] = 'master'
 default['rogue']['geonode']['location'] = '/var/lib/geonode/'

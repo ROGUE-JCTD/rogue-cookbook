@@ -11,6 +11,12 @@ ALLOWED_HOSTS = (
 
 )
 
+PROXY_ALLOWED_HOSTS = (
+<%node['rogue']['settings']['PROXY_ALLOWED_HOSTS'].each do |host|%>
+'<%= host %>',
+<%end%>
+)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
