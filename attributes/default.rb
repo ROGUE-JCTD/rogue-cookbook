@@ -5,10 +5,12 @@ if node.attribute?('vagrant')
     default['rogue']['iface'] = 'eth1'
 end
 
+default['rogue']['user'] = {:username=>'rogue',
+                            :password=>'$1$oqU7lFMn$xYYGAjusAQ59R.NBEAwH7.'
+                            }
+
 default['rogue']['logging']['location'] = '/var/log/rogue'
-
 default['rogue']['ip'] = node[:network][:interfaces][node['rogue']['iface']][:addresses].detect{|k,v| v[:family] == "inet" }[0]
-
 default['rogue']['networking']['application']['hostname'] = 'rogue-geoserver'
 default['rogue']['networking']['application']['address'] = node['rogue']['ip']
 default['rogue']['networking']['application']['fqdn'] = node['rogue']['ip']

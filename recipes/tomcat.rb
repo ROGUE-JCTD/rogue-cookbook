@@ -50,6 +50,13 @@ node.set["tomcat"]["java_options"] = "-Djava.awt.headless=true -Xmx512m -XX:MaxP
 
 include_recipe 'tomcat::default'
 
+group "roguecat" do
+  action :modify
+  append true
+  members node["tomcat"]["user"]
+end
+
+
 # Overwrite the default server.xml
 template "tomcat_config" do
   path "#{node["tomcat"]["config_dir"]}/server.xml"
