@@ -112,8 +112,9 @@ execute "sync_db" do
     action :nothing
 end
 
+fixtures = "sample_admin.json #{node['rogue']['rogue_geonode']['location']}/rogue_geonode/fixtures/initial_data.json"
 execute "load_sample_data" do
-    command "#{node['rogue']['interpreter']} manage.py loaddata sample_admin.json"
+    command "#{node['rogue']['interpreter']} manage.py loaddata  #{fixtures}"
     cwd node['rogue']['rogue_geonode']['location']
     user 'root'
     ignore_failure true
