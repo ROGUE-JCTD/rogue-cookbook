@@ -6,11 +6,13 @@ geonode_pkgs.each do |pkg|
   end
 end
 
+include_recipe 'rogue::permissions'
 include_recipe 'rogue::java'
 include_recipe 'rogue::tomcat'
 include_recipe 'rogue::nginx'
 include_recipe 'rogue::geogit'
 include_recipe 'rogue::networking'
+include_recipe 'rogue::unison'
 
 source = "/usr/lib/x86_64-linux-gnu/libjpeg.so"
 target = "/usr/lib/libjpeg.so"
@@ -56,7 +58,6 @@ if node['rogue']['rogue_geonode']['branch'] == 'maploom'
 end
 
 include_recipe 'rogue::geoserver'
-include_recipe 'rogue::fileservice'
 
 template "rogue_geonode_config" do
   path "#{node['rogue']['rogue_geonode']['location']}/rogue_geonode/local_settings.py"
