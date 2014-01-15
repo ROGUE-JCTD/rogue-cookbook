@@ -14,6 +14,7 @@ execute "remove_old_geoserver_directory" do
 end
 
 execute "copy_geoserver_war" do
+  command "mode 00644 #{::File.join(node['rogue']['rogue_geonode']['location'], 'geoserver_ext/target/geoserver.war')} #{node['tomcat']['webapp_dir']}"
   command "mv #{::File.join(node['rogue']['rogue_geonode']['location'], 'geoserver_ext/target/geoserver.war')} #{node['tomcat']['webapp_dir']}"
   action :nothing
   notifies :restart, resources(:service => "tomcat"), :immediate
