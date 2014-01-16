@@ -46,7 +46,7 @@ execute "copy geoserver data dir" do
  command <<-EOH
    mv #{geoserver_data_dir} #{node['rogue']['geoserver']['data_dir']}
    chown -R #{node['tomcat']['user']}:roguecat #{dirs}
-   chmod -R 755 #{node['rogue']['geoserver']['data_dir']} #{dirs}
+   chmod -R 775 #{node['rogue']['geoserver']['data_dir']} #{dirs}
  EOH
  action :run
  only_if  do !geoserver_data_dir.eql? node['rogue']['geoserver']['data_dir'] and File.exists? geoserver_data_dir and !File.exists? node['rogue']['geoserver']['data_dir'] end
