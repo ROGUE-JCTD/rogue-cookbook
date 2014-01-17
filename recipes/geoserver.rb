@@ -18,6 +18,18 @@ execute "copy_geoserver_war" do
   action :nothing
   notifies :restart, resources(:service => "tomcat"), :immediate
   notifies :create, "template[geoserver_config]", :immediate
+  notifies :create, "cookbook_file[geonode-geoserver-ext-2.3-SNAPSHOT.jar]"
+end
+
+cookbook_file "geonode-geoserver-ext-2.3-SNAPSHOT.jar" do
+  path File.join(node['tomcat']['webapp_dir'], 'geoserver/WEB-INF/lib/geonode-geoserver-ext-2.3-SNAPSHOT.jar')
+  owner node['tomcat']['user']
+  group node['tomcat']['group']
+  mode 00644
+  retry_delay 15
+  retries 6
+  notifies :restart, resources(:service => "tomcat"), :immediate
+  action :nothing
 end
 
 template "geoserver_config" do
