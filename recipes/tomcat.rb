@@ -46,7 +46,8 @@ else
   node.set["tomcat"]["endorsed_dir"] = "#{node["tomcat"]["lib_dir"]}/endorsed"
 end
 
-node.set["tomcat"]["java_options"] = "-Djava.awt.headless=true -Xmx512m -XX:MaxPermSize=256m -XX:+UseConcMarkSweepGC"
+
+node.default["tomcat"]["java_options"] = "-Djava.awt.headless=true -Xmx512m -XX:MaxPermSize=256m -XX:+UseConcMarkSweepGC"
 
 include_recipe 'tomcat::default'
 
