@@ -1,7 +1,7 @@
-node.set['java']['oracle']['accept_oracle_download_terms'] = true
-node.set['java']['install_flavor']= "oracle"
-node.set['java']['jdk_version'] = '6'
-node.set['java']['java_home']='/usr/lib/jvm/jdk1.6.0_45'
+node.default['java']['oracle']['accept_oracle_download_terms'] = true
+node.default['java']['install_flavor']= "oracle"
+node.default['java']['jdk_version'] = '6'
+node.default['java']['java_home']='/usr/lib/jvm/jdk1.6.0_45'
 
 include_recipe "java::default"
 include_recipe "java::oracle"

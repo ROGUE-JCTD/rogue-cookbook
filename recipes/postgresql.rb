@@ -1,5 +1,5 @@
-node.set['postgresql']['password']['postgres'] = 'rogue'
-node.set['postgresql']['pg_hba'] = [
+node.default['postgresql']['password']['postgres'] = 'rogue'
+node.default['postgresql']['pg_hba'] = [
   {:type => 'local', :db => 'all', :user => 'postgres', :addr => nil, :method => 'ident'},
   {:type => 'local', :db => 'all', :user => 'all', :method => 'md5'},
   {:type => 'host', :db => 'all', :user => 'all', :addr => '192.168.10.1/32', :method => 'md5'},
@@ -8,7 +8,7 @@ node.set['postgresql']['pg_hba'] = [
 ]
 
 # Add the postgres dev server to the installation
-node.set['postgresql']['server']['packages'] = ["postgresql-#{node['postgresql']['version']} postgresql-server-dev-#{node['postgresql']['version']}"]
+node.default['postgresql']['server']['packages'] = ["postgresql-#{node['postgresql']['version']} postgresql-server-dev-#{node['postgresql']['version']}"]
 
 include_recipe 'postgresql::server'
 include_recipe 'rogue::postgis'
