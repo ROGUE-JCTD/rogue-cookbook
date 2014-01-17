@@ -16,6 +16,7 @@ directory "file_service_store" do
   path ::File.join(node['rogue']['geoserver']['data_dir'], 'file-service-store')
   owner node["tomcat"]["user"]
   recursive true
-  mode 00755
+  mode 00775
   action :nothing
+  not_if do File.join(node['rogue']['geoserver']['data_dir'], 'file-service-store') end
 end

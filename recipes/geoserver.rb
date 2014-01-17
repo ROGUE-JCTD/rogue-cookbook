@@ -75,7 +75,7 @@ execute "change_perms" do
     find #{geogit} -type d -print0 | xargs -0 setfacl -d -m g::rwx
     find #{geogit} -type d -print0 | xargs -0 setfacl -d -m o::rx
     chown tomcat7:roguecat -R #{file_store}
-    chmod 644 #{file_store}/*
+    chmod 664 #{file_store}/*
   EOH
   user 'root'
   action :nothing
