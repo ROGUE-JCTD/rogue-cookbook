@@ -173,6 +173,8 @@ http_request "create_geonode_imports_datastore" do
   cwd node['rogue']['rogue_geonode']['location']
   user 'root'
   action :run
+  retries 5
+  ignore_failure true
 end
 
 log "Rogue is now running on #{node['rogue']['networking']['application']['address']}."
