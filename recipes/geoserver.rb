@@ -29,7 +29,7 @@ cookbook_file "geonode-geoserver-ext-2.3-SNAPSHOT.jar" do
   group node['tomcat']['group']
   mode 00644
   retry_delay 15
-  retries 6
+  retries 8
   action :nothing
 end
 
@@ -37,7 +37,7 @@ template "geoserver_config" do
   path File.join(node['tomcat']['webapp_dir'], 'geoserver', 'WEB-INF', 'web.xml')
   source 'web.xml.erb'
   retry_delay 15
-  retries 6
+  retries 8
   owner node['tomcat']['user']
   group node['tomcat']['group']
   action :nothing

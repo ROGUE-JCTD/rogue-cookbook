@@ -165,7 +165,7 @@ http_request "create_geonode_imports_datastore" do
   action :nothing
   headers({"AUTHORIZATION" => "Basic #{Base64.encode64("#{node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['USER']}:#{node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['PASSWORD']}")}"})
   ignore_failure true
-  retries 5
+  retries 8
  end
 
  execute "update_layers" do
@@ -173,7 +173,7 @@ http_request "create_geonode_imports_datastore" do
   cwd node['rogue']['rogue_geonode']['location']
   user 'root'
   action :run
-  retries 5
+  retries 8
   ignore_failure true
 end
 
