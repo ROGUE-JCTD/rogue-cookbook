@@ -133,10 +133,10 @@ file "/etc/cron.d/geonode_restart" do
 end
 
 runserver = "#{node['rogue']['geonode']['location']}bin/uwsgi --ini #{node['rogue']['rogue_geonode']['location']}/django.ini &"
-
 execute "runserver" do
   command runserver
   user 'root'
+  not_if "pgrep uwsgi"
 end
 
 http_request "create_geonode_imports_datastore" do
