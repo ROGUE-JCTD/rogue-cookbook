@@ -17,8 +17,10 @@ execute "copy_geoserver_war" do
   command "mv #{::File.join(node['rogue']['rogue_geonode']['location'], 'geoserver_ext/target/geoserver.war')} #{node['tomcat']['webapp_dir']} && chmod 644 /var/lib/tomcat7/webapps/geoserver.war"
   action :nothing
   notifies :restart, resources(:service => "tomcat"), :immediate
+  notifies :stop, resources(:service => "tomcat"), :immediate
+  notifies :create, "cookbook_file[geonode-geoserver-ext-2.3-SNAPSHOT.jar]", :immediate
   notifies :create, "template[geoserver_config]", :immediate
-  notifies :create, "cookbook_file[geonode-geoserver-ext-2.3-SNAPSHOT.jar]"
+  notifies :start, resources(:service => "tomcat"), :immediate
 end
 
 cookbook_file "geonode-geoserver-ext-2.3-SNAPSHOT.jar" do
@@ -28,7 +30,6 @@ cookbook_file "geonode-geoserver-ext-2.3-SNAPSHOT.jar" do
   mode 00644
   retry_delay 15
   retries 6
-  notifies :restart, resources(:service => "tomcat"), :immediate
   action :nothing
 end
 
@@ -39,8 +40,17 @@ template "geoserver_config" do
   retries 6
   owner node['tomcat']['user']
   group node['tomcat']['group']
-  notifies :restart, resources(:service => "tomcat"), :immediate
   action :nothing
+end
+
+template "geoserver_db_client_settings" do
+  path File.join(node["tomcat"]["context_dir"], 'geoserver.xml')
+  source "geoserver.xml.erb"
+  mode 00644
+  owner node["tomcat"]["user"]
+  group node["tomcat"]["group"]
+  only_if do node['rogue']['geoserver']['use_db_client'] end
+  notifies :restart, resources(:service => "tomcat"), :immediate
 end
 
 geoserver_data_dir = '/opt/geoserver_data'

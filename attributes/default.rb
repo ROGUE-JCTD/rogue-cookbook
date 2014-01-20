@@ -9,7 +9,6 @@ default['rogue']['user'] = {:username=>'rogue',
                             :password=>'$1$oqU7lFMn$xYYGAjusAQ59R.NBEAwH7.'
                             }
 
-
 default['rogue']['ssh']['private_key'] = ''
 default['rogue']['ssh']['public_key'] = ''
 default['rogue']['ssh']['private_key_remote_file'] = '/root/.ssh/id_rsa'
@@ -28,6 +27,7 @@ default['rogue']['networking']['database']['address'] = '127.0.0.1'
 default['rogue']['networking']['database']['gateway'] = nil
 default['rogue']['networking']['database']['netmask'] = nil
 
+default['rogue']['geoserver']['use_db_client'] = true
 default['rogue']['geoserver']['base_url'] = '/geoserver'
 default['rogue']['geoserver']['data_dir'] = '/var/lib/geoserver_data'
 default['rogue']['geoserver']['geowebcache']['url'] = "http://sourceforge.net/projects/geowebcache/files/geowebcache/1.4.0/geowebcache-1.4.0-war.zip"
