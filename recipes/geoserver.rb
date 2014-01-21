@@ -16,11 +16,11 @@ end
 execute "copy_geoserver_war" do
   command "mv #{::File.join(node['rogue']['rogue_geonode']['location'], 'geoserver_ext/target/geoserver.war')} #{node['tomcat']['webapp_dir']} && chmod 644 /var/lib/tomcat7/webapps/geoserver.war"
   action :nothing
-  notifies :restart, resources(:service => "tomcat"), :immediate
-  notifies :stop, resources(:service => "tomcat"), :immediate
-  notifies :create, "cookbook_file[geonode-geoserver-ext-2.3-SNAPSHOT.jar]", :immediate
+  notifies :restart, "service[tomcat]", :immediately
+  notifies :stop, "service[tomcat]", :immediately
   notifies :create, "template[geoserver_config]", :immediate
-  notifies :start, resources(:service => "tomcat"), :immediate
+  notifies :create, "cookbook_file[geonode-geoserver-ext-2.3-SNAPSHOT.jar]", :immediately
+  notifies :start, "service[tomcat]", :immediately
 end
 
 cookbook_file "geonode-geoserver-ext-2.3-SNAPSHOT.jar" do
