@@ -15,7 +15,7 @@ default['rogue']['ssh']['private_key_remote_file'] = '/root/.ssh/id_rsa'
 default['rogue']['ssh']['public_key_remote_file'] = '/root/.ssh/id_rsa.pub'
 
 default['rogue']['logging']['location'] = '/var/log/rogue'
-default['rogue']['ip'] = node[:network][:interfaces][node['rogue']['iface']][:addresses].detect{|k,v| v[:family] == "inet" }[0]
+default['rogue']['ip'] = node['network']['interfaces'][node['rogue']['iface']]['addresses'].detect{|k,v| v['family'] == "inet" }[0]
 default['rogue']['networking']['application']['hostname'] = 'rogue-geoserver'
 default['rogue']['networking']['application']['address'] = node['rogue']['ip']
 default['rogue']['networking']['application']['fqdn'] = node['rogue']['ip']
@@ -68,7 +68,7 @@ default['rogue']['geogit']['branch'] = 'SprintRelease'
 default['rogue']['geogit']['location'] = '/var/lib/geogit'
 default['rogue']['geogit']['url'] = 'https://github.com/ROGUE-JCTD/GeoGit.git'
 
-default[:postgis][:version] = '2.0.4'
+default['postgis']['version'] = '2.0.4'
 default['postgis']['template_name'] = 'template_postgis'
 default['postgis']['locale'] = 'en_US.utf8'
 

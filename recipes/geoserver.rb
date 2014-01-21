@@ -50,7 +50,7 @@ template "geoserver_db_client_settings" do
   owner node["tomcat"]["user"]
   group node["tomcat"]["group"]
   only_if do node['rogue']['geoserver']['use_db_client'] end
-  notifies :restart, resources(:service => "tomcat"), :immediate
+  notifies :restart, "service[tomcat]", :immediate
 end
 
 geoserver_data_dir = '/opt/geoserver_data'
@@ -109,12 +109,12 @@ jai_io_file = File.join(node['java']['java_home'], 'jai_imageio-1_1-lib-linux-am
 
 remote_file  jai_file do
   source node['rogue']['geoserver']['jai']['url']
-  mode 755
+  mode 00755
 end
 
 remote_file jai_io_file do
   source node['rogue']['geoserver']['jai_io']['url']
-  mode 755
+  mode 00755
 end
 
 execute "fix jai" do

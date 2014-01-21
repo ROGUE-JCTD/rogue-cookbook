@@ -76,6 +76,6 @@ source $HOME/.keychain/$HOSTNAME-sh
   EOH
   user 'root'
   action :nothing
-  not_if do "grep 'START-Keychain' /root/.profile" end
+  not_if "grep 'START-Keychain' /root/.profile"
   only_if do File.exists? '/root/.ssh/id_rsa' end
 end

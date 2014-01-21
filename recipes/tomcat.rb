@@ -4,7 +4,7 @@ node.default['tomcat']['base_version'] = 7
 
 case node['platform']
 
-when "centos","redhat","fedora"
+when "centos","redhat","fedora", "amazon", "scientific"
   node.default["tomcat"]["home"] = "/usr/share/tomcat#{node["tomcat"]["base_version"]}"
   node.default["tomcat"]["base"] = "/usr/share/tomcat#{node["tomcat"]["base_version"]}"
   node.default["tomcat"]["config_dir"] = "/etc/tomcat#{node["tomcat"]["base_version"]}"

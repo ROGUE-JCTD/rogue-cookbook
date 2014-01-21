@@ -49,12 +49,11 @@ python_pip node['rogue']['rogue_geonode']['location'] do
   notifies :run, "execute[collect_static]"
 end
 
-if node['rogue']['rogue_geonode']['branch'] == 'maploom'
-    python_pip node['rogue']['django_maploom']['url'] do
-      virtualenv node['rogue']['geonode']['location']
-      action :upgrade
-      options "--no-deps"
-    end
+python_pip node['rogue']['django_maploom']['url'] do
+  virtualenv node['rogue']['geonode']['location']
+  action :upgrade
+  options "--no-deps"
+  only_if { node['rogue']['rogue_geonode']['branch'] == 'maploom' }
 end
 
 include_recipe 'rogue::geoserver'
@@ -166,15 +165,14 @@ http_request "create_geonode_imports_datastore" do
   headers({"AUTHORIZATION" => "Basic #{Base64.encode64("#{node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['USER']}:#{node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['PASSWORD']}")}"})
   ignore_failure true
   retries 8
- end
+end
 
- execute "update_layers" do
+execute "update_layers" do
   command "#{node['rogue']['interpreter']} manage.py updatelayers --ignore-errors"
   cwd node['rogue']['rogue_geonode']['location']
   user 'root'
   action :run
   retries 8
-  ignore_failure true
 end
 
 log "Rogue is now running on #{node['rogue']['networking']['application']['address']}."

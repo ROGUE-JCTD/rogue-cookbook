@@ -13,18 +13,18 @@ pkgs.each { |pkg| package pkg }
 
 
 # Download PostGIS
-remote_file "#{Chef::Config[:file_cache_path]}/postgis-#{node[:postgis][:version]}.tar.gz" do
-  source "http://download.osgeo.org/postgis/source/postgis-#{node[:postgis][:version]}.tar.gz"
+remote_file "#{Chef::Config['file_cache_path']}/postgis-#{node['postgis']['version']}.tar.gz" do
+  source "http://download.osgeo.org/postgis/source/postgis-#{node['postgis']['version']}.tar.gz"
   notifies :run, "bash[install_postgis]", :immediately
 end
 
 # Compile PostGIS
 bash "install_postgis" do
   user "root"
-  cwd "#{Chef::Config[:file_cache_path]}"
+  cwd Chef::Config[:file_cache_path]
   code <<-EOH
-    tar -zxf postgis-#{node[:postgis][:version]}.tar.gz
-    (cd postgis-#{node[:postgis][:version]}/ && ./configure && make && make install)
+    tar -zxf postgis-#{node['postgis']['version']}.tar.gz
+    (cd postgis-#{node['postgis']['version']}/ && ./configure && make && make install)
   EOH
   action :nothing
 end
