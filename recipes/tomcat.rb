@@ -66,7 +66,7 @@ template "tomcat_config" do
   group "root"
   mode "0644"
   action :create
-  notifies :restart, "service[tomcat]"
+  notifies :restart, "service[tomcat]", :immediately
 end
 
 
