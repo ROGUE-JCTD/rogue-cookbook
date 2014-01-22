@@ -18,7 +18,7 @@ execute "copy_geoserver_war" do
   action :nothing
   notifies :restart, "service[tomcat]", :immediately
   notifies :stop, "service[tomcat]", :immediately
-  notifies :create, "template[geoserver_config]", :immediate
+  notifies :create, "template[geoserver_config]", :immediately
   notifies :create, "cookbook_file[geonode-geoserver-ext-2.3-SNAPSHOT.jar]", :immediately
   notifies :start, "service[tomcat]", :immediately
 end

@@ -9,7 +9,7 @@ execute "deploy_file_service_war" do
   command "mv #{tmp_file_service_war} #{node['tomcat']['webapp_dir']}"
   action :run
   notifies :create, "directory[file_service_store]", :immediately
-  notifies :restart, "service[tomcat]"
+  notifies :restart, "service[tomcat]", :immediately
 end
 
 directory "file_service_store" do
