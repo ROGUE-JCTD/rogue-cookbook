@@ -50,7 +50,7 @@ template "geoserver_db_client_settings" do
   owner node["tomcat"]["user"]
   group node["tomcat"]["group"]
   only_if do node['rogue']['geoserver']['use_db_client'] end
-  notifies :restart, "service[tomcat]", :immediate
+  notifies :restart, "service[tomcat]", :immediately
 end
 
 geoserver_data_dir = '/opt/geoserver_data'
