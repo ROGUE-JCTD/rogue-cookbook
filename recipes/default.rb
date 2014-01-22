@@ -56,7 +56,9 @@ python_pip node['rogue']['django_maploom']['url'] do
   only_if { node['rogue']['rogue_geonode']['branch'] == 'maploom' }
 end
 
+include_recipe 'rogue::geoserver_data'
 include_recipe 'rogue::geoserver'
+include_recipe 'rogue::fileservice'
 
 template "rogue_geonode_config" do
   path "#{node['rogue']['rogue_geonode']['location']}/rogue_geonode/local_settings.py"
