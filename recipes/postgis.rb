@@ -1,3 +1,7 @@
+node.default['postgis']['version'] = '2.0.4'
+node.default['postgis']['template_name'] = 'template_postgis'
+node.default['postgis']['locale'] = 'en_US.utf8'
+
 apt_repository "opengeo" do
   uri 'http://apt.opengeo.org/suite/v4/ubuntu/'
   distribution 'lucid'

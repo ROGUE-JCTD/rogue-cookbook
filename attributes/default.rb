@@ -9,9 +9,7 @@ default['rogue']['user'] = {:username=>'rogue',
                             :password=>'$1$oqU7lFMn$xYYGAjusAQ59R.NBEAwH7.'
                             }
 
-default['rogue']['ssh']['private_key'] = ''
 default['rogue']['ssh']['public_key'] = ''
-default['rogue']['ssh']['private_key_remote_file'] = '/root/.ssh/id_rsa'
 default['rogue']['ssh']['public_key_remote_file'] = '/root/.ssh/id_rsa.pub'
 
 default['rogue']['logging']['location'] = '/var/log/rogue'
@@ -38,10 +36,6 @@ default['rogue']['geoserver']['url']= "http://#{node['rogue']['networking']['app
 
 default['rogue']['settings']['ALLOWED_HOSTS'] = [node['rogue']['networking']['application']['address'], 'localhost']
 default['rogue']['settings']['PROXY_ALLOWED_HOSTS'] = [node['rogue']['networking']['application']['address'], 'geoserver.rogue.lmnsolutions.com']
-
-default['rogue']['geonode']['branch'] = 'master'
-default['rogue']['geonode']['location'] = '/var/lib/geonode/'
-default['rogue']['geonode']['url'] = 'git+https://github.com/GeoNode/geonode.git@' + node['rogue']['geonode']['branch'] + '#egg=geonode'
 default['rogue']['interpreter'] = ::File.join(node['rogue']['geonode']['location'], 'bin/python')
 
 default['rogue']['django_maploom']['url'] = "git+https://github.com/ROGUE-JCTD/django-maploom.git#egg=django-maploom"
@@ -69,7 +63,5 @@ default['rogue']['geogit']['branch'] = 'SprintRelease'
 default['rogue']['geogit']['location'] = '/var/lib/geogit'
 default['rogue']['geogit']['url'] = 'https://github.com/ROGUE-JCTD/GeoGit.git'
 
-default['postgis']['version'] = '2.0.4'
-default['postgis']['template_name'] = 'template_postgis'
-default['postgis']['locale'] = 'en_US.utf8'
+
 
