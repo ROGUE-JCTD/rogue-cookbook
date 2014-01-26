@@ -23,50 +23,14 @@ link target do
   action :create
 end
 
-python_virtualenv node['rogue']['geonode']['location'] do
-  interpreter "python2.7"
-  action :create
+rogue_geonode node['rogue']['geonode']['location'] do
+  action :install
 end
 
-bash "downgrade_pip" do
-  code "#{node['rogue']['geonode']['location']}/bin/easy_install pip==1.4.1"
-end
-
-for pkg in "uwsgi psycopg2".split do
-  python_pip pkg do
-    virtualenv node['rogue']['geonode']['location']
-  end
-end
-
-git node['rogue']['rogue_geonode']['location'] do
-  repository node['rogue']['rogue_geonode']['url']
-  revision node['rogue']['rogue_geonode']['branch']
-  action :sync
-end
-
-python_pip node['rogue']['rogue_geonode']['location'] do
-  virtualenv node['rogue']['geonode']['location']   
-  notifies :run, "execute[collect_static]"
-end
-
-python_pip node['rogue']['django_maploom']['url'] do
-  virtualenv node['rogue']['geonode']['location']
-  action :upgrade
-  options "--no-deps"
-  only_if { node['rogue']['rogue_geonode']['branch'] == 'maploom' }
-end
 
 include_recipe 'rogue::geoserver_data'
 include_recipe 'rogue::geoserver'
 include_recipe 'rogue::fileservice'
-
-template "rogue_geonode_config" do
-  path "#{node['rogue']['rogue_geonode']['location']}/rogue_geonode/local_settings.py"
-  source "local_settings.py.erb"
-  variables ({:database => node['rogue']['rogue_geonode']['settings']['DATABASES']['default'],
-              :data_store => node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports']})
-end
-
 include_recipe 'rogue::database'
 
 template "nginx_proxy_config" do
@@ -81,14 +45,6 @@ template "rogue_geonode_nginx_config" do
   notifies :reload, "service[nginx]", :immediately
 end
 
-directory node['rogue']['logging']['location'] do
-  action :create
-end
-
-template "rogue_geonode_uwsgi_config" do
-  path "#{node['rogue']['rogue_geonode']['location']}/django.ini"
-  source "django.ini.erb"
-end
 
 # Create the GeoGIT datastore directory
 directory node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATASTORE_DIR'] do
@@ -97,48 +53,6 @@ directory node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATAS
     mode 00755
 end
 
-execute "collect_static" do
-  command "#{node['rogue']['interpreter']} manage.py collectstatic --noinput"
-  cwd node['rogue']['rogue_geonode']['location']
-  user 'root'
-  action :nothing
-  notifies :run, "execute[set_rogue_geonode_permissions]"
-end
-
-execute "sync_db" do
-    command "#{node['rogue']['interpreter']} manage.py syncdb --all --noinput"
-    cwd node['rogue']['rogue_geonode']['location']
-    user 'root'
-    ignore_failure true
-    action :nothing
-end
-
-fixtures = "sample_admin.json #{node['rogue']['rogue_geonode']['location']}/rogue_geonode/fixtures/initial_data.json"
-execute "load_sample_data" do
-    command "#{node['rogue']['interpreter']} manage.py loaddata  #{fixtures}"
-    cwd node['rogue']['rogue_geonode']['location']
-    user 'root'
-    ignore_failure true
-    action :nothing
-end
-
-execute "set_rogue_geonode_permissions" do
-  command "chmod -R 755 #{node['rogue']['geonode']['location']}"
-  action :nothing
-end
-
-file "/etc/cron.d/geonode_restart" do
-  content "@reboot root /bin/bash #{node['rogue']['rogue_geonode']['location']}/start_geonode.sh\n"
-  mode 00755
-  action :create_if_missing
-end
-
-runserver = "#{node['rogue']['geonode']['location']}bin/uwsgi --ini #{node['rogue']['rogue_geonode']['location']}/django.ini &"
-execute "runserver" do
-  command runserver
-  user 'root'
-  not_if "pgrep uwsgi"
-end
 
 http_request "create_geonode_imports_datastore" do
   url node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['LOCATION'] + 'rest/workspaces/geonode/datastores.xml'
@@ -169,12 +83,8 @@ http_request "create_geonode_imports_datastore" do
   retries 8
 end
 
-execute "update_layers" do
-  command "#{node['rogue']['interpreter']} manage.py updatelayers --ignore-errors"
-  cwd node['rogue']['rogue_geonode']['location']
-  user 'root'
-  action :run
-  retries 8
+rogue_geonode node['rogue']['geonode']['location'] do
+ action [:update_layers, :start]
 end
 
 log "Rogue is now running on #{node['rogue']['networking']['application']['address']}."

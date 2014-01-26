@@ -24,8 +24,8 @@ postgresql_database geonode_connection_info[:name] do
   connection postgresql_connection_info
   owner geonode_connection_info[:user]
   action :create
-  notifies :run, "execute[sync_db]", :immediately
-  notifies :run, "execute[load_sample_data]", :immediately
+  notifies :sync_db, "rogue_geonode[#{node['rogue']['geonode']['location']}]", :immediately
+  notifies :load_data, "rogue_geonode[#{node['rogue']['geonode']['location']}]", :immediately
 end
 
 # Create the GeoNode imports user

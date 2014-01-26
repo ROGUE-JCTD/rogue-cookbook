@@ -1,4 +1,4 @@
-actions :install, :syncdb, :load_data, :collect_static, :runserver
+actions :install, :syncdb, :load_data, :collect_static, :start, :update_layers
 default_action :install
 
 
@@ -10,5 +10,6 @@ attribute :python_packages, :kind_of => Array, :default => ["uwsgi", "psycopg2"]
 attribute :rogue_geonode_location, :kind_of => String, :default => node['rogue']['rogue_geonode']['location']
 attribute :rogue_geonode_branch, :kind_of => String, :default => node['rogue']['rogue_geonode']['branch']
 attribute :fixtures, :kind_of => Array, :default => node['rogue']['rogue_geonode']['fixtures']
+attribute :logging_location, :kind_of => String, :default => node['rogue']['logging']['location']
 
 
