@@ -9,6 +9,7 @@ execute "install_GeoGIT" do
   cwd ::File.join(node['rogue']['geogit']['location'], 'src/parent')
   user 'root'
   action :run
+  retries 1
 end
 
 file "/etc/profile.d/geogit.sh" do
