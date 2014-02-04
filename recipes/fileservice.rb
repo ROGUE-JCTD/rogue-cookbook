@@ -1,22 +1,15 @@
-tmp_file_service_war = File.join('/tmp/', 'file-service.war')
-
-remote_file tmp_file_service_war do
-  source "http://jenkins.rogue.lmnsolutions.com/job/file-service/lastSuccessfulBuild/artifact/target/file-service.war"
-  action :create
-end
-
-execute "deploy_file_service_war" do
-  command "mv #{tmp_file_service_war} #{node['tomcat']['webapp_dir']}"
-  action :run
+war 'file-service.war' do
+  remote_file_location "http://jenkins.rogue.lmnsolutions.com/job/file-service/lastSuccessfulBuild/artifact/target/file-service.war"
+  action :deploy
   notifies :create, "directory[file_service_store]", :immediately
-  notifies :restart, "service[tomcat]", :immediately
 end
+
 
 directory "file_service_store" do
   path ::File.join(node['rogue']['geoserver']['data_dir'], 'file-service-store')
   owner node["tomcat"]["user"]
   recursive true
   mode 00775
-  action :nothing
   not_if do File.join(node['rogue']['geoserver']['data_dir'], 'file-service-store') end
+  action :nothing
 end

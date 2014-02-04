@@ -3,24 +3,15 @@ execute "install_geoserver" do
   cwd File.join(node['rogue']['rogue_geonode']['location'], 'geoserver_ext')
   user 'root'
   notifies :stop, "service[tomcat]", :immediately
-  notifies :run, "execute[remove_old_geoserver_directory]", :immediately
-  notifies :run, "execute[copy_geoserver_war]", :immediately
 end
 
-execute "remove_old_geoserver_directory" do
-  command "rm -rf #{File.join(node['tomcat']['webapp_dir'],'geoserver')}"
-  only_if { File.exists? File.join(node['tomcat']['webapp_dir'],'geoserver') }
-  action :nothing
+war 'geoserver.war' do
+  remote_file_location "file://#{::File.join(node['rogue']['rogue_geonode']['location'], 'geoserver_ext/target/geoserver.war')}"
+  action :deploy
 end
 
-execute "copy_geoserver_war" do
-  command "mv #{::File.join(node['rogue']['rogue_geonode']['location'], 'geoserver_ext/target/geoserver.war')} #{node['tomcat']['webapp_dir']} && chmod 644 /var/lib/tomcat7/webapps/geoserver.war"
-  action :nothing
-  notifies :restart, "service[tomcat]", :immediately
-  notifies :stop, "service[tomcat]", :immediately
-  notifies :create, "template[geoserver_config]", :immediately
-  notifies :create, "cookbook_file[geonode-geoserver-ext-2.3-SNAPSHOT.jar]", :immediately
-  notifies :start, "service[tomcat]", :immediately
+service 'tomcat7' do
+  action :stop
 end
 
 cookbook_file "geonode-geoserver-ext-2.3-SNAPSHOT.jar" do
@@ -30,17 +21,17 @@ cookbook_file "geonode-geoserver-ext-2.3-SNAPSHOT.jar" do
   mode 00644
   retry_delay 15
   retries 8
-  action :nothing
+  action :create
 end
 
 template "geoserver_config" do
-  path File.join(node['tomcat']['webapp_dir'], 'geoserver', 'WEB-INF', 'web.xml')
+  path File.join(node['tomcat']['webapp_dir'], 'geoserver/WEB-INF/web.xml')
   source 'web.xml.erb'
   retry_delay 15
-  retries 8
+  retries 15
   owner node['tomcat']['user']
   group node['tomcat']['group']
-  action :nothing
+  action :create
 end
 
 template "geoserver_db_client_settings" do
@@ -52,8 +43,6 @@ template "geoserver_db_client_settings" do
   only_if do node['rogue']['geoserver']['use_db_client'] end
   notifies :restart, "service[tomcat]", :immediately
 end
-
-
 
 #### Install JAI ####
 jai_file = File.join(node['java']['java_home'], 'jai-1_1_3-lib-linux-amd64-jdk.bin')
