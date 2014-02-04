@@ -143,8 +143,6 @@ action :create_postgis_store do
       variables ({ :settings => new_resource.settings })
     end
 
-    url =
-
     bash "create_geonode_imports_datastore" do
       code 'curl -v -u admin:geoserver -XPOST -H "Content-type: text/xml" -d @/tmp/newDataStore.xml ' + new_resource.settings["OGC_SERVER"]["LOCATION"] + 'rest/workspaces/geonode/datastores.xml'
       ignore_failure true
