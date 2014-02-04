@@ -1,4 +1,4 @@
-actions :install, :syncdb, :load_data, :collect_static, :start, :update_layers
+actions :install, :sync_db, :load_data, :collect_static, :start, :update_layers
 default_action :install
 
 
@@ -11,5 +11,5 @@ attribute :rogue_geonode_location, :kind_of => String, :default => node['rogue']
 attribute :rogue_geonode_branch, :kind_of => String, :default => node['rogue']['rogue_geonode']['branch']
 attribute :fixtures, :kind_of => Array, :default => node['rogue']['rogue_geonode']['fixtures']
 attribute :logging_location, :kind_of => String, :default => node['rogue']['logging']['location']
-
+attribute :settings, :kind_of => Array, :default => node['rogue']['rogue_geonode']['settings']
 

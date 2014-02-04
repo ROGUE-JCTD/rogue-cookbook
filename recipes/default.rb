@@ -23,15 +23,15 @@ link target do
   action :create
 end
 
+include_recipe 'rogue::database'
+
 rogue_geonode node['rogue']['geonode']['location'] do
   action :install
 end
 
-
 include_recipe 'rogue::geoserver_data'
 include_recipe 'rogue::geoserver'
 include_recipe 'rogue::fileservice'
-include_recipe 'rogue::database'
 
 template "nginx_proxy_config" do
   path File.join(node['nginx']['dir'], 'proxy.conf')
@@ -45,46 +45,15 @@ template "rogue_geonode_nginx_config" do
   notifies :reload, "service[nginx]", :immediately
 end
 
-
 # Create the GeoGIT datastore directory
 directory node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATASTORE_DIR'] do
-    owner node["tomcat"]["user"]
-    recursive true
-    mode 00755
-end
-
-
-http_request "create_geonode_imports_datastore" do
-  url node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['LOCATION'] + 'rest/workspaces/geonode/datastores.xml'
-  message :"dataStore"=>
-    {"name"=>node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports'][:name],
-    "type"=>"PostGIS",
-    "enabled"=>true,
-    "workspace"=>{
-        "name"=>"geonode",
-        "href"=> node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['LOCATION'] + "/rest/workspaces/geonode.xml"},
-        "connectionParameters"=>{
-            "entry"=>[{"@key"=>"port","$"=>node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports'][:port]},
-                    {"@key"=>"passwd","$"=>node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports'][:password]},
-                    {"@key"=>"dbtype","$"=>"postgis"},
-                    {"@key"=>"schema","$"=>"public"},
-                    {"@key"=>"max connections", "$"=>"10"},
-                    {"@key"=>"min connections", "$"=>"1"},
-                    {"@key"=>"Max open prepared statements", "$"=>"50"},
-                    {"@key"=>"host","$"=> node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports'][:host]},
-                    {"@key"=>"user","$"=>node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports'][:user]},
-                    {"@key"=>"database","$"=>node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports'][:name]},
-                    ]},
-        "_default"=>false,
-        }
-  action :nothing
-  headers({"AUTHORIZATION" => "Basic #{Base64.encode64("#{node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['USER']}:#{node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['PASSWORD']}")}"})
-  ignore_failure true
-  retries 8
+  owner node['tomcat']['user']
+  recursive true
+  mode 00755
 end
 
 rogue_geonode node['rogue']['geonode']['location'] do
- action [:update_layers, :start]
+ action [:sync_db, :load_data, :update_layers, :start]
 end
 
 log "Rogue is now running on #{node['rogue']['networking']['application']['address']}."

@@ -24,8 +24,6 @@ postgresql_database geonode_connection_info[:name] do
   connection postgresql_connection_info
   owner geonode_connection_info[:user]
   action :create
-  notifies :sync_db, "rogue_geonode[#{node['rogue']['geonode']['location']}]", :immediately
-  notifies :load_data, "rogue_geonode[#{node['rogue']['geonode']['location']}]", :immediately
 end
 
 # Create the GeoNode imports user
@@ -41,7 +39,6 @@ postgresql_database geonode_imports_connection_info[:name] do
   template node['postgis']['template_name']
   owner geonode_imports_connection_info[:user]
   action :create
-  notifies :post, "http_request[create_geonode_imports_datastore]"
 end
 
 postgresql_database 'set user' do
@@ -170,4 +167,5 @@ END
 $$ LANGUAGE plpgsql;
   EOH
   action :query
+  only_if { node['rogue']['geoserver']['use_db_client'] }
 end

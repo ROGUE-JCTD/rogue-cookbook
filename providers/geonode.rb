@@ -1,11 +1,15 @@
+require 'json'
+require 'net/http'
+
 def whyrun_supported?
   true
 end
 
 use_inline_resources
 
+
 def django_command(cmd, options)
-    "#{new_resource.virtual_env_location}/bin/python manage.py #{cmd} #{options.join(' ')}"
+    "#{new_resource.virtual_env_location}bin/python manage.py #{cmd} #{options.join(' ')}"
 end
 
 def collect_static
@@ -50,6 +54,7 @@ action :install do
     Chef::Log.debug "Installing ROGUE using PIP"
     python_pip new_resource.rogue_geonode_location do
      virtualenv new_resource.virtual_env_location
+     options '-e'
      # notifies :run, "execute[collect_static]" ## where do we put this?
     end
 
@@ -85,16 +90,16 @@ action :install do
      path "#{new_resource.rogue_geonode_location}/django.ini"
      source "django.ini.erb"
     end
-
     new_resource.updated_by_last_action(true)
   end
 end
 
-action :syncdb do
-  execute "sync_db" do
+action :sync_db do
+  execute "sync_db_#{new_resource.rogue_geonode_location}" do
     command django_command('syncdb', ['--all', '--noinput'])
     cwd new_resource.rogue_geonode_location
     user 'root'
+    not_if "cd #{new_resource.rogue_geonode_location} && #{django_command('dumpdata', ['security'])}"
   end
   new_resource.updated_by_last_action(true)
 end
@@ -128,8 +133,37 @@ action :update_layers do
   action :run
   retries 8
  end
+ new_resource.updated_by_last_action(true)
 end
 
+action :create_postgis_store do
+
+    template "/tmp/newDataStore.xml" do
+      source "newDataSource.xml.erb"
+      variables ({ :settings => new_resource.settings })
+    end
+
+    url =
+
+    bash "create_geonode_imports_datastore" do
+      code 'curl -v -u admin:geoserver -XPOST -H "Content-type: text/xml" -d @/tmp/newDataStore.xml ' + new_resource.settings["OGC_SERVER"]["LOCATION"] + 'rest/workspaces/geonode/datastores.xml'
+      ignore_failure true
+      not_if do
+        uri = URI.parse("#{new_resource.settings['OGC_SERVER']['LOCATION']}rest/workspaces/geonode/datastores.json")
+        req = Net::HTTP::Get.new(uri.to_s)
+        req.basic_auth new_resource.settings['OGC_SERVER']['USER'], new_resource.settings['OGC_SERVER']['PASSWORD']
+        resp = Net::HTTP.new(uri.host, uri.port).start{|http| http.request(req)}
+        resp.body.include? 'geonode_imports'
+       end
+      retries 8
+    end
+
+    file "/tmp/newDataStore.xml" do
+     action :delete
+    end
+
+    new_resource.updated_by_last_action(true)
+end
 
 def test()
   true
