@@ -135,14 +135,16 @@ action :update_layers do
   new_resource.updated_by_last_action(true)
 end
 
-action :create_postgis_store do
+action :create_postgis_datastore do
   template "/tmp/newDataStore.xml" do
     source "newDataSource.xml.erb"
     variables ({ :settings => new_resource.settings })
   end
 
+
+  credentials = new_resource.settings["OGC_SERVER"]["USER"] + ':' + new_resource.settings["OGC_SERVER"]["PASSWORD"]
   bash "create_geonode_imports_datastore" do
-    code 'curl -v -u admin:geoserver -XPOST -H "Content-type: text/xml" -d @/tmp/newDataStore.xml ' + new_resource.settings["OGC_SERVER"]["LOCATION"] + 'rest/workspaces/geonode/datastores.xml'
+    code 'curl -v -u ' + credentials + ' -XPOST -H "Content-type: text/xml" -d @/tmp/newDataStore.xml ' + new_resource.settings["OGC_SERVER"]["LOCATION"] + 'rest/workspaces/geonode/datastores.xml'
     ignore_failure true
     not_if do
   	  uri = URI.parse("#{new_resource.settings['OGC_SERVER']['LOCATION']}rest/workspaces/geonode/datastores.json")
@@ -152,6 +154,7 @@ action :create_postgis_store do
   	  resp.body.include? 'geonode_imports'
     end
     retries 8
+    retry_delay 10
   end
 
   file "/tmp/newDataStore.xml" do
