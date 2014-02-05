@@ -45,9 +45,17 @@ action :install do
     end
 
     Chef::Log.debug "Pulling ROGUE GeoNode from Git"
+
+    branch = new_resource.rogue_geonode_branch
+
+    if branch == 'maploom'
+      Chef::Log.warn('The maploom branch has been merged into master, please update your run list or Vagrant file.')
+      branch = 'master'
+    end
+
     git new_resource.rogue_geonode_location do
       repository node['rogue']['rogue_geonode']['url']
-      revision new_resource.rogue_geonode_branch
+      revision branch
       action :sync
     end
 
@@ -61,7 +69,6 @@ action :install do
       virtualenv new_resource.virtual_env_location
       action :upgrade
       options "--no-deps"
-      only_if { node['rogue']['rogue_geonode']['branch'] == 'maploom' }
     end
 
     template "rogue_geonode_config" do
