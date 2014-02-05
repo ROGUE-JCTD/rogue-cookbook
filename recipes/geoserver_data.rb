@@ -10,15 +10,15 @@ dirs = "#{node['rogue']['geoserver']['data_dir']} #{File.join(node['rogue']['geo
 
 # move the geoserver data dir to the correct location
 execute "copy_geoserver_data_dir" do
- command <<-EOH
-   mv #{geoserver_data_dir} #{node['rogue']['geoserver']['data_dir']}
-   chown -R #{node['tomcat']['user']}:roguecat #{dirs}
-   chmod -R 775 #{node['rogue']['geoserver']['data_dir']} #{dirs}
- EOH
- action :run
- only_if  do !geoserver_data_dir.eql? node['rogue']['geoserver']['data_dir'] and File.exists? geoserver_data_dir and !File.exists? node['rogue']['geoserver']['data_dir'] end
- notifies :run, "execute[change_perms]"
- user 'root'
+  command <<-EOH
+    mv #{geoserver_data_dir} #{node['rogue']['geoserver']['data_dir']}
+    chown -R #{node['tomcat']['user']}:roguecat #{dirs}
+    chmod -R 775 #{node['rogue']['geoserver']['data_dir']} #{dirs}
+  EOH
+  action :run
+  only_if  do !geoserver_data_dir.eql? node['rogue']['geoserver']['data_dir'] and File.exists? geoserver_data_dir and !File.exists? node['rogue']['geoserver']['data_dir'] end
+  notifies :run, "execute[change_perms]"
+  user 'root'
 end
 
 geogit = File.join(node['rogue']['geoserver']['data_dir'], 'geogit')

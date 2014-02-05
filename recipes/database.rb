@@ -14,9 +14,9 @@ geonode_imports_connection_info = node['rogue']['rogue_geonode']['settings']['DA
 
 # Create the GeoNode user
 postgresql_database_user geonode_connection_info[:user] do
-    connection postgresql_connection_info
-    password geonode_connection_info[:password]
-    action :create
+  connection postgresql_connection_info
+  password geonode_connection_info[:password]
+  action :create
 end
 
 # Create the GeoNode database
@@ -28,9 +28,9 @@ end
 
 # Create the GeoNode imports user
 postgresql_database_user geonode_imports_connection_info[:user] do
-    connection postgresql_connection_info
-    password geonode_imports_connection_info[:password]
-    action :create
+  connection postgresql_connection_info
+  password geonode_imports_connection_info[:password]
+  action :create
 end
 
 # Create the GeoNode imports db
