@@ -33,6 +33,8 @@ default['rogue']['geoserver']['jai']['url'] = "http://download.java.net/media/ja
 default['rogue']['geoserver']['jai_io']['url'] = "http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64-jdk.bin"
 default['rogue']['geoserver']['url']= "http://#{node['rogue']['networking']['application']['fqdn']}#{node['rogue']['geoserver']['base_url']}/"
 
+default['rogue']['geoserver_data']['url'] = 'https://github.com/ROGUE-JCTD/geoserver_data.git'
+default['rogue']['geoserver_data']['branch'] = 'master'
 
 default['rogue']['settings']['ALLOWED_HOSTS'] = [node['rogue']['networking']['application']['address'], 'localhost']
 default['rogue']['settings']['PROXY_ALLOWED_HOSTS'] = [node['rogue']['networking']['application']['address'], 'geoserver.rogue.lmnsolutions.com']

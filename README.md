@@ -32,6 +32,8 @@ Attributes
 - `node['rogue']['geoserver']['geowebcache']['url']` = The URL used to download GeoWebCache.
 - `node['rogue']['geoserver']['jai']['url']` = The URL used to download JAI.
 - `node['rogue']['geoserver']['jai_io']['url']` = The URL used to download JAI IO.
+- `node['rogue']['geoserver_data']['url']` = The URL used to download a template geoserver data directory.
+- `node['rogue']['geoserver_data']['branch']` = The branch or revision to use when downloading a template geoserver data directory.
 - `node['rogue']['interpreter']` = The path to the ROGUE python interpreter.
 - `node['rogue']['ip']` = The IP address used to configure ROGUE applications.
 - `node['rogue']['iface']` = The network interface used to obtain the ip.  Defaults to eth1 when the vagrant attribute is true, eth0 all other times.

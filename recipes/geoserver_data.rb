@@ -1,8 +1,9 @@
 geoserver_data_dir = '/opt/geoserver_data'
 git geoserver_data_dir do
-  repository "https://github.com/ROGUE-JCTD/geoserver_data.git"
+  repository node['rogue']['geoserver_data']['url']
   user 'root'
-  action :export
+  action :checkout
+  revision node['rogue']['geoserver_data']['branch']
   not_if do File.exists? node['rogue']['geoserver']['data_dir'] end
 end
 
