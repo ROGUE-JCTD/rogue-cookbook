@@ -124,6 +124,13 @@ action :collect_static do
 end
 
 action :start do
+
+  bash "stop_uwsgi" do
+    command "pkill -9 -f uwsgi"
+    only_if "pgrep uwsgi"
+    user 'root'
+  end
+
   execute "runserver" do
     command "#{new_resource.virtual_env_location}bin/uwsgi --ini #{new_resource.rogue_geonode_location}/django.ini &"
     user 'root'
