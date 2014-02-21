@@ -12,4 +12,5 @@ attribute :rogue_geonode_branch, :kind_of => String, :default => node['rogue']['
 attribute :fixtures, :kind_of => Array, :default => node['rogue']['rogue_geonode']['fixtures']
 attribute :logging_location, :kind_of => String, :default => node['rogue']['logging']['location']
 attribute :settings, :kind_of => Array, :default => node['rogue']['rogue_geonode']['settings']
-
+attribute :site_domain, :kind_of => String, :default => node['rogue']['networking']['application']['fqdn']
+attribute :site_name, :kind_of => String, :default => 'ROGUE'

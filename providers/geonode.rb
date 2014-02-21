@@ -7,7 +7,6 @@ end
 
 use_inline_resources
 
-
 def django_command(cmd, options)
   "#{new_resource.virtual_env_location}bin/python manage.py #{cmd} #{options.join(' ')}"
 end
@@ -24,6 +23,13 @@ def collect_static
   end
 end
 
+def clean_domain(domain)
+  unless domain.start_with? 'http'
+    "http://#{domain}"
+  else
+    domain
+  end
+end
 
 action :install do
   if test
@@ -91,6 +97,12 @@ action :install do
       action :create
     end
 
+    execute "update_site_domain" do
+      command django_command('siteupdate', ["-d #{clean_domain(new_resource.site_domain)}", "-n #{new_resource.site_name}"] )
+      cwd new_resource.rogue_geonode_location
+      user 'root'
+    end
+
     Chef::Log.debug "Creating the GeoNode uwsgi configuration file"
     template "rogue_geonode_uwsgi_config" do
       path "#{new_resource.rogue_geonode_location}/django.ini"
@@ -115,6 +127,7 @@ action :load_data do
     command django_command('loaddata', new_resource.fixtures)
     cwd new_resource.rogue_geonode_location
     user 'root'
+    not_if { new_resource.fixtures.empty? }
   end
   new_resource.updated_by_last_action(true)
 end

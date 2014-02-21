@@ -46,7 +46,7 @@ default['rogue']['geonode']['location'] = '/var/lib/geonode/'
 default['rogue']['rogue_geonode']['branch'] = 'master'
 default['rogue']['rogue_geonode']['location'] = File.join(node['rogue']['geonode']['location'], 'rogue_geonode')
 default['rogue']['rogue_geonode']['url'] = 'https://github.com/ROGUE-JCTD/rogue_geonode.git'
-default['rogue']['rogue_geonode']['fixtures'] = "sample_admin.json #{node['rogue']['rogue_geonode']['location']}/rogue_geonode/fixtures/initial_data.json".split
+default['rogue']['rogue_geonode']['fixtures'] = ['sample_admin.json',]
 
 default['rogue']['rogue_geonode']['settings']['SITEURL'] = "http://#{node['rogue']['networking']['application']['fqdn']}/"
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['LOCATION'] = node['rogue']['geoserver']['url']
