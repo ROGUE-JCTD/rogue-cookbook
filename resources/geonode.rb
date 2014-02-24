@@ -1,4 +1,4 @@
-actions :install, :sync_db, :load_data, :collect_static, :start, :update_layers, :create_postgis_datastore
+actions :install, :sync_db, :load_data, :collect_static, :start, :update_layers, :create_postgis_datastore, :update_site
 default_action :install
 
 

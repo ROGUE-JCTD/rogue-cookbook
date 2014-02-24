@@ -97,12 +97,6 @@ action :install do
       action :create
     end
 
-    execute "update_site_domain" do
-      command django_command('siteupdate', ["-d #{clean_domain(new_resource.site_domain)}", "-n #{new_resource.site_name}"] )
-      cwd new_resource.rogue_geonode_location
-      user 'root'
-    end
-
     Chef::Log.debug "Creating the GeoNode uwsgi configuration file"
     template "rogue_geonode_uwsgi_config" do
       path "#{new_resource.rogue_geonode_location}/django.ini"
@@ -119,7 +113,16 @@ action :sync_db do
     user 'root'
     not_if "cd #{new_resource.rogue_geonode_location} && #{django_command('dumpdata', ['security'])}"
   end
+
   new_resource.updated_by_last_action(true)
+end
+
+action :update_site do
+  execute "update_site_domain" do
+    command django_command('siteupdate', ["-d #{clean_domain(new_resource.site_domain)}", "-n #{new_resource.site_name}"] )
+    cwd new_resource.rogue_geonode_location
+    user 'root'
+  end
 end
 
 action :load_data do
