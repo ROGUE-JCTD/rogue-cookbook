@@ -2,7 +2,7 @@ geoserver_data_dir = '/opt/geoserver_data'
 git geoserver_data_dir do
   repository node['rogue']['geoserver_data']['url']
   user 'root'
-  action :checkout
+  action :sync
   revision node['rogue']['geoserver_data']['branch']
   not_if do File.exists? node['rogue']['geoserver']['data_dir'] end
 end
