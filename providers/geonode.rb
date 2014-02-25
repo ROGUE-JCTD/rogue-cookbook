@@ -23,13 +23,6 @@ def collect_static
   end
 end
 
-def clean_domain(domain)
-  unless domain.start_with? 'http'
-    "http://#{domain}"
-  else
-    domain
-  end
-end
 
 action :install do
   if test
@@ -119,7 +112,7 @@ end
 
 action :update_site do
   execute "update_site_domain" do
-    command django_command('siteupdate', ["-d #{clean_domain(new_resource.site_domain)}", "-n #{new_resource.site_name}"] )
+    command django_command('siteupdate', ["-d #{new_resource.site_domain}", "-n #{new_resource.site_name}"] )
     cwd new_resource.rogue_geonode_location
     user 'root'
   end
