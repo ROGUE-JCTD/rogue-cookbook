@@ -52,7 +52,7 @@ postgresql_database 'add_geonode_authorize_layer_function' do
   connection   postgresql_connection_info
   database_name geonode_connection_info[:name]
   sql <<-EOH
-DROP FUNCTION geonode_authorize_layer(varchar, varchar);
+DROP FUNCTION IF EXISTS geonode_authorize_layer(varchar, varchar);
 CREATE OR REPLACE FUNCTION geonode_authorize_layer(user_name varchar, type_name varchar) RETURNS varchar AS $$
 
 DECLARE
