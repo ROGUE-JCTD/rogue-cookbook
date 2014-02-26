@@ -52,8 +52,8 @@ Attributes
 - `node['rogue']['rogue_geonode']['url']` - The git repository to use for ROGUE.
 - `node['rogue']['rogue_geonode']['branch']` - The branch to use for ROGUE.
 - `node['rogue']['rogue_geonode']['settings']` - ROGUE_GEONODE settings (loaded into local_settings.py).
-- `node['rogue']['settings']['ALLOWED_HOSTS']` = An array of hosts allowed to make requests to GeoNode.
-- `node['rogue']['settings']['PROXY_ALLOWED_HOSTS']` = An array of hosts that the GeoNode can forward requests to.
+- `node['rogue']['rogue_geonode']['settings']['ALLOWED_HOSTS']` = An array of hosts allowed to make requests to GeoNode.
+- `node['rogue']['rogue_geonode']['settings']['PROXY_ALLOWED_HOSTS']` = An array of hosts that the GeoNode can forward requests to.
 - `node['rogue']['ssh']['public_key']` = A public key used for the rogue user to support file synchronization.
 - `node['rogue']['ssh']['public_key_remote_file']` = The location where to store the public key on the guest machine.
 - `node['rogue']['iface']` = The network interface used to obtain the ip.  Defaults to eth1 when the vagrant attribute is true, eth0 all other times.

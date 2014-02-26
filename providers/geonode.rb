@@ -74,7 +74,9 @@ action :install do
        path "#{new_resource.rogue_geonode_location}/rogue_geonode/local_settings.py"
        source "local_settings.py.erb"
        variables ({:database => node['rogue']['rogue_geonode']['settings']['DATABASES']['default'],
-                   :data_store => node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports']})
+                   :data_store => node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports'],
+                   :settings => node['rogue']['rogue_geonode']['settings']
+                   })
      end
 
     collect_static
@@ -119,7 +121,7 @@ action :update_site do
 end
 
 action :load_data do
-  execute "load_data" do
+  execute "load_data_#{new_resource.name}" do
     command django_command('loaddata', new_resource.fixtures)
     cwd new_resource.rogue_geonode_location
     user 'root'
