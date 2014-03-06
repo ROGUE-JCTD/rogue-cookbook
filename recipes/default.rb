@@ -50,6 +50,7 @@ directory node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATAS
   owner node['tomcat']['user']
   recursive true
   mode 00755
+  notifies :restart, "service[tomcat]", :immediately
 end
 
 rogue_geonode node['rogue']['geonode']['location'] do
