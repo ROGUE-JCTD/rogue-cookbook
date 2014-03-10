@@ -19,7 +19,7 @@ execute "copy_geoserver_data_dir" do
   action :run
   only_if  do !geoserver_data_dir.eql? node['rogue']['geoserver']['data_dir'] and File.exists? geoserver_data_dir and !File.exists? node['rogue']['geoserver']['data_dir'] end
   notifies :create, "directory[#{file_store}]", :immediately
-  notifies :run, "execute[change_perms]"
+  notifies :run, "execute[change_perms]", :immediately
   user 'root'
 end
 
