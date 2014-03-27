@@ -23,6 +23,18 @@ def collect_static
   end
 end
 
+def local_settings(template_variables={})
+  variables = {:database => node['rogue']['rogue_geonode']['settings']['DATABASES']['default'],
+                :data_store => node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports'],
+                :settings => new_resource.settings
+               }.merge(template_variables)
+
+  template "rogue_geonode_config" do
+    path "#{new_resource.rogue_geonode_location}/rogue_geonode/local_settings.py"
+    source "local_settings.py.erb"
+    variables(variables)
+  end
+end
 
 action :install do
   if test
@@ -70,15 +82,7 @@ action :install do
       options "--no-deps"
     end
 
-    template "rogue_geonode_config" do
-       path "#{new_resource.rogue_geonode_location}/rogue_geonode/local_settings.py"
-       source "local_settings.py.erb"
-       variables ({:database => node['rogue']['rogue_geonode']['settings']['DATABASES']['default'],
-                   :data_store => node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports'],
-                   :settings => node['rogue']['rogue_geonode']['settings']
-                   })
-     end
-
+    local_settings
     collect_static
 
     Chef::Log.debug "Adding a script to start GeoNode on reboot"
@@ -128,6 +132,10 @@ action :load_data do
     not_if { new_resource.fixtures.empty? }
   end
   new_resource.updated_by_last_action(true)
+end
+
+action :update_local_settings do
+    local_settings
 end
 
 action :collect_static do

@@ -67,6 +67,3 @@ default['rogue']['rogue_geonode']['settings']['DATABASES'] = {
 default['rogue']['geogit']['branch'] = 'SprintRelease'
 default['rogue']['geogit']['location'] = '/var/lib/geogit'
 default['rogue']['geogit']['url'] = 'https://github.com/ROGUE-JCTD/GeoGit.git'
-
-
-
