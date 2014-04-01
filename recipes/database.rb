@@ -153,7 +153,7 @@ if (user_name IS NOT NULL) then
 		ON ("security_userobjectrolemapping"."role_id" = "security_objectrole"."id")
 		INNER JOIN "security_objectrole_permissions"
 		ON ("security_objectrole"."id" = "security_objectrole_permissions"."objectrole_id")
-		WHERE ("security_objectrole_permissions"."permission_id" = change_perm
+		WHERE ("security_objectrole_permissions"."permission_id" = view_perm
 		AND "security_userobjectrolemapping"."object_ct_id" = ct
 		AND "security_userobjectrolemapping"."user_id" = "user".id
 		AND "security_userobjectrolemapping"."object_id" = "layer".id
