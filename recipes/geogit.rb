@@ -29,3 +29,16 @@ email = rogue@lmnsolutions.com
  only_if do node["tomcat"]["home"] end
  action :create_if_missing
 end
+
+git node['rogue']['geoeserver-exts']['location'] do
+  repository node['rogue']['geoeserver-exts']['url']
+  revision node['rogue']['geoeserver-exts']['branch']
+  action :sync
+end
+
+execute "build the geoserver_ext" do
+  command "mvn clean install -DskipTests"
+  cwd ::File.join(node['rogue']['geoeserver-exts']['location'], 'geogit')
+  user 'root'
+  action :run
+end

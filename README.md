@@ -34,6 +34,9 @@ Attributes
 - `node['rogue']['geoserver']['jai_io']['url']` = The URL used to download JAI IO.
 - `node['rogue']['geoserver_data']['url']` = The URL used to download a template geoserver data directory.
 - `node['rogue']['geoserver_data']['branch']` = The branch or revision to use when downloading a template geoserver data directory.
+- `node['rogue']['geoeserver-exts']['branch']` = The branch or revision to use when downloading the geoserver extensions repository, defaults to '2.4.x'.
+- `node['rogue']['geoeserver-exts']['location']` = The geoserver-exts installation location.
+- `node['rogue']['geoeserver-exts']['url']` = The git repository url for geoserver-exts.
 - `node['rogue']['interpreter']` = The path to the ROGUE python interpreter.
 - `node['rogue']['ip']` = The IP address used to configure ROGUE applications.
 - `node['rogue']['iface']` = The network interface used to obtain the ip.  Defaults to eth1 when the vagrant attribute is true, eth0 all other times.

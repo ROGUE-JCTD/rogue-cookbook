@@ -67,3 +67,7 @@ default['rogue']['rogue_geonode']['settings']['DATABASES'] = {
 default['rogue']['geogit']['branch'] = 'SprintRelease'
 default['rogue']['geogit']['location'] = '/var/lib/geogit'
 default['rogue']['geogit']['url'] = 'https://github.com/ROGUE-JCTD/GeoGit.git'
+
+default['rogue']['geoeserver-exts']['branch'] = '2.4.x'
+default['rogue']['geoeserver-exts']['location'] = '/var/lib/geoserver-exts'
+default['rogue']['geoeserver-exts']['url'] = 'https://github.com/boundlessgeo/geoserver-exts.git'
