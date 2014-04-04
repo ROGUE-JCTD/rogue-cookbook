@@ -17,10 +17,10 @@ execute "update_fstab" do
 end
 
 execute "generate_ssh_key" do
-  command "ssh-keygen -t rsa -f ~/.ssh/id_rsa"
+  command "ssh-keygen -t rsa -q -f ~/.ssh/id_rsa -P \"\" "
   user 'root'
   action :run
-  not_if do File.exists? '/root/.ssh/id_rsa' end
+  not_if 'ls ~/.ssh/id_rsa'
 end
 
 #directory ".ssh" do
