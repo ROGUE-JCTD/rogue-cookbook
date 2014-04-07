@@ -7,6 +7,12 @@ provisioner:
 
 platforms:
   - name: ubuntu-12.04
+    driver:
+      box: ubuntu-12.04
+      box_url: "http://files.vagrantup.com/precise64.box"
+      customize:
+        memory: 5000
+        cpus: 10
 
 suites:
   - name: default
