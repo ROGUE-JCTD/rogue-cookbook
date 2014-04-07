@@ -19,3 +19,9 @@ end
 describe file('/etc/tomcat7/server.xml') do
   it { should be_mode 644 }
 end
+
+describe file('/usr/share/tomcat7') do
+  it { should be_directory }
+  it { should be_owned_by 'tomcat7' }
+  it { should be_grouped_into 'tomcat7' }
+end

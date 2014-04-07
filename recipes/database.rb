@@ -1,7 +1,3 @@
-gem_package "pg" do
-  action :install
-end
-
 postgresql_connection_info = {
   :host     => node['rogue']['networking']['database']['hostname'],
   :port     => node['postgresql']['config']['port'],

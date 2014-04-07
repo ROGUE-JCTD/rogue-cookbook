@@ -20,8 +20,6 @@ suites:
       - recipe[apt]
       - recipe[python]
       - recipe[git]
-      - recipe[rogue::java]
-      - recipe[rogue::permissions]
-      - recipe[rogue::nginx]
-      - recipe[rogue::tomcat]
+      - recipe[rogue::postgresql]
+      - recipe[rogue]
     attributes: {}
