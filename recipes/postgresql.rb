@@ -58,5 +58,6 @@ sudo make install
 sudo /opt/chef/embedded/bin/gem install pg -- --with-pg-config=/opt/chef/embedded/lib/postgresql/9.2/bin/pg_config
 EOF
   only_if { File.exists?("/opt/chef") }
+  not_if "/opt/chef/embedded/bin/gem list | grep pg"
 end
 
