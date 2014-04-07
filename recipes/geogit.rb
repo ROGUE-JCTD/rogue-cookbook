@@ -12,22 +12,22 @@ execute "install_GeoGIT" do
   retries 1
 end
 
+geogit_home = File.join(node['rogue']['geogit']['location'], 'src/cli-app/target/geogit')
+
 file "/etc/profile.d/geogit.sh" do
-  content "export GEOGIT_HOME=#{::File.join(node['rogue']['geogit']['location'], 'src/cli-app/target/geogit')} && PATH=$PATH:$GEOGIT_HOME/bin"
+  content "export GEOGIT_HOME=#{geogit_home} && PATH=$PATH:$GEOGIT_HOME/bin"
   mode 00755
   action :create_if_missing
 end
 
-file "gitconfig" do
-  path ::File.join(node["tomcat"]["home"], '.geogitconfig')
-  content <<-EOH
-[user]
-name = Rogue
-email = rogue@lmnsolutions.com
-  EOH
- mode 00755
- only_if do node["tomcat"]["home"] end
- action :create_if_missing
+geogit_home = File.join(node['rogue']['geogit']['location'], 'src/cli-app/target/geogit')
+node['rogue']['geogit']['global_configuration'].each do |section, values|
+    values.each do |key, value|
+      bash "geogit global config #{section}.#{key} #{value}" do
+        code "#{File.join(geogit_home, '/bin/geogit')} config --global #{section}.#{key} #{value}"
+        user "tomcat7"
+      end
+    end
 end
 
 git node['rogue']['geoeserver-exts']['location'] do
@@ -42,3 +42,4 @@ execute "build the geoserver_ext" do
   user 'root'
   action :run
 end
+

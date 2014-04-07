@@ -23,6 +23,7 @@ Attributes
 - `node['rogue']['debug']`= Boolean.  Determines whether applications should be configured in debug mode.
 - `node['rogue']['django_maploom']['url']` - The url to use when using pip to download Django-Maploom.
 - `node['rogue']['geogit']['branch']` = The geogit branch to during the installation.
+- `node['rogue']['geogit']['global_configuration']` = A hash of hashes which represents geogit global configuration.
 - `node['rogue']['geogit']['location']` = The geogit installation location.
 - `node['rogue']['geogit']['url']` = The git repository url for geogit.
 - `node['rogue']['geoserver']['use_db_client']` = Boolean.  If true, geoserver will use the database client in the geonode-geoserver extension to authenticate users.
