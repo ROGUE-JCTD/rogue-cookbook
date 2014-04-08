@@ -23,16 +23,19 @@ Attributes
 - `node['rogue']['debug']`= Boolean.  Determines whether applications should be configured in debug mode.
 - `node['rogue']['django_maploom']['url']` - The url to use when using pip to download Django-Maploom.
 - `node['rogue']['geogit']['branch']` = The geogit branch to during the installation.
+- `node['rogue']['geogit']['build_from_source']` = Boolean.  If true, geogit will build from source code every provision, if false geogit will be downloaded from the `node['rogue']['geogit']['url']` location.
 - `node['rogue']['geogit']['global_configuration']` = A hash of hashes which represents geogit global configuration.
 - `node['rogue']['geogit']['location']` = The geogit installation location.
-- `node['rogue']['geogit']['url']` = The git repository url for geogit.
+- `node['rogue']['geogit']['url']` = The git repository url or zip file for geogit.
 - `node['rogue']['geoserver']['use_db_client']` = Boolean.  If true, geoserver will use the database client in the geonode-geoserver extension to authenticate users.
 - `node['rogue']['geoserver']['url']` = The full url to Geoserver in ROGUE.
 - `node['rogue']['geoserver']['base_url']` = Geoserver's URL route in ROGUE.
+- `node['rogue']['geoserver']['build_from_source']` = Boolean.  If true, geoserver will build from the `geoserver_ext` folder in the `rogue_geonode` repository.
 - `node['rogue']['geoserver']['data_dir']` = The location of the geoserver data directory.
 - `node['rogue']['geoserver']['geowebcache']['url']` = The URL used to download GeoWebCache.
 - `node['rogue']['geoserver']['jai']['url']` = The URL used to download JAI.
 - `node['rogue']['geoserver']['jai_io']['url']` = The URL used to download JAI IO.
+- `node['rogue']['geoserver']['war']` = The url of a geoserver .war file.  This is only used if `node['rogue']['geoserver']['build_from_source']` is `false`.
 - `node['rogue']['geoserver_data']['url']` = The URL used to download a template geoserver data directory.
 - `node['rogue']['geoserver_data']['branch']` = The branch or revision to use when downloading a template geoserver data directory.
 - `node['rogue']['geoeserver-exts']['branch']` = The branch or revision to use when downloading the geoserver extensions repository, defaults to '2.4.x'.

@@ -25,6 +25,7 @@ default['rogue']['networking']['database']['address'] = '127.0.0.1'
 default['rogue']['networking']['database']['gateway'] = nil
 default['rogue']['networking']['database']['netmask'] = nil
 
+default['rogue']['geoserver']['build_from_source'] = false
 default['rogue']['geoserver']['use_db_client'] = true
 default['rogue']['geoserver']['base_url'] = '/geoserver'
 default['rogue']['geoserver']['data_dir'] = '/var/lib/geoserver_data'
@@ -32,6 +33,7 @@ default['rogue']['geoserver']['geowebcache']['url'] = "http://sourceforge.net/pr
 default['rogue']['geoserver']['jai']['url'] = "http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64-jdk.bin"
 default['rogue']['geoserver']['jai_io']['url'] = "http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64-jdk.bin"
 default['rogue']['geoserver']['url']= "http://#{node['rogue']['networking']['application']['fqdn']}#{node['rogue']['geoserver']['base_url']}/"
+default['rogue']['geoserver']['war'] = "http://jenkins.rogue.lmnsolutions.com/job/geoserver/lastSuccessfulBuild/artifact/geoserver_ext/target/geoserver.war"
 
 default['rogue']['geoserver_data']['url'] = 'https://github.com/ROGUE-JCTD/geoserver_data.git'
 default['rogue']['geoserver_data']['branch'] = 'master'
@@ -63,14 +65,20 @@ default['rogue']['rogue_geonode']['settings']['DATABASES'] = {
     :default=>{:name=>'geonode', :user=>'geonode', :password=>'geonode', :host=>'rogue-database', :port=>'5432'},
     :geonode_imports=>{:name=>'geonode_imports', :user=>'geonode', :password=>'geonode', :host=>'rogue-database', :port=>'5432'}
     }
-
+default['rogue']['geogit']['build_from_source'] = false
 default['rogue']['geogit']['branch'] = 'SprintRelease'
-default['rogue']['geogit']['location'] = '/var/lib/geogit'
-default['rogue']['geogit']['url'] = 'https://github.com/ROGUE-JCTD/GeoGit.git'
+
+if node['rogue']['geogit']['build_from_source']
+  default['rogue']['geogit']['url'] = 'https://github.com/ROGUE-JCTD/GeoGit.git'
+else
+  default['rogue']['geogit']['url'] = 'http://jenkins.rogue.lmnsolutions.com/job/geogit/lastSuccessfulBuild/artifact/src/cli-app/target/geogit-cli-app.zip'
+end
+
 default['rogue']['geogit']['global_configuration'] = {"user"=> {"name"=>"rogue",
                                                                 "email"=>"rogue@lmnsolutions.com"},
                                                       "bdbje"=> {"object_durability"=>"safe"}
                                                       }
+default['rogue']['geogit']['location'] = '/var/lib/geogit'
 
 
 default['rogue']['geoeserver-exts']['branch'] = '2.4.x'

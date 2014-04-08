@@ -3,10 +3,17 @@ execute "install_geoserver" do
   cwd File.join(node['rogue']['rogue_geonode']['location'], 'geoserver_ext')
   user 'root'
   notifies :stop, "service[tomcat]", :immediately
+  only_if { node['rogue']['geoserver']['build_from_source'] }
+end
+
+if node['rogue']['geoserver']['build_from_source']
+  remote_file_location = "file://#{::File.join(node['rogue']['rogue_geonode']['location'], 'geoserver_ext/target/geoserver.war')}"
+else
+  remote_file_location = node['rogue']['geoserver']['war']
 end
 
 war 'geoserver.war' do
-  remote_file_location "file://#{::File.join(node['rogue']['rogue_geonode']['location'], 'geoserver_ext/target/geoserver.war')}"
+  remote_file_location remote_file_location
   action :deploy
 end
 
