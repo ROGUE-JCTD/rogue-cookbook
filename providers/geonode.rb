@@ -66,7 +66,6 @@ action :install do
 
     git new_resource.rogue_geonode_location do
       repository node['rogue']['rogue_geonode']['url']
-      checkout_branch branch
       revision branch
       action :sync
     end

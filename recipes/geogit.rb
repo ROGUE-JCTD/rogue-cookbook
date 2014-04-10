@@ -1,5 +1,4 @@
 git node['rogue']['geogit']['location'] do
-  checkout_branch node['rogue']['geogit']['branch']
   repository node['rogue']['geogit']['url']
   revision node['rogue']['geogit']['branch']
   action :sync
@@ -57,7 +56,6 @@ node['rogue']['geogit']['global_configuration'].each do |section, values|
 end
 
 git node['rogue']['geoeserver-exts']['location'] do
-  checkout_branch node['rogue']['geoeserver-exts']['branch']
   repository node['rogue']['geoeserver-exts']['url']
   revision node['rogue']['geoeserver-exts']['branch']
   action :sync
