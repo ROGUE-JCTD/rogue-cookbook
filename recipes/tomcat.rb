@@ -17,8 +17,8 @@ end
 template "tomcat_config" do
   path "#{node["tomcat"]["config_dir"]}/server.xml"
   source "server.xml.erb"
-  owner "tomcat7"
-  group "tomcat7"
+  owner node['tomcat']['user']
+  group node['tomcat']['user']
   mode "0644"
   action :create
   notifies :restart, "service[tomcat]", :immediately

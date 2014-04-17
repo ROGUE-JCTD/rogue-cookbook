@@ -17,7 +17,7 @@ war 'geoserver.war' do
   action :deploy
 end
 
-service 'tomcat7' do
+service node['tomcat']['user'] do
   action :stop
 end
 

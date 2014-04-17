@@ -43,10 +43,10 @@ execute "change_perms" do
     find #{geogit} -type d -print0 | xargs -0 chmod 775
     find #{geogit} -type f -print0 | xargs -0 chmod 664
 
-    chown tomcat7:roguecat -R #{geogit}
+    chown #{node['tomcat']['user']}:roguecat -R #{geogit}
     find #{geogit} -type d -print0 | xargs -0 setfacl -d -m g::rwx
     find #{geogit} -type d -print0 | xargs -0 setfacl -d -m o::rx
-    chown tomcat7:roguecat -R #{file_store}
+    chown #{node['tomcat']['user']}:roguecat -R #{file_store}
     chmod 664 #{file_store}/*
   EOH
   user 'root'
