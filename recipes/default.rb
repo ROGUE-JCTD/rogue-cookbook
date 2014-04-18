@@ -23,7 +23,9 @@ link target do
   action :create
 end
 
-include_recipe 'rogue::database'
+if node['rogue']['setup_db']
+  include_recipe 'rogue::database'
+end
 
 rogue_geonode node['rogue']['geonode']['location'] do
   action :install

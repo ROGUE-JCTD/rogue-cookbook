@@ -1,8 +1,8 @@
 postgresql_connection_info = {
   :host     => node['rogue']['networking']['database']['hostname'],
-  :port     => node['postgresql']['config']['port'],
-  :username => 'postgres',
-  :password => node['postgresql']['password']['postgres']
+  :port     => node['rogue']['postgresql']['port'],
+  :username => node['rogue']['postgresql']['user'],
+  :password => node['rogue']['postgresql']['password']
 }
 
 geonode_connection_info = node['rogue']['rogue_geonode']['settings']['DATABASES']['default']
@@ -32,7 +32,7 @@ end
 # Create the GeoNode imports db
 postgresql_database geonode_imports_connection_info[:name] do
   connection postgresql_connection_info
-  template node['postgis']['template_name']
+  template node.fetch('postgis', {}).fetch('template_name', 'template_postgis')
   owner geonode_imports_connection_info[:user]
   action :create
 end

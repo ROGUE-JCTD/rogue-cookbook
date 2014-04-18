@@ -13,11 +13,17 @@ default['unison']['user'] = {:username=>'unison',
                             :password=>'$1$oqU7lFMn$xYYGAjusAQ59R.NBEAwH7.'
                             }
 
+default['rogue']['postgresql']['user'] = 'postgres'
+default['rogue']['postgresql']['password'] = node.fetch('postgresql',{}).fetch('password', {}).fetch('postgres', 'rogue')
+default['rogue']['postgresql']['port'] = node.fetch('postgresql',{}).fetch('config', {}).fetch('port', '5432')
+
+
 default['rogue']['ssh']['public_key'] = ''
 default['rogue']['ssh']['public_key_remote_file'] = '/root/.ssh/id_rsa.pub'
 default['rogue']['install_docs'] = true
 default['rogue']['logging']['location'] = '/var/log/rogue'
 default['rogue']['ip'] = node['network']['interfaces'][node['rogue']['iface']]['addresses'].detect{|k,v| v['family'] == "inet" }[0]
+default['rogue']['setup_db'] = true
 default['rogue']['networking']['application']['hostname'] = 'rogue-geoserver'
 default['rogue']['networking']['application']['address'] = node['rogue']['ip']
 default['rogue']['networking']['application']['fqdn'] = node['rogue']['ip']

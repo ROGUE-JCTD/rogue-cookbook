@@ -23,6 +23,7 @@ Attributes
 - `node['rogue']['debug']`= Boolean.  Determines whether applications should be configured in debug mode.
 - `node['rogue']['django_maploom']['url']` - The url to use when using pip to download Django-Maploom.
 - `node['rogue']['user']` = A hash with the username and password for the ROGUE user.
+- `node['rogue']['setup_db']` = Boolean.  Dictates whether the `rogue::database` recipe is executed.
 - `node['rogue']['geogit']['branch']` = The geogit branch to during the installation.
 - `node['rogue']['geogit']['build_from_source']` = Boolean.  If true, geogit will build from source code every provision, if false geogit will be downloaded from the `node['rogue']['geogit']['url']` location.
 - `node['rogue']['geogit']['global_configuration']` = A hash of hashes which represents geogit global configuration.
@@ -57,6 +58,9 @@ Attributes
 - `node['rogue']['networking']['database']['hostname']` = The database server's hostname.
 - `node['rogue']['networking']['database']['netmask']` = The database server's netmask (if applicable)
 - `node['rogue']['nginx']['locations']` = Key, value pairs used to generate nginx location directives.
+- `node['rogue']['postgresql']['user']` = The postgres username. Defaults to 'postgres'.
+- `node['rogue']['postgresql']['password']` = The postgres password. Defaults to `node['postgresql']['password']`.
+- `node['rogue']['postgresql']['port']` = The postgres port. Defaults to `node['postgresql']['password']`.
 - `node['rogue']['rogue_geonode']['location']` - The path on the node where ROGUE is installed.
 - `node['rogue']['rogue_geonode']['url']` - The git repository to use for ROGUE.
 - `node['rogue']['rogue_geonode']['branch']` - The branch to use for ROGUE.
@@ -154,6 +158,36 @@ The unison recipe will:
 
 - Install Unison, ACL, and Keychain
 - Update root's fstab entry to add acl
+
+How To
+------
+Below are instructions for common configurations that are not default.
+
+### Using an existing database server.
+A common configuration request is to separate the database from the application server. Follow the steps below to set up ROGUE to use an existing database server.  All of the changes will occur in your `dna.json` file if you are provisioning without Vagrant or in the Vagrantfile if are using Vagrant.
+
+#### Using Chef only on the application server: ####
+This installation method will refrain from installing Postgres and PostGIS on the application server, but still use the application server to configure the databases.
+
+**Note:** The `database`recipe assumes that PostGIS is already installed and that a template database called `template_postgis` is present.  You can override the PostGIS template name using the `node['postgis']['template_name']` attribute.
+
+1. Remove `rogue::postgresql` from your run list to prevent Chef from installing Postgres on the application server.
+2. Specify the network location for your Postgres server in the `node['rogue']['networking']['database']['address']` attribute.
+3. Next, populate your postgres connection parameters for the server using the `node['rogue']['postgresql']['password']`, `node['rogue']['postgresql']['user']`, `node['rogue']['postgresql']['port']` attributes.  By default, the `database` recipe will attempt to connect as `postgres` in order to create the correct application usernames, tables, and functions.  Make sure that your Postgres server will allow this user to login remotely from the application server using the appropriate configuration settings.
+
+#### Using Chef on the application and database server: ####
+This method separates the application from the database server but installs and configures Postgres and the GeoNode databases using Chef on the database server.
+
+##### On the Application server #####
+1. Remove `rogue::postgresql` from your run list to prevent Chef from installing Postgres on the application server.
+2. Specify the network location for your Postgres server in the `node['rogue']['networking']['database']['address']` attribute.
+3. Set the `node['rogue']['setup_db']` attribute to `false` to disable the database configuration step when provisioning.
+
+##### On the Database server #####
+1. Add the `rogue::postgresql` and `rogue::database` recipes to your run list.
+2. If desired, add your pg_hba.conf configuration via the `node['postgresql']['pg_hba']`.  Ensure that the application server will be able to connect.
+3. You will need to add your application server's host to `node['postgresql']['config']['listen_addresses']`.
+
 
 Contributing
 ------------
