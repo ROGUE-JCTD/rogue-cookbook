@@ -22,6 +22,7 @@ Attributes
 
 - `node['rogue']['debug']`= Boolean.  Determines whether applications should be configured in debug mode.
 - `node['rogue']['django_maploom']['url']` - The url to use when using pip to download Django-Maploom.
+- `node['rogue']['user']` = A hash with the username and password for the ROGUE user.
 - `node['rogue']['geogit']['branch']` = The geogit branch to during the installation.
 - `node['rogue']['geogit']['build_from_source']` = Boolean.  If true, geogit will build from source code every provision, if false geogit will be downloaded from the `node['rogue']['geogit']['url']` location.
 - `node['rogue']['geogit']['global_configuration']` = A hash of hashes which represents geogit global configuration.
@@ -64,6 +65,7 @@ Attributes
 - `node['rogue']['ssh']['public_key']` = A public key used for the rogue user to support file synchronization.
 - `node['rogue']['ssh']['public_key_remote_file']` = The location where to store the public key on the guest machine.
 - `node['rogue']['iface']` = The network interface used to obtain the ip.  Defaults to eth1 when the vagrant attribute is true, eth0 all other times.
+- `node['unison']['user']` = A hash with the username and password for the `unison` user.
 
 Usage
 -----

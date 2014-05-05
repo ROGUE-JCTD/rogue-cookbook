@@ -12,6 +12,12 @@ describe user('rogue') do
   it { should have_login_shell '/bin/bash' }
 end
 
+describe user('unison') do
+  it { should exist }
+  it { should belong_to_group 'roguecat' }
+  it { should have_login_shell '/bin/bash' }
+end
+
 describe group('roguecat') do
   it { should exist }
 end

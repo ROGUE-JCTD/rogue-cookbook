@@ -26,3 +26,14 @@ group "roguecat" do
   append true
   members "rogue"
 end
+
+user "unison" do
+  shell '/bin/bash'
+  password node['unison']['user']['password']
+end
+
+group "roguecat" do
+  action :modify
+  append true
+  members "unison"
+end

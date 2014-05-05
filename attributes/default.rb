@@ -9,6 +9,10 @@ default['rogue']['user'] = {:username=>'rogue',
                             :password=>'$1$oqU7lFMn$xYYGAjusAQ59R.NBEAwH7.'
                             }
 
+default['unison']['user'] = {:username=>'unison',
+                            :password=>'$1$oqU7lFMn$xYYGAjusAQ59R.NBEAwH7.'
+                            }
+
 default['rogue']['ssh']['public_key'] = ''
 default['rogue']['ssh']['public_key_remote_file'] = '/root/.ssh/id_rsa.pub'
 
