@@ -22,4 +22,4 @@ suites:
       - recipe[git]
       - recipe[rogue::postgresql]
       - recipe[rogue]
-    attributes: {}
+    attributes: {'tomcat':{'java_options':"-Djava.awt.headless=true -Xmx3g -XX:MaxPermSize=256m -XX:+UseConcMarkSweepGC"}}
