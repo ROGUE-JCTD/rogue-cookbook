@@ -14,6 +14,7 @@ end
 
 describe user('unison') do
   it { should exist }
+  it { should have_home_directory '/home/unison' }
   it { should belong_to_group 'roguecat' }
   it { should have_login_shell '/bin/bash' }
 end

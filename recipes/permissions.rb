@@ -29,6 +29,7 @@ end
 
 user "unison" do
   shell '/bin/bash'
+  home '/home/unison'
   password node['unison']['user']['password']
 end
 
