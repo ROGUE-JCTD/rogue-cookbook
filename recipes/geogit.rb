@@ -43,7 +43,7 @@ end
 file "/etc/profile.d/geogit.sh" do
   content "export GEOGIT_HOME=#{geogit_home} && PATH=$PATH:$GEOGIT_HOME/bin"
   mode 00755
-  action :create_if_missing
+  action :create
 end
 
 node['rogue']['geogit']['global_configuration'].each do |section, values|
