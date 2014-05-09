@@ -1,7 +1,7 @@
 default['rogue']['debug'] = true
 default['rogue']['iface'] = 'eth0'
 
-if node.attribute?('vagrant')
+if node.fetch('vagrant', false)
     default['rogue']['iface'] = 'eth1'
 end
 
