@@ -73,7 +73,7 @@ action :install do
     Chef::Log.debug "Installing ROGUE using PIP"
     python_pip new_resource.rogue_geonode_location do
       virtualenv new_resource.virtual_env_location
-      options '-e'
+      options '--use-mirrors -e'
     end
 
     python_pip node['rogue']['django_maploom']['url'] do
