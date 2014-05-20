@@ -1,5 +1,5 @@
 actions :install, :sync_db, :load_data, :collect_static, :start, :update_layers, :create_postgis_datastore,
-  :update_site, :update_local_settings
+  :update_site, :update_local_settings, :build_html_docs
 
 default_action :install
 

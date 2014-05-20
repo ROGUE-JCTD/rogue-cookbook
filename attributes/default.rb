@@ -15,7 +15,7 @@ default['unison']['user'] = {:username=>'unison',
 
 default['rogue']['ssh']['public_key'] = ''
 default['rogue']['ssh']['public_key_remote_file'] = '/root/.ssh/id_rsa.pub'
-
+default['rogue']['install_docs'] = true
 default['rogue']['logging']['location'] = '/var/log/rogue'
 default['rogue']['ip'] = node['network']['interfaces'][node['rogue']['iface']]['addresses'].detect{|k,v| v['family'] == "inet" }[0]
 default['rogue']['networking']['application']['hostname'] = 'rogue-geoserver'

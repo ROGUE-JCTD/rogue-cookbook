@@ -71,9 +71,15 @@ action :install do
     end
 
     Chef::Log.debug "Installing ROGUE using PIP"
-    python_pip new_resource.rogue_geonode_location do
+
+    pip_install = new_resource.rogue_geonode_location
+    if node['rogue']['install_docs']
+      pip_install = "#{new_resource.rogue_geonode_location}[docs]"
+    end
+
+    python_pip pip_install do
       virtualenv new_resource.virtual_env_location
-      options '--use-mirrors -e'
+      options "--use-mirrors -e"
     end
 
     python_pip node['rogue']['django_maploom']['url'] do
@@ -195,6 +201,13 @@ action :create_postgis_datastore do
   end
 
   new_resource.updated_by_last_action(true)
+end
+
+action :build_html_docs do
+  bash "build docs" do
+    code "source #{new_resource.virtual_env_location}/bin/activate && cd #{new_resource.rogue_geonode_location}/docs && make html && chmod 755 build -R"
+    only_if { node['rogue']['install_docs'] }
+  end
 end
 
 def test()

@@ -54,7 +54,7 @@ directory node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATAS
 end
 
 rogue_geonode node['rogue']['geonode']['location'] do
-  action [:sync_db, :update_site, :create_postgis_datastore, :load_data, :update_layers, :start]
+  action [:sync_db, :update_site, :create_postgis_datastore, :load_data, :update_layers, :start, :build_html_docs]
 end
 
 log "Rogue is now running on #{node['rogue']['networking']['application']['address']}."
