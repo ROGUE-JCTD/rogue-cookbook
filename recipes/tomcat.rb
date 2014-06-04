@@ -25,4 +25,11 @@ template "tomcat_config" do
 end
 
 
-
+template "#{node['tomcat']['config_dir']}/logging.properties" do
+  source 'logging.properties.erb'
+  owner 'root'
+  group 'root'
+  mode '0644'
+  cookbook 'rogue'
+  notifies :restart, 'service[tomcat]'
+end

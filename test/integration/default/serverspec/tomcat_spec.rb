@@ -25,3 +25,8 @@ describe file('/usr/share/tomcat7') do
   it { should be_owned_by 'tomcat7' }
   it { should be_grouped_into 'tomcat7' }
 end
+
+describe file('/etc/tomcat7/logging.properties') do
+  it { should be_file }
+  it { should contain '${catalina.base}/logs' }
+end

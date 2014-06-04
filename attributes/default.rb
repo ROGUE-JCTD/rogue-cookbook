@@ -88,3 +88,4 @@ default['rogue']['geogit']['location'] = '/var/lib/geogit'
 default['rogue']['geoeserver-exts']['branch'] = '2.4.x'
 default['rogue']['geoeserver-exts']['location'] = '/var/lib/geoserver-exts'
 default['rogue']['geoeserver-exts']['url'] = 'https://github.com/ROGUE-JCTD/geoserver-exts.git'
+default['rogue']['tomcat']['log_dir'] = "${catalina.base}/logs"
