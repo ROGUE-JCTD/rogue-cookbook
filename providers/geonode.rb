@@ -152,14 +152,14 @@ action :start do
 
   bash "stop_uwsgi" do
     command "pkill -9 -f uwsgi"
-    only_if "pgrep uwsgi"
+    only_if { ::File.exist? "/tmp/uwsgi.sock" or ::File.exist? "/var/run/geonode.sock" }
     user 'root'
   end
 
   execute "runserver" do
     command "#{new_resource.virtual_env_location}bin/uwsgi --ini #{new_resource.rogue_geonode_location}/django.ini &"
     user 'root'
-    not_if "pgrep uwsgi"
+    not_if { ::File.exist? "/tmp/uwsgi.sock" or ::File.exist? "/var/run/geonode.sock" }
   end
 end
 
