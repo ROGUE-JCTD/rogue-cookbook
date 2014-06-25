@@ -184,7 +184,7 @@ This method separates the application from the database server but installs and 
 3. Set the `node['rogue']['setup_db']` attribute to `false` to disable the database configuration step when provisioning.
 
 ##### On the Database server #####
-1. Add the `rogue::postgresql` and `rogue::database` recipes to your run list.
+1. Add the `rogue::networking`, `rogue::postgresql` and `rogue::database` recipes to your run list.
 2. If desired, add your pg_hba.conf configuration via the `node['postgresql']['pg_hba']`.  Ensure that the application server will be able to connect.
 3. You will need to add your application server's host to `node['postgresql']['config']['listen_addresses']`.
 
