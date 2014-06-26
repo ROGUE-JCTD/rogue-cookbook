@@ -5,6 +5,11 @@ postgresql_connection_info = {
   :password => node['rogue']['postgresql']['password']
 }
 
+gem_package "pg" do
+  action :install
+  not_if {File.exist?("/opt/chef")}
+end
+
 geonode_connection_info = node['rogue']['rogue_geonode']['settings']['DATABASES']['default']
 geonode_imports_connection_info = node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports']
 

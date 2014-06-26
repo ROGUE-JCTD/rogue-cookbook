@@ -14,12 +14,6 @@ include_recipe 'build-essential'
 include_recipe 'postgresql::server'
 include_recipe 'rogue::postgis'
 
-gem_package "pg" do
-  action :install
-  not_if {File.exist?("/opt/chef")}
-end
-
-
 # Work around for https://tickets.opscode.com/browse/COOK-1406
 # Only running when the /opt/chef directroy is present is used
 # to detect omnibus installations.
