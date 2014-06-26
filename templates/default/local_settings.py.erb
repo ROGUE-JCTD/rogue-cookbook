@@ -22,6 +22,20 @@ ADMINS = (
 <%end%>
 )
 
+CLASSIFICATION_BANNER_ENABLED = <%= @settings['CLASSIFICATION_BANNER_ENABLED'] ? "True":"False" %>
+
+<% if @settings['CLASSIFICATION_TEXT'] -%>
+CLASSIFICATION_TEXT = '<%= @settings['CLASSIFICATION_TEXT'] %>'
+<% end -%>
+
+<% if @settings['CLASSIFICATION_TEXT_COLOR'] -%>
+CLASSIFICATION_TEXT_COLOR = '<%= @settings['CLASSIFICATION_TEXT_COLOR'] %>'
+<% end -%>
+
+<% if @settings['CLASSIFICATION_BACKGROUND_COLOR'] -%>
+CLASSIFICATION_BACKGROUND_COLOR = '<%= @settings['CLASSIFICATION_BACKGROUND_COLOR'] %>'
+<% end -%>
+
 SERVER_EMAIL = '<%= @settings['SERVER_EMAIL'] %>'
 REGISTRATION_OPEN = <%= @settings['REGISTRATION_OPEN'] ? "True":"False" %>
 

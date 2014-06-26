@@ -95,3 +95,8 @@ default['rogue']['geoeserver-exts']['branch'] = '2.4.x'
 default['rogue']['geoeserver-exts']['location'] = '/var/lib/geoserver-exts'
 default['rogue']['geoeserver-exts']['url'] = 'https://github.com/ROGUE-JCTD/geoserver-exts.git'
 default['rogue']['tomcat']['log_dir'] = "${catalina.base}/logs"
+
+default['rogue']['rogue_geonode']['settings']['CLASSIFICATION_BANNER_ENABLED'] = false
+default['rogue']['rogue_geonode']['settings']['CLASSIFICATION_TEXT_COLOR'] = nil
+default['rogue']['rogue_geonode']['settings']['CLASSIFICATION_BACKGROUND_COLOR'] = nil
+default['rogue']['rogue_geonode']['settings']['CLASSIFICATION_TEXT'] = nil
