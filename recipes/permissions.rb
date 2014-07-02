@@ -38,3 +38,22 @@ group "roguecat" do
   append true
   members "unison"
 end
+
+user 'www-data' do
+  action :create
+  system true
+  shell  '/bin/false'
+  home   '/var/www'
+end
+
+group "www-data" do
+  action :create
+  append true
+  members "www-data"
+end
+
+directory '/var/www' do
+  group "rogue"
+  owner "www-data"
+  mode 0755
+end

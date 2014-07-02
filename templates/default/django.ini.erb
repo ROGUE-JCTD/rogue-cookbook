@@ -5,8 +5,8 @@ virtualenv = <%= node['rogue']['geonode']['location'] %>
 logto = <%= File.join(node['rogue']['logging']['location'] , 'rogue_geonode.log') %>
 log-maxsize = 20971520
 
-#uid = www-data
-#gid = www-data
+uid = www-data
+gid = www-data
 
 # master
 master                  = true
@@ -19,8 +19,7 @@ processes               = 10
 socket          = /var/run/geonode.sock
 
 # with appropriate permissions - *may* be needed
-#chmod-socket    = 644
-
+chmod-socket    = 644
 chown-socket    = www-data
 
 # the base directory

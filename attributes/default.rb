@@ -69,6 +69,9 @@ default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATASTORE_DI
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['USER'] = "admin"
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['PASSWORD'] = "geoserver"
 default['rogue']['rogue_geonode']['settings']['UPLOADER']['BACKEND'] = 'geonode.importer'
+default['rogue']['rogue_geonode']['settings']['STATIC_ROOT'] = '/var/www/rogue'
+default['rogue']['rogue_geonode']['settings']['MEDIA_ROOT'] = '/var/www/rogue/media'
+
 default['rogue']['nginx']['locations'] = {}
 
 default['rogue']['rogue_geonode']['settings']['DATABASES'] = {

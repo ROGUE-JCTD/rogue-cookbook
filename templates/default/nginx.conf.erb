@@ -1,8 +1,7 @@
 # nginx.conf
 upstream django {
     # connect to this socket
-    server unix:///var/run/geonode.sock;    # for a file socket
-   # server 127.0.0.1:8001;      # for a web port socket
+    server unix:/var/run/geonode.sock;    # for a file socket
     }
 
 server {
@@ -48,7 +47,7 @@ server {
         }
 
         location /static {
-                alias <%=File.join(node['rogue']['rogue_geonode']['location'], 'rogue_geonode/static_root')%>;
+                alias <%=node['rogue']['rogue_geonode']['settings']['STATIC_ROOT']%>;
         }
 
         <% if node['rogue']['install_docs'] %>

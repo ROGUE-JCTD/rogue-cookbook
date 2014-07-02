@@ -11,16 +11,33 @@ def django_command(cmd, options)
   "#{new_resource.virtual_env_location}bin/python manage.py #{cmd} #{options.join(' ')}"
 end
 
+def set_perms(directory, perm=570)
+  bash "set_file_permissions" do
+    code "chmod #{perm} #{directory} -R && chown www-data:rogue #{directory} -R"
+  end
+end
+
 def collect_static
+  directory new_resource.settings['STATIC_ROOT'] do
+    group "rogue"
+    owner "www-data"
+    mode 0755
+  end
+
+  directory new_resource.settings['MEDIA_ROOT'] do
+    group "rogue"
+    owner "www-data"
+    mode 0755
+  end
+
   execute "collect_static" do
     command django_command('collectstatic', ['--noinput'])
     cwd new_resource.rogue_geonode_location
-    user 'root'
   end
 
-  execute "set_rogue_geonode_permissions" do
-    command "chmod -R 755 #{new_resource.rogue_geonode_location}"
-  end
+  set_perms(new_resource.settings['STATIC_ROOT'], 775)
+  set_perms(new_resource.settings['MEDIA_ROOT'], 775)
+
 end
 
 def local_settings(template_variables={})
@@ -53,6 +70,10 @@ action :install do
       python_pip pkg do
         virtualenv new_resource.virtual_env_location
       end
+    end
+
+    bash "virtual_env permissions" do
+      code "chmod 570 #{new_resource.virtual_env_location} -R && chown www-data:rogue #{new_resource.virtual_env_location} -R"
     end
 
     Chef::Log.debug "Pulling ROGUE GeoNode from Git"
@@ -107,6 +128,9 @@ action :install do
       path "#{new_resource.rogue_geonode_location}/django.ini"
       source "django.ini.erb"
     end
+
+    set_perms(new_resource.rogue_geonode_location)
+
     new_resource.updated_by_last_action(true)
   end
 end
@@ -115,7 +139,6 @@ action :sync_db do
   execute "sync_db_#{new_resource.rogue_geonode_location}" do
     command django_command('syncdb', ['--all', '--noinput'])
     cwd new_resource.rogue_geonode_location
-    user 'root'
     not_if "cd #{new_resource.rogue_geonode_location} && #{django_command('dumpdata', ['security'])}"
   end
 
@@ -126,7 +149,6 @@ action :update_site do
   execute "update_site_domain" do
     command django_command('siteupdate', ["-d #{new_resource.site_domain}", "-n #{new_resource.site_name}"] )
     cwd new_resource.rogue_geonode_location
-    user 'root'
   end
 end
 
@@ -134,7 +156,6 @@ action :load_data do
   execute "load_data_#{new_resource.name}" do
     command django_command('loaddata', new_resource.fixtures)
     cwd new_resource.rogue_geonode_location
-    user 'root'
     not_if { new_resource.fixtures.empty? }
   end
   new_resource.updated_by_last_action(true)
@@ -167,7 +188,6 @@ action :update_layers do
   execute "update_layers" do
     command django_command('updatelayers', ['--ignore-errors'])
     cwd new_resource.rogue_geonode_location
-    user 'root'
     action :run
     retries 8
   end
@@ -205,9 +225,11 @@ end
 
 action :build_html_docs do
   bash "build docs" do
-    code "source #{new_resource.virtual_env_location}/bin/activate && cd #{new_resource.rogue_geonode_location}/docs && make html && chmod 755 build -R"
+    code "source #{new_resource.virtual_env_location}/bin/activate && cd #{new_resource.rogue_geonode_location}/docs && make html && chmod 574 build -R && chown www-data:rogue build -R"
     only_if { node['rogue']['install_docs'] }
   end
+
+
 end
 
 def test()
