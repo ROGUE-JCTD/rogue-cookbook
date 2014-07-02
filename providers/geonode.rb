@@ -13,7 +13,7 @@ end
 
 def set_perms(directory, perm=570)
   bash "set_file_permissions" do
-    code "chmod #{perm} #{directory} -R && chown www-data:rogue #{directory} -R"
+    code "chmod #{perm} #{directory} -R && chown www-data:#{node['rogue']['user']['username']} #{directory} -R"
   end
 end
 
@@ -73,7 +73,7 @@ action :install do
     end
 
     bash "virtual_env permissions" do
-      code "chmod 570 #{new_resource.virtual_env_location} -R && chown www-data:rogue #{new_resource.virtual_env_location} -R"
+      code "chmod 570 #{new_resource.virtual_env_location} -R && chown www-data:#{node['rogue']['user']['username']} #{new_resource.virtual_env_location} -R"
     end
 
     Chef::Log.debug "Pulling ROGUE GeoNode from Git"
@@ -225,7 +225,7 @@ end
 
 action :build_html_docs do
   bash "build docs" do
-    code "source #{new_resource.virtual_env_location}/bin/activate && cd #{new_resource.rogue_geonode_location}/docs && make html && chmod 574 build -R && chown www-data:rogue build -R"
+    code "source #{new_resource.virtual_env_location}/bin/activate && cd #{new_resource.rogue_geonode_location}/docs && make html && chmod 574 build -R && chown www-data:#{node['rogue']['user']['username']} build -R"
     only_if { node['rogue']['install_docs'] }
   end
 
