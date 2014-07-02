@@ -5,7 +5,6 @@ include Serverspec::Helper::DetectOS
 
 describe user('tomcat7') do
   it { should exist }
-  it { should belong_to_group 'roguecat' }
 end
 
 describe service('tomcat7') do

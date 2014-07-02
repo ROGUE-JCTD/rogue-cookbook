@@ -25,16 +25,16 @@ end
 
 directory file_store do
   owner node['tomcat']['user']
-  group 'roguecat'
+  group node['tomcat']['group']
   action :create
   not_if { File.exists? file_store }
 end
 
 execute "change_perms" do
   command <<-EOH
-    chown -R #{node['tomcat']['user']}:roguecat #{dirs}
-    chmod -R 775 #{node['rogue']['geoserver']['data_dir']} #{dirs}
+    chown -R #{node['tomcat']['user']}:#{node['tomcat']['group']} #{dirs}
     chmod g+s #{geogit} #{file_store}
+    chmod -R 775 #{node['rogue']['geoserver']['data_dir']} #{dirs}
     setfacl -d -m g::rwx #{geogit}
     setfacl -d -m o::rx #{geogit}
     setfacl -d -m g::rwx #{file_store}
@@ -43,10 +43,10 @@ execute "change_perms" do
     find #{geogit} -type d -print0 | xargs -0 chmod 775
     find #{geogit} -type f -print0 | xargs -0 chmod 664
 
-    chown #{node['tomcat']['user']}:roguecat -R #{geogit}
+    chown #{node['tomcat']['user']}:#{node['tomcat']['group']} -R #{geogit}
     find #{geogit} -type d -print0 | xargs -0 setfacl -d -m g::rwx
     find #{geogit} -type d -print0 | xargs -0 setfacl -d -m o::rx
-    chown #{node['tomcat']['user']}:roguecat -R #{file_store}
+    chown #{node['tomcat']['user']}:#{node['tomcat']['group']} -R #{file_store}
     chmod 664 #{file_store}/*
   EOH
   user 'root'

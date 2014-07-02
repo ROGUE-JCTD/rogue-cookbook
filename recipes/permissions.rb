@@ -33,12 +33,6 @@ user "unison" do
   password node['unison']['user']['password']
 end
 
-group "roguecat" do
-  action :modify
-  append true
-  members "unison"
-end
-
 user 'www-data' do
   action :create
   system true

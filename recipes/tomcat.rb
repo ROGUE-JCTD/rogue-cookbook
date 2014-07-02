@@ -1,10 +1,10 @@
 include_recipe 'rogue::tomcat_overrides'
 include_recipe 'tomcat::default'
 
-group "roguecat" do
+group "tomcat7" do
   action :modify
   append true
-  members node["tomcat"]["user"]
+  members ["unison", "rogue"]
 end
 
 directory node['tomcat']['home'] do
