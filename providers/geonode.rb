@@ -112,15 +112,11 @@ action :install do
     local_settings
     collect_static
 
-    Chef::Log.debug "Adding a script to start GeoNode on reboot"
-    file "/etc/cron.d/geonode_restart" do
-      content "@reboot root /bin/bash #{new_resource.rogue_geonode_location}/start_geonode.sh\n"
-      mode 00755
-      action :create_if_missing
-    end
-
     directory new_resource.logging_location do
       action :create
+      owner 'www-data'
+      group 'rogue'
+      mode 0370
     end
 
     Chef::Log.debug "Creating the GeoNode uwsgi configuration file"
@@ -130,8 +126,14 @@ action :install do
     end
 
     set_perms(new_resource.rogue_geonode_location)
-
     new_resource.updated_by_last_action(true)
+
+    supervisord_program 'rogue' do
+      name 'rogue'
+      command "#{new_resource.virtual_env_location}bin/uwsgi --ini #{new_resource.rogue_geonode_location}/django.ini"
+      action :supervise
+    end
+
   end
 end
 
@@ -170,18 +172,9 @@ action :collect_static do
 end
 
 action :start do
-
-  bash "stop_uwsgi" do
-    command "pkill -9 -f uwsgi"
-    only_if { ::File.exist? "/tmp/uwsgi.sock" or ::File.exist? "/var/run/geonode.sock" }
-    user 'root'
-  end
-
-  execute "runserver" do
-    command "#{new_resource.virtual_env_location}bin/uwsgi --ini #{new_resource.rogue_geonode_location}/django.ini &"
-    user 'root'
-    not_if { ::File.exist? "/tmp/uwsgi.sock" or ::File.exist? "/var/run/geonode.sock" }
-  end
+    execute "start_rogue" do
+      command 'supervisorctl start rogue'
+    end
 end
 
 action :update_layers do
