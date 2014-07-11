@@ -21,16 +21,6 @@ service node['tomcat']['user'] do
   action :stop
 end
 
-cookbook_file "geonode-geoserver-ext-2.4-SNAPSHOT.jar" do
-  path File.join(node['tomcat']['webapp_dir'], 'geoserver/WEB-INF/lib/geonode-geoserver-ext-2.4-SNAPSHOT.jar')
-  owner node['tomcat']['user']
-  group node['tomcat']['group']
-  mode 00644
-  retry_delay 15
-  retries 8
-  action :create
-end
-
 template "geoserver_config" do
   path File.join(node['tomcat']['webapp_dir'], 'geoserver/WEB-INF/web.xml')
   source 'web.xml.erb'
