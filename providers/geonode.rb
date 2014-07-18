@@ -30,6 +30,12 @@ def collect_static
     mode 0755
   end
 
+  directory new_resource.settings['MEDIA_ROOT'] + "/thumbs" do
+    group "rogue"
+    owner "www-data"
+    mode 0755
+  end
+
   execute "collect_static" do
     command django_command('collectstatic', ['--noinput'])
     cwd new_resource.rogue_geonode_location
