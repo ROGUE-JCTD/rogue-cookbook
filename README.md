@@ -159,6 +159,11 @@ The unison recipe will:
 - Install Unison, ACL, and Keychain
 - Update root's fstab entry to add acl
 
+#### rogue::stig
+The stig recipe will:
+
+- Do a git pull from the ROGUE-JCTD stig repository.
+
 How To
 ------
 Below are instructions for common configurations that are not default.
