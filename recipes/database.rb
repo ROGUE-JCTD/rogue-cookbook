@@ -24,6 +24,9 @@ end
 postgresql_database geonode_connection_info[:name] do
   connection postgresql_connection_info
   owner geonode_connection_info[:user]
+  encoding 'UTF8'
+  collation 'en_US.utf8'
+  template 'template0'
   action :create
 end
 
