@@ -52,4 +52,8 @@ end
 # https://github.com/ROGUE-JCTD/rogue_geonode/blob/master/geoshape/core/management/commands/update-layer-ips.py
 describe file('/var/lib/geonode/rogue_geonode/geoshape/local_settings.py') do
   it { should contain 'PUBLIC_LOCATION' }
+
+describe file('/usr/lib/python2.6/dist-packages/') do
+  it { should be_directory }
 end
+
