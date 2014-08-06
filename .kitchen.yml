@@ -22,4 +22,14 @@ suites:
       - recipe[git]
       - recipe[rogue::postgresql]
       - recipe[rogue]
-    attributes: {'tomcat':{'java_options':"-Djava.awt.headless=true -Xmx3g -XX:MaxPermSize=256m -XX:+UseConcMarkSweepGC"}}
+    attributes: {'tomcat':
+                   {'java_options':
+                      "-Djava.awt.headless=true -Xmx3g -XX:MaxPermSize=256m -XX:+UseConcMarkSweepGC"
+                   },
+                 'rogue':
+                   {
+                    'geoserver':{
+                      'url':'http://localhost:8080/geoserver/'
+                     }
+                 }
+    }
