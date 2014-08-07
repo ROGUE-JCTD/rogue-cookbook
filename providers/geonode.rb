@@ -53,7 +53,7 @@ def local_settings(template_variables={})
                }.merge(template_variables)
 
   template "rogue_geonode_config" do
-    path "#{new_resource.rogue_geonode_location}/rogue_geonode/local_settings.py"
+    path "#{new_resource.rogue_geonode_location}/geoshape/local_settings.py"
     source "local_settings.py.erb"
     variables(variables)
   end
