@@ -14,6 +14,7 @@ include_recipe 'rogue::geogit'
 include_recipe 'rogue::networking'
 include_recipe 'rogue::unison'
 include_recipe 'rogue::stig'
+include_recipe 'rogue::roguescripts'
 
 source = "/usr/lib/x86_64-linux-gnu/libjpeg.so"
 target = "/usr/lib/libjpeg.so"

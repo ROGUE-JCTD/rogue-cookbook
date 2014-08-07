@@ -106,3 +106,7 @@ default['rogue']['rogue_geonode']['settings']['CLASSIFICATION_TEXT'] = nil
 
 default['rogue']['stig']['url'] = 'https://github.com/ROGUE-JCTD/stig.git'
 default['rogue']['stig']['branch'] = 'master'
+
+default['rogue']['rogue-scripts']['branch'] = 'master'
+default['rogue']['rogue-scripts']['location'] = '/opt/rogue-scripts'
+default['rogue']['rogue-scripts']['url'] = 'https://github.com/ROGUE-JCTD/rogue-scripts.git'
