@@ -26,7 +26,7 @@ chown-socket    = www-data
 chdir           = <%= node['rogue']['rogue_geonode']['location'] %>
 
 # Django's wsgi file
-module          = rogue_geonode.wsgi
+module          = geoshape.wsgi
 
 # the virtualenv
 home            = <%= node['rogue']['geonode']['location'] %>
