@@ -183,6 +183,12 @@ action :start do
     end
 end
 
+action :stop do
+    execute "stop_rogue" do
+      command 'supervisorctl stop rogue'
+    end
+end
+
 action :update_layers do
   execute "update_layers" do
     command django_command('updatelayers', ['--ignore-errors'])
