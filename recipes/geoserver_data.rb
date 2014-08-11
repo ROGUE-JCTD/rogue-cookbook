@@ -35,10 +35,6 @@ execute "change_perms" do
     chown -R #{node['tomcat']['user']}:#{node['tomcat']['group']} #{dirs}
     chmod g+s #{geogit} #{file_store}
     chmod -R 775 #{node['rogue']['geoserver']['data_dir']} #{dirs}
-    setfacl -d -m g::rwx #{geogit}
-    setfacl -d -m o::rx #{geogit}
-    setfacl -d -m g::rwx #{file_store}
-    setfacl -d -m o::rx #{file_store}
 
     find #{geogit} -type d -print0 | xargs -0 chmod 775
     find #{geogit} -type f -print0 | xargs -0 chmod 664
