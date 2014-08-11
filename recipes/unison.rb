@@ -1,19 +1,9 @@
-unison_packages = ['unison', 'acl', 'keychain', 'augeas-tools']
+unison_packages = ['unison', 'keychain', 'augeas-tools']
 
 unison_packages.each do |pkg|
   package pkg do
     action :install
   end
-end
-
-execute "update_fstab" do
-  command <<-EOF
-    echo 'ins opt after /files/etc/fstab/*[file="/"]/opt[last()]
-    set /files/etc/fstab/*[file="/"]/opt[last()] acl
-    save' | augtool
-    mount -o remount /
-  EOF
-  not_if "grep acl /etc/fstab" # TODO: Switch to something similar to this, augtool match '/files/etc/fstab/*[file=\"/\" and count(opt[.=\"acl\"])=0]'
 end
 
 execute "generate_ssh_key" do
