@@ -20,6 +20,7 @@ suites:
       - recipe[apt]
       - recipe[python]
       - recipe[git]
+      - recipe[rogue::gdal]
       - recipe[rogue::postgresql]
       - recipe[rogue]
     attributes: {'tomcat':
