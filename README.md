@@ -21,7 +21,9 @@ Attributes
 #### rogue::default
 
 - `node['rogue']['debug']`= Boolean.  Determines whether applications should be configured in debug mode.
+- `node['rogue']['version']`= The ROGUE version. Defaults to `1.x`.
 - `node['rogue']['django_maploom']['url']` - The url to use when using pip to download Django-Maploom.
+- `node['rogue']['django_maploom']['auto_upgrade']` - Boolean. Determines whether to auto-upgrade the django-maploom version.
 - `node['rogue']['user']` = A hash with the username and password for the ROGUE user.
 - `node['rogue']['setup_db']` = Boolean.  Dictates whether the `rogue::database` recipe is executed.
 - `node['rogue']['geogit']['branch']` = The geogit branch to during the installation.

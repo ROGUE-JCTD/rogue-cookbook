@@ -113,6 +113,7 @@ action :install do
       virtualenv new_resource.virtual_env_location
       action :upgrade
       options "--no-deps"
+      only_if { node['rogue']['django_maploom']['auto_upgrade'] }
     end
 
     local_settings

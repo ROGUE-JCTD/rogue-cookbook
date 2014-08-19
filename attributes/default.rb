@@ -1,4 +1,5 @@
 default['rogue']['debug'] = true
+default['rogue']['version'] = '1.x'
 default['rogue']['iface'] = 'eth0'
 
 if node.fetch('vagrant', false)
@@ -39,7 +40,6 @@ default['rogue']['geoserver']['build_from_source'] = false
 default['rogue']['geoserver']['use_db_client'] = true
 default['rogue']['geoserver']['base_url'] = '/geoserver'
 default['rogue']['geoserver']['data_dir'] = '/var/lib/geoserver_data'
-default['rogue']['geoserver']['geowebcache']['url'] = "http://sourceforge.net/projects/geowebcache/files/geowebcache/1.4.0/geowebcache-1.4.0-war.zip"
 default['rogue']['geoserver']['jai']['url'] = "http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64-jdk.bin"
 default['rogue']['geoserver']['jai_io']['url'] = "http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64-jdk.bin"
 default['rogue']['geoserver']['url']= "http://#{node['rogue']['networking']['application']['fqdn']}#{node['rogue']['geoserver']['base_url']}/"
@@ -50,7 +50,7 @@ default['rogue']['geoserver_data']['branch'] = 'master'
 
 default['rogue']['geonode']['location'] = '/var/lib/geonode/'
 default['rogue']['interpreter'] = ::File.join(node['rogue']['geonode']['location'], 'bin/python')
-
+default['rogue']['django_maploom']['auto_upgrade'] = true
 default['rogue']['django_maploom']['url'] = "git+https://github.com/ROGUE-JCTD/django-maploom.git#egg=django-maploom"
 default['rogue']['geonode']['location'] = '/var/lib/geonode/'
 default['rogue']['rogue_geonode']['branch'] = 'master'
@@ -71,7 +71,6 @@ default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['PASSWORD'] = "geose
 default['rogue']['rogue_geonode']['settings']['UPLOADER']['BACKEND'] = 'geonode.importer'
 default['rogue']['rogue_geonode']['settings']['STATIC_ROOT'] = '/var/www/rogue'
 default['rogue']['rogue_geonode']['settings']['MEDIA_ROOT'] = '/var/www/rogue/media'
-
 default['rogue']['nginx']['locations'] = {}
 
 default['rogue']['rogue_geonode']['settings']['DATABASES'] = {
@@ -110,3 +109,18 @@ default['rogue']['stig']['branch'] = 'master'
 default['rogue']['rogue-scripts']['branch'] = 'master'
 default['rogue']['rogue-scripts']['location'] = '/opt/rogue-scripts'
 default['rogue']['rogue-scripts']['url'] = 'https://github.com/ROGUE-JCTD/rogue-scripts.git'
+
+if node['rogue']['version'] == '1.x'
+  default['rogue']['rogue_geonode']['branch'] = '1.x'
+  default['rogue']['geoserver_data']['branch'] = '1.x'
+  default['rogue']['django_maploom']['auto_upgrade'] = false
+  default['rogue']['geoserver']['war'] = "http://jenkins.rogue.lmnsolutions.com/userContent/geoshape-1.x/geoserver.war"
+
+  if node['rogue']['geogit']['build_from_source']
+    default['rogue']['geogit']['url'] = 'https://github.com/boundlessgeo/GeoGig.git'
+    default['rogue']['geogit']['branch'] = '0.10.x'
+  else
+    default['rogue']['geogit']['url'] = 'http://jenkins.rogue.lmnsolutions.com/userContent/geoshape-1.x/geogit-cli-app-0.1.zip'
+  end
+
+end
