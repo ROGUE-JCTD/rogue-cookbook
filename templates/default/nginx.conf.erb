@@ -61,14 +61,10 @@ server {
                 include          <%= @proxy_conf %>;
         }
 
-
-        <% if not node['rogue']['debug'] %>
-
         location /uploaded {
-                alias <%=File.join(node['rogue']['rogue_geonode']['location'], 'rogue_geonode/uploaded')%>;
+                alias <%=node['rogue']['rogue_geonode']['settings']['MEDIA_ROOT']%>;
         }
 
-        <% end %>
 
 
     <% node['rogue']['nginx']['locations'].each do |location| %>
