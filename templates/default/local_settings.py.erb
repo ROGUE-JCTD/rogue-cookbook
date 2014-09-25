@@ -37,6 +37,7 @@ CLASSIFICATION_BACKGROUND_COLOR = '<%= @settings['CLASSIFICATION_BACKGROUND_COLO
 <% end -%>
 
 SERVER_EMAIL = '<%= @settings['SERVER_EMAIL'] %>'
+DEFAULT_FROM_EMAIL = '<%= @settings['DEFAULT_FROM_EMAIL'] %>'
 REGISTRATION_OPEN = <%= @settings['REGISTRATION_OPEN'] ? "True":"False" %>
 
 <% if @settings['REGISTRATION_OPEN'] -%>

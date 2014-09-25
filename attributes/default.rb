@@ -62,6 +62,7 @@ default['rogue']['rogue_geonode']['settings']['ALLOWED_HOSTS'] = [node['rogue'][
 default['rogue']['rogue_geonode']['settings']['PROXY_ALLOWED_HOSTS'] = ['*', node['rogue']['networking']['application']['address'], '.lmnsolutions.com', '.openstreetmap.org']
 default['rogue']['rogue_geonode']['settings']['REGISTATION_OPEN'] = false
 default['rogue']['rogue_geonode']['settings']['SERVER_EMAIL'] = "ROGUE@#{node['rogue']['networking']['application']['fqdn']}"
+default['rogue']['rogue_geonode']['settings']['DEFAULT_FROM_EMAIL'] = "webmaster@#{node['rogue']['networking']['application']['fqdn']}"
 default['rogue']['rogue_geonode']['settings']['ADMINS'] = [['ROGUE', 'ROGUE@lmnsolutions.com'],]
 default['rogue']['rogue_geonode']['settings']['SITEURL'] = "http://#{node['rogue']['networking']['application']['fqdn']}/"
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['LOCATION'] = node['rogue']['geoserver']['url']
