@@ -54,6 +54,7 @@ default['rogue']['django_maploom']['auto_upgrade'] = true
 default['rogue']['django_maploom']['url'] = "git+https://github.com/ROGUE-JCTD/django-maploom.git#egg=django-maploom"
 default['rogue']['geonode']['location'] = '/var/lib/geonode/'
 default['rogue']['rogue_geonode']['branch'] = 'master'
+default['rogue']['rogue_geonode']['python_packages'] = ["uwsgi", "psycopg2"]
 default['rogue']['rogue_geonode']['location'] = File.join(node['rogue']['geonode']['location'], 'rogue_geonode')
 default['rogue']['rogue_geonode']['url'] = 'https://github.com/ROGUE-JCTD/rogue_geonode.git'
 default['rogue']['rogue_geonode']['fixtures'] = ['sample_admin.json',]
