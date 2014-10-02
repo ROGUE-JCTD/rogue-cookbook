@@ -58,7 +58,17 @@ directory node['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATAS
 end
 
 rogue_geonode node['rogue']['geonode']['location'] do
-  action [:stop, :sync_db, :update_site, :create_postgis_datastore, :load_data, :update_layers, :start, :build_html_docs]
+  action [:stop, :sync_db, :update_site, :create_postgis_datastore]
 end
+
+rogue_geonode node['rogue']['geonode']['location'] do
+  action :load_data
+  not_if "#{node[:rogue][:geonode][:location]}bin/python -c \"from django.contrib.auth.models import User; User.objects.get(id=1)\"", :environment=>{'DJANGO_SETTINGS_MODULE' => 'geoshape.settings'}
+end
+
+rogue_geonode node['rogue']['geonode']['location'] do
+  action [:update_layers, :start, :build_html_docs]
+end
+
 
 log "Rogue is now running on #{node['rogue']['networking']['application']['address']}."
