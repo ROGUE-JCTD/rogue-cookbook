@@ -1,8 +1,5 @@
 require 'serverspec'
 
-include Serverspec::Helper::Exec
-include Serverspec::Helper::DetectOS
-
 describe file('/usr/share/tomcat7/.geogitconfig') do
   it { should contain '[user]' }
   it { should contain 'name = rogue' }
@@ -25,5 +22,5 @@ describe file('/var/lib/geogit/bin/geogit') do
 end
 
 describe command('ls /var/lib/tomcat7/webapps/geoserver/WEB-INF/lib/gs-geogit*') do
-  it { should return_exit_status 0 }
+  its(:exit_status) { should eq 0 }
 end

@@ -1,7 +1,5 @@
 require 'serverspec'
 
-include Serverspec::Helper::Exec
-include Serverspec::Helper::DetectOS
 
 describe file('/var/lib/geonode/rogue_geonode') do
   it { should be_directory }
