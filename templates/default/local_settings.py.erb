@@ -71,6 +71,7 @@ OGC_SERVER = {
     'default': {
         'BACKEND': 'geonode.geoserver',
         'LOCATION': '<%= @settings['OGC_SERVER']['LOCATION'] %>',
+        'PUBLIC_LOCATION': '<%= @settings['OGC_SERVER']['PUBLIC_LOCATION'] %>',
         'USER': '<%= @settings['OGC_SERVER']['USER'] %>',
         'PASSWORD': '<%= @settings['OGC_SERVER']['PASSWORD'] %>',
         'MAPFISH_PRINT_ENABLED': True,

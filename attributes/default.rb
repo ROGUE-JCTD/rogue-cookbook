@@ -66,6 +66,7 @@ default['rogue']['rogue_geonode']['settings']['DEFAULT_FROM_EMAIL'] = "webmaster
 default['rogue']['rogue_geonode']['settings']['ADMINS'] = [['ROGUE', 'ROGUE@lmnsolutions.com'],]
 default['rogue']['rogue_geonode']['settings']['SITEURL'] = "http://#{node['rogue']['networking']['application']['fqdn']}/"
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['LOCATION'] = node['rogue']['geoserver']['url']
+default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['PUBLIC_LOCATION'] = node['rogue']['geoserver']['url']
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['DATASTORE'] = ""
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATASTORE_DIR'] = ::File.join(node['rogue']['geoserver']['data_dir'], 'geogit')
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['USER'] = "admin"

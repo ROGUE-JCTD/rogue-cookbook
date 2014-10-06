@@ -47,3 +47,9 @@ describe file('/var/lib/geoserver_data/geogit') do
   it { should be_executable.by_user('rogue') }
   it { should be_readable.by_user('rogue') }
 end
+
+# The update-layer-ips command looks for the PUBLIC_LOCATION key.
+# https://github.com/ROGUE-JCTD/rogue_geonode/blob/master/geoshape/core/management/commands/update-layer-ips.py
+describe file('/var/lib/geonode/rogue_geonode/geoshape/local_settings.py') do
+  it { should contain 'PUBLIC_LOCATION' }
+end
