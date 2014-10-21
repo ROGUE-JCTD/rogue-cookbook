@@ -41,6 +41,43 @@ template "geoserver_db_client_settings" do
   notifies :restart, "service[tomcat]", :immediately
 end
 
+# hard coding this version because it works but the most recent snapshot is not working.
+# url is: http://ares.boundlessgeo.com/geoserver/2.5.x/community-latest/geoserver-2.5-SNAPSHOT-python-plugin.zip
+
+cookbook_file "geoserver-2.5-SNAPSHOT-python-plugin.zip" do
+  path File.join('/tmp', 'geoserver-2.5-SNAPSHOT-python-plugin.zip')
+  owner node['tomcat']['user']
+  group node['tomcat']['group']
+  mode 00644
+  retry_delay 15
+  retries 8
+  action :create
+  not_if {::File.exists? ::File.join(node['tomcat']['webapp_dir'], '/geoserver/WEB-INF/lib/geoscript-py-1.4-SNAPSHOT.jar') }
+  notifies :run, "bash[install_geoscript_python_plugin]", :immediately
+end
+
+bash "install_geoscript_python_plugin" do
+  user "root"
+  cwd "/tmp"
+  code <<-EOH
+  unzip geoserver-2.5-SNAPSHOT-python-plugin.zip -d #{::File.join(node['tomcat']['webapp_dir'], 'geoserver/WEB-INF/lib/')}
+  chown #{node['tomcat']['user']}:#{node['tomcat']['user']} #{::File.join(node['tomcat']['webapp_dir'], 'geoserver/WEB-INF/lib/*')}
+  EOH
+  action :nothing
+end
+
+# java statistics lib used by wps to compute summarizations for attributes
+cookbook_file "commons-math3-3.3.jar" do
+  path ::File.join(node['tomcat']['webapp_dir'], '/geoserver/WEB-INF/lib/commons-math3-3.3.jar')
+  owner node['tomcat']['user']
+  group node['tomcat']['group']
+  mode 00644
+  retry_delay 15
+  retries 8
+  action :create
+  not_if {::File.exists? ::File.join(node['tomcat']['webapp_dir'], '/geoserver/WEB-INF/lib/commons-math3-3.3.jar') }
+end
+
 #### Install JAI ####
 jai_file = File.join(node['java']['java_home'], 'jai-1_1_3-lib-linux-amd64-jdk.bin')
 jai_io_file = File.join(node['java']['java_home'], 'jai_imageio-1_1-lib-linux-amd64-jdk.bin')
