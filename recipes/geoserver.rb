@@ -52,8 +52,6 @@ cookbook_file "geoserver-2.5-SNAPSHOT-python-plugin.zip" do
   retry_delay 15
   retries 8
   action :create
-  not_if {::File.exists? ::File.join(node['tomcat']['webapp_dir'], '/geoserver/WEB-INF/lib/geoscript-py-1.4-SNAPSHOT.jar') }
-  notifies :run, "bash[install_geoscript_python_plugin]", :immediately
 end
 
 bash "install_geoscript_python_plugin" do
@@ -62,8 +60,8 @@ bash "install_geoscript_python_plugin" do
   code <<-EOH
   unzip geoserver-2.5-SNAPSHOT-python-plugin.zip -d #{::File.join(node['tomcat']['webapp_dir'], 'geoserver/WEB-INF/lib/')}
   chown #{node['tomcat']['user']}:#{node['tomcat']['user']} #{::File.join(node['tomcat']['webapp_dir'], 'geoserver/WEB-INF/lib/*')}
+  rm -rf geoserver-2.5-SNAPSHOT-python-plugin.zip
   EOH
-  action :nothing
 end
 
 # java statistics lib used by wps to compute summarizations for attributes
