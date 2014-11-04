@@ -25,6 +25,7 @@ default['rogue']['install_docs'] = true
 default['rogue']['logging']['location'] = '/var/log/rogue'
 default['rogue']['ip'] = node['network']['interfaces'][node['rogue']['iface']]['addresses'].detect{|k,v| v['family'] == "inet" }[0]
 default['rogue']['setup_db'] = true
+default['rogue']['aws_rds'] = false
 default['rogue']['networking']['application']['hostname'] = 'rogue-geoserver'
 default['rogue']['networking']['application']['address'] = node['rogue']['ip']
 default['rogue']['networking']['application']['fqdn'] = node['rogue']['ip']
