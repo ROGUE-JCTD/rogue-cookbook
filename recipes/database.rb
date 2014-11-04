@@ -20,6 +20,14 @@ postgresql_database_user geonode_connection_info[:user] do
   action :create
 end
 
+# Grant Postgres privileges to geonode.  Necessary for AWS RDS.
+bash 'grant privileges' do
+  code <<-EOH
+  PGPASSWORD='#{postgresql_connection_info[:password]}' psql --host='#{postgresql_connection_info[:host]}' --port=5432 --username postgres -c "GRANT geonode to postgres;"
+  EOH
+  only_if { node['rogue']['aws_rds'] }
+end
+
 # Create the GeoNode database
 postgresql_database geonode_connection_info[:name] do
   connection postgresql_connection_info
