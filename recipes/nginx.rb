@@ -1,6 +1,7 @@
 node.default['nginx']['init_style'] = "init"
 node.default['nginx']['install_method'] = 'source'
 node.default['nginx']['source']['version'] = '1.4.1'
+node.default['nginx']['source']['checksum'] = 'bca5d1e89751ba29406185e1736c390412603a7e6b604f5b4575281f6565d119'
 node.default['nginx']['source']['url'] = "http://nginx.org/download/nginx-#{node['nginx']['source']['version']}.tar.gz"
 node.default['nginx']['source']['prefix']                  = "/opt/nginx-#{node['nginx']['source']['version']}"
 node.default['nginx']['source']['conf_path']               = "#{node['nginx']['dir']}/nginx.conf"
