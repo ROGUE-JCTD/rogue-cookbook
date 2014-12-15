@@ -98,3 +98,11 @@ UPLOADER = {
 
 STATIC_ROOT = '<%= @settings['STATIC_ROOT'] %>'
 MEDIA_ROOT = '<%= @settings['MEDIA_ROOT'] %>'
+
+# CSW settings
+CATALOGUE = {
+    'default': {
+        'ENGINE': 'geonode.catalogue.backends.pycsw_local',
+        'URL': '%scatalogue/csw' % SITEURL,
+    }
+}
