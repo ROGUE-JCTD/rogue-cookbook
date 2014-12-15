@@ -21,6 +21,7 @@ Attributes
 #### rogue::default
 
 - `node['rogue']['debug']`= Boolean.  Determines whether applications should be configured in debug mode.
+- `node['rogue']['aws_rds']` = Boolean.  If true, the cookbook will run logic needed to correctly deploy on Amaozn RDS.
 - `node['rogue']['version']`= The ROGUE version. Defaults to `1.x`.
 - `node['rogue']['django_maploom']['url']` - The url to use when using pip to download Django-Maploom.
 - `node['rogue']['django_maploom']['auto_upgrade']` - Boolean. Determines whether to auto-upgrade the django-maploom version.
