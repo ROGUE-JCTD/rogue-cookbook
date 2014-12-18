@@ -106,3 +106,9 @@ CATALOGUE = {
         'URL': '%scatalogue/csw' % SITEURL,
     }
 }
+
+
+BROKER_URL = '<%= "amqp://#{node['rabbitmq']['rogue_user']['name']}:#{node['rabbitmq']['rogue_user']['password']}@#{node['rabbitmq']['address']}:#{node['rabbitmq']['port']}" %>'
+CELERY_ALWAYS_EAGER = False
+NOTIFICATION_QUEUE_ALL = not CELERY_ALWAYS_EAGER
+

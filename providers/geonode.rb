@@ -147,6 +147,14 @@ action :install do
     supervisord_program 'rogue' do
       name 'rogue'
       command "#{new_resource.virtual_env_location}bin/uwsgi --ini #{new_resource.rogue_geonode_location}/django.ini"
+      autorestart true
+      action :supervise
+    end
+
+    supervisord_program 'rogue-celery' do
+      name 'rogue-celery'
+      command "service celeryd start"
+      autorestart true
       action :supervise
     end
 
@@ -190,6 +198,12 @@ end
 action :start do
     execute "start_rogue" do
       command 'supervisorctl start rogue'
+      not_if "supervisorctl status rogue | grep RUNNING"
+    end
+
+    execute "start_rogue-celery" do
+      command 'supervisorctl start rogue-celery'
+      not_if "supervisorctl status rogue-celery | grep RUNNING"
     end
 end
 

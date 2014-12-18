@@ -51,7 +51,7 @@ default['rogue']['geonode']['location'] = '/var/lib/geonode/'
 default['rogue']['interpreter'] = ::File.join(node['rogue']['geonode']['location'], 'bin/python')
 default['rogue']['django_maploom']['auto_upgrade'] = true
 default['rogue']['django_maploom']['url'] = "git+https://github.com/ROGUE-JCTD/django-maploom.git#egg=django-maploom"
-default['rogue']['geonode']['location'] = '/var/lib/geonode/'
+
 default['rogue']['rogue_geonode']['python_packages'] = ["uwsgi", "psycopg2"]
 default['rogue']['rogue_geonode']['location'] = File.join(node['rogue']['geonode']['location'], 'rogue_geonode')
 default['rogue']['rogue_geonode']['url'] = 'https://github.com/ROGUE-JCTD/rogue_geonode.git'
@@ -81,9 +81,9 @@ default['rogue']['rogue_geonode']['settings']['DATABASES'] = {
 default['rogue']['geogig']['build_from_source'] = false
 default['rogue']['geogig']['branch'] = 'SprintRelease'
 
-if node['rogue']['geogig']['build_from_source']
-  default['rogue']['geogig']['url'] = 'https://github.com/locationtech/geogig.git'
-end
+
+default['rogue']['geogig']['url'] = 'https://github.com/locationtech/geogig.git'
+
 
 default['rogue']['geogig']['global_configuration'] = {"user"=> {"name"=>"rogue",
                                                                 "email"=>"rogue@lmnsolutions.com"},
@@ -114,4 +114,11 @@ default['rogue']['rogue_geonode']['branch'] = '2.x'
 default['rogue']['geoserver_data']['branch'] = '2.x'
 default['rogue']['django_maploom']['auto_upgrade'] = false
 default['rogue']['geoserver']['war'] = "http://jenkins.rogue.lmnsolutions.com/userContent/geoshape-2.x/geoserver.war"
-default['rogue']['geogig']['url'] = 'http://jenkins.rogue.lmnsolutions.com/userContent/geoshape-2.x/geogig-cli-app-1.0.zip'
+default['rogue']['geogit']['url'] = 'http://jenkins.rogue.lmnsolutions.com/userContent/geoshape-2.x/geogig-cli-app-1.0.zip'
+
+default['rabbitmq']['rogue_user'] = {
+        :name => 'geoshape',
+        :password => 'geoshape',
+        :rights =>[{ :vhost => nil, :conf => '.*', :write => '.*', :read => '.*' }]
+  }
+

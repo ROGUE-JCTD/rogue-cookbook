@@ -9,10 +9,16 @@ user node['rogue']['user']['username'] do
   password node['rogue']['user']['password']
 end
 
+user 'celery'
+
+group 'celery' do
+  members 'celery'
+end
+
 group "rogue" do
   action :create
   append true
-  members "rogue"
+  members ["rogue", "celery"]
 end
 
 group "sudo" do
@@ -49,5 +55,11 @@ end
 directory '/var/www' do
   group "rogue"
   owner "www-data"
+  mode 0755
+end
+
+directory '/var/log/celery' do
+  group "rogue"
+  owner "celery"
   mode 0755
 end
