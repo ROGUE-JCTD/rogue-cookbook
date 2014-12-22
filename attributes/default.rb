@@ -49,7 +49,6 @@ default['rogue']['geoserver']['war'] = "http://jenkins.rogue.lmnsolutions.com/jo
 default['rogue']['geoserver_data']['url'] = 'https://github.com/ROGUE-JCTD/geoserver_data.git'
 default['rogue']['geoserver_data']['branch'] = 'master'
 
-default['rogue']['geonode']['location'] = '/var/lib/geonode/'
 default['rogue']['interpreter'] = ::File.join(node['rogue']['geonode']['location'], 'bin/python')
 default['rogue']['django_maploom']['auto_upgrade'] = true
 default['rogue']['django_maploom']['url'] = "git+https://github.com/ROGUE-JCTD/django-maploom.git#egg=django-maploom"
