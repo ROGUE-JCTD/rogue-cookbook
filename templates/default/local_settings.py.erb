@@ -77,22 +77,22 @@ OGC_SERVER = {
         'MAPFISH_PRINT_ENABLED': True,
         'PRINT_NG_ENABLED': True,
         'GEONODE_SECURITY_ENABLED': True,
-        'GEOGIT_ENABLED': True,
+        'GEOGIG_ENABLED': True,
         'WMST_ENABLED': False,
         'DATASTORE': '<%= @data_store[:name] %>',
-        'GEOGIT_DATASTORE_DIR':'<%= @settings['OGC_SERVER']['GEOGIT_DATASTORE_DIR'] %>',
+        'GEOGIG_DATASTORE_DIR':'<%= @settings['OGC_SERVER']['GEOGIG_DATASTORE_DIR'] %>',
         }
     }
 
 #  Database datastore connection settings
-GEOGIT_DATASTORE_NAME = 'geogit-repo'
+GEOGIG_DATASTORE_NAME = 'geogig-repo'
 
 
 UPLOADER = {
     'BACKEND' : '<%= @settings['UPLOADER']['BACKEND'] or 'geonode.rest' %>',
     'OPTIONS' : {
         'TIME_ENABLED' : True,
-        'GEOGIT_ENABLED' : True,
+        'GEOGIG_ENABLED' : True,
     }
 }
 

@@ -51,7 +51,7 @@ default['rogue']['geonode']['location'] = '/var/lib/geonode/'
 default['rogue']['interpreter'] = ::File.join(node['rogue']['geonode']['location'], 'bin/python')
 default['rogue']['django_maploom']['auto_upgrade'] = true
 default['rogue']['django_maploom']['url'] = "git+https://github.com/ROGUE-JCTD/django-maploom.git#egg=django-maploom"
-default['rogue']['rogue_geonode']['branch'] = 'master'
+default['rogue']['geonode']['location'] = '/var/lib/geonode/'
 default['rogue']['rogue_geonode']['python_packages'] = ["uwsgi", "psycopg2"]
 default['rogue']['rogue_geonode']['location'] = File.join(node['rogue']['geonode']['location'], 'rogue_geonode')
 default['rogue']['rogue_geonode']['url'] = 'https://github.com/ROGUE-JCTD/rogue_geonode.git'
@@ -66,7 +66,7 @@ default['rogue']['rogue_geonode']['settings']['SITEURL'] = "http://#{node['rogue
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['LOCATION'] = node['rogue']['geoserver']['url']
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['PUBLIC_LOCATION'] = node['rogue']['geoserver']['url']
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['DATASTORE'] = ""
-default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIT_DATASTORE_DIR'] = ::File.join(node['rogue']['geoserver']['data_dir'], 'geogit')
+default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIG_DATASTORE_DIR'] = ::File.join(node['rogue']['geoserver']['data_dir'], 'geogig')
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['USER'] = "admin"
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['PASSWORD'] = "geoserver"
 default['rogue']['rogue_geonode']['settings']['UPLOADER']['BACKEND'] = 'geonode.importer'
@@ -78,18 +78,18 @@ default['rogue']['rogue_geonode']['settings']['DATABASES'] = {
     :default=>{:name=>'geonode', :user=>'geonode', :password=>'geonode', :host=>'rogue-database', :port=>'5432'},
     :geonode_imports=>{:name=>'geonode_imports', :user=>'geonode', :password=>'geonode', :host=>'rogue-database', :port=>'5432'}
     }
-default['rogue']['geogit']['build_from_source'] = false
-default['rogue']['geogit']['branch'] = 'SprintRelease'
+default['rogue']['geogig']['build_from_source'] = false
+default['rogue']['geogig']['branch'] = 'SprintRelease'
 
-if node['rogue']['geogit']['build_from_source']
-  default['rogue']['geogit']['url'] = 'https://github.com/ROGUE-JCTD/GeoGit.git'
+if node['rogue']['geogig']['build_from_source']
+  default['rogue']['geogig']['url'] = 'https://github.com/locationtech/geogig.git'
 end
 
-default['rogue']['geogit']['global_configuration'] = {"user"=> {"name"=>"rogue",
+default['rogue']['geogig']['global_configuration'] = {"user"=> {"name"=>"rogue",
                                                                 "email"=>"rogue@lmnsolutions.com"},
                                                       "bdbje"=> {"object_durability"=>"safe"}
                                                       }
-default['rogue']['geogit']['location'] = '/var/lib/geogit'
+default['rogue']['geogig']['location'] = '/var/lib/geogig'
 
 
 default['rogue']['geoeserver-exts']['branch'] = '2.4.x'
@@ -114,4 +114,4 @@ default['rogue']['rogue_geonode']['branch'] = '2.x'
 default['rogue']['geoserver_data']['branch'] = '2.x'
 default['rogue']['django_maploom']['auto_upgrade'] = false
 default['rogue']['geoserver']['war'] = "http://jenkins.rogue.lmnsolutions.com/userContent/geoshape-2.x/geoserver.war"
-default['rogue']['geogit']['url'] = 'http://jenkins.rogue.lmnsolutions.com/userContent/geoshape-2.x/geogig-cli-app-1.0.zip'
+default['rogue']['geogig']['url'] = 'http://jenkins.rogue.lmnsolutions.com/userContent/geoshape-2.x/geogig-cli-app-1.0.zip'
