@@ -26,7 +26,7 @@ bash "unzip_geogig" do
   rm -rf #{node['rogue']['geogig']['location']}
   mv #{Chef::Config[:file_cache_path]}/geogig-cli-app/geogig /var/lib
   chmod 755 /var/lib/geogig/ -R
-  chown root:roguecat /var/lib/geogig -R
+  chown rogue:rogue /var/lib/geogig -R
   rm -rf #{Chef::Config[:file_cache_path]}/geogig-cli-app/
   EOF
   user 'root'
