@@ -16,6 +16,7 @@ include_recipe 'rogue::unison'
 include_recipe 'rogue::stig'
 include_recipe 'rogue::roguescripts'
 include_recipe 'rogue::rabbitmq'
+include_recipe 'rogue::celery'
 
 source = "/usr/lib/x86_64-linux-gnu/libjpeg.so"
 target = "/usr/lib/libjpeg.so"
@@ -71,11 +72,9 @@ rogue_geonode node['rogue']['geonode']['location'] do
   action [:update_layers, :start, :build_html_docs]
 end
 
-include_recipe 'rogue::celery'
-
 execute "start_celery-worker" do
-  command 'supervisorctl start celery-worker'
-  not_if "supervisorctl status celery-worker | grep RUNNING"
+  command 'supervisorctl start rogue-celery'
+  not_if "supervisorctl status rogue-celery | grep RUNNING"
 end
 
 log "Rogue is now running on #{node['rogue']['networking']['application']['address']}."
