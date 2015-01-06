@@ -73,6 +73,7 @@ default['rogue']['rogue_geonode']['settings']['UPLOADER']['BACKEND'] = 'geonode.
 default['rogue']['rogue_geonode']['settings']['STATIC_ROOT'] = '/var/www/rogue'
 default['rogue']['rogue_geonode']['settings']['MEDIA_ROOT'] = '/var/www/rogue/media'
 default['rogue']['nginx']['locations'] = {}
+default['nginx']['client_max_body_size']='150M'
 
 default['rogue']['rogue_geonode']['settings']['DATABASES'] = {
     :default=>{:name=>'geonode', :user=>'geonode', :password=>'geonode', :host=>'rogue-database', :port=>'5432'},

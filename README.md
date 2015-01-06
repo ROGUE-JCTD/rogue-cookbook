@@ -74,6 +74,8 @@ Attributes
 - `node['rogue']['ssh']['public_key_remote_file']` = The location where to store the public key on the guest machine.
 - `node['rogue']['iface']` = The network interface used to obtain the ip.  Defaults to eth1 when the vagrant attribute is true, eth0 all other times.
 - `node['unison']['user']` = A hash with the username and password for the `unison` user.
+- `node['nginx']['client_max_body_size']` = The max body size for nginx.
+
 
 Usage
 -----
