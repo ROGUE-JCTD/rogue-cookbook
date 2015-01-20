@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 - Bumps the Nginx version to 1.4.4.
 - Parameterizes the Nginx client_max_body_size variable and defaults it to 150mb.
 - Adds a Celery configuration and RabbitMQ to the build.
-- Renames GeoGit to GeoGIG.
+- Renames GeoGit to GeoGIG and brings in latest changes. 
 - Updates build to support installing GeoNode > 2.0.
 - Updates build to use Geoserver 2.6-SNAPSHOT.
 
