@@ -7,7 +7,7 @@ end
 
 use_inline_resources
 
-def django_command(cmd, options)
+def django_command(cmd, options=[])
   "#{new_resource.virtual_env_location}bin/python manage.py #{cmd} #{options.join(' ')}"
 end
 
@@ -66,6 +66,15 @@ action :install do
     python_virtualenv new_resource.virtual_env_location do
       interpreter new_resource.python_interpreter
       action :create
+    end
+
+    osgeo_library = '/usr/lib/python2.6/dist-packages/'
+    site_packages = ::File.join(new_resource.virtual_env_location, 'lib/python2.7/site-packages/')
+
+    bash "add_virtual_path" do
+      code "echo #{osgeo_library} > #{site_packages}_virtualenv_path_extensions.pth"
+      #only_if { ::File.exists? osgeo_library and !::File.exists? ::File.join(site_packages, '_virtualenv_path_extensions.pth')}
+      cwd site_packages
     end
 
     bash "downgrade_pip" do
@@ -138,6 +147,14 @@ action :install do
     supervisord_program 'rogue' do
       name 'rogue'
       command "#{new_resource.virtual_env_location}bin/uwsgi --ini #{new_resource.rogue_geonode_location}/django.ini"
+      autorestart true
+      action :supervise
+    end
+
+    supervisord_program 'rogue-celery' do
+      name 'rogue-celery'
+      command "service celeryd start"
+      autorestart true
       action :supervise
     end
 
@@ -146,9 +163,8 @@ end
 
 action :sync_db do
   execute "sync_db_#{new_resource.rogue_geonode_location}" do
-    command django_command('syncdb', ['--all', '--noinput'])
+    command django_command('syncdb', ['--noinput'])
     cwd new_resource.rogue_geonode_location
-    not_if "cd #{new_resource.rogue_geonode_location} && #{django_command('dumpdata', ['security'])}"
   end
 
   new_resource.updated_by_last_action(true)
@@ -165,7 +181,8 @@ action :load_data do
   execute "load_data_#{new_resource.name}" do
     command django_command('loaddata', new_resource.fixtures)
     cwd new_resource.rogue_geonode_location
-    not_if { new_resource.fixtures.empty? }
+    only_if { new_resource.fixtures }
+    ignore_failure true
   end
   new_resource.updated_by_last_action(true)
 end
@@ -181,6 +198,12 @@ end
 action :start do
     execute "start_rogue" do
       command 'supervisorctl start rogue'
+      not_if "supervisorctl status rogue | grep RUNNING"
+    end
+
+    execute "start_rogue-celery" do
+      command 'supervisorctl start rogue-celery'
+      not_if "supervisorctl status rogue-celery | grep RUNNING"
     end
 end
 

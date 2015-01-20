@@ -42,7 +42,7 @@ describe file('/var/run/geonode.sock') do
   it { should be_owned_by 'www-data' }
 end
 
-describe file('/var/lib/geoserver_data/geogit') do
+describe file('/var/lib/geoserver_data/geogig') do
   it { should be_directory }
   it { should be_executable.by_user('rogue') }
   it { should be_readable.by_user('rogue') }
@@ -52,4 +52,8 @@ end
 # https://github.com/ROGUE-JCTD/rogue_geonode/blob/master/geoshape/core/management/commands/update-layer-ips.py
 describe file('/var/lib/geonode/rogue_geonode/geoshape/local_settings.py') do
   it { should contain 'PUBLIC_LOCATION' }
+
+describe file('/usr/lib/python2.6/dist-packages/') do
+  it { should be_directory }
 end
+

@@ -27,11 +27,11 @@ Attributes
 - `node['rogue']['django_maploom']['auto_upgrade']` - Boolean. Determines whether to auto-upgrade the django-maploom version.
 - `node['rogue']['user']` = A hash with the username and password for the ROGUE user.
 - `node['rogue']['setup_db']` = Boolean.  Dictates whether the `rogue::database` recipe is executed.
-- `node['rogue']['geogit']['branch']` = The geogit branch to during the installation.
-- `node['rogue']['geogit']['build_from_source']` = Boolean.  If true, geogit will build from source code every provision, if false geogit will be downloaded from the `node['rogue']['geogit']['url']` location.
-- `node['rogue']['geogit']['global_configuration']` = A hash of hashes which represents geogit global configuration.
-- `node['rogue']['geogit']['location']` = The geogit installation location.
-- `node['rogue']['geogit']['url']` = The git repository url or zip file for geogit.
+- `node['rogue']['geogig']['branch']` = The geogig branch to during the installation.
+- `node['rogue']['geogig']['build_from_source']` = Boolean.  If true, geogig will build from source code every provision, if false geogig will be downloaded from the `node['rogue']['geogig']['url']` location.
+- `node['rogue']['geogig']['global_configuration']` = A hash of hashes which represents geogig global configuration.
+- `node['rogue']['geogig']['location']` = The geogig installation location.
+- `node['rogue']['geogig']['url']` = The git repository url or zip file for geogig.
 - `node['rogue']['geoserver']['use_db_client']` = Boolean.  If true, geoserver will use the database client in the geonode-geoserver extension to authenticate users.
 - `node['rogue']['geoserver']['url']` = The full url to Geoserver in ROGUE.
 - `node['rogue']['geoserver']['base_url']` = Geoserver's URL route in ROGUE.
@@ -74,6 +74,8 @@ Attributes
 - `node['rogue']['ssh']['public_key_remote_file']` = The location where to store the public key on the guest machine.
 - `node['rogue']['iface']` = The network interface used to obtain the ip.  Defaults to eth1 when the vagrant attribute is true, eth0 all other times.
 - `node['unison']['user']` = A hash with the username and password for the `unison` user.
+- `node['nginx']['client_max_body_size']` = The max body size for nginx.
+
 
 Usage
 -----
@@ -98,10 +100,10 @@ The fileservice recipe will:
 - Download the fileservice war and deploy it to Tomcat
 - Create a file-service-store in the Geoserver data directory, if it does not already exist
 
-#### rogue::geogit
-The geogit recipe will:
+#### rogue::geogig
+The geogig recipe will:
 
-- install geogit
+- install geogig
 
 #### rogue::geoserver
 The geoserver recipe will:
