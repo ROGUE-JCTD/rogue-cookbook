@@ -32,6 +32,10 @@ server {
         location /docs {
                 alias <%=File.join(node['rogue']['rogue_geonode']['location'], '/docs/build/html')%>;
         }
+
+        location /help {
+                alias <%=File.join(node['rogue']['rogue_geonode']['location'], '/docs/build/html')%>;
+        }
         <% end %>
 
         location /uploaded {

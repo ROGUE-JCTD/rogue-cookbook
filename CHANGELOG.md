@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 [Unreleased][unreleased]
 ------------------------
+- Override the GeoNode help to go to the GeoSHAPE documentation.
 - Adds CHANGELOG.md.
 
 [1.1] - 2015-01-19
