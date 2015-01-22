@@ -76,8 +76,8 @@ default['rogue']['nginx']['locations'] = {}
 default['nginx']['client_max_body_size']='150M'
 
 default['rogue']['rogue_geonode']['settings']['DATABASES'] = {
-    :default=>{:name=>'geonode', :user=>'geonode', :password=>'geonode', :host=>'rogue-database', :port=>'5432'},
-    :geonode_imports=>{:name=>'geonode_imports', :user=>'geonode', :password=>'geonode', :host=>'rogue-database', :port=>'5432'}
+    :default=>{:name=>'geonode', :user=>'geonode', :password=>'geonode', :host=>'rogue-database', :port=>'5432', :conn_max_age=>60},
+    :geonode_imports=>{:name=>'geonode_imports', :user=>'geonode', :password=>'geonode', :host=>'rogue-database', :port=>'5432', :conn_max_age=>60}
     }
 default['rogue']['geogig']['build_from_source'] = false
 default['rogue']['geogig']['branch'] = 'SprintRelease'

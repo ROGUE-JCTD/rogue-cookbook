@@ -52,6 +52,7 @@ DATABASES = {
         'PASSWORD': '<%= @database[:password] %>',
         'HOST': '<%= @database[:host] %>',
         'PORT': '<%= @database[:port] %>',
+        'CONN_MAX_AGE': <%= @database[:conn_max_age] %>,
     },
 
     <% if @data_store[:name] -%>
@@ -62,6 +63,7 @@ DATABASES = {
         'PASSWORD': '<%= @data_store[:password] %>',
         'HOST': '<%= @data_store[:host] %>',
         'PORT': '<%= @data_store[:port] %>',
+        'CONN_MAX_AGE': <%= @data_store[:conn_max_age] %>,
     },
     <% end -%>
 }
