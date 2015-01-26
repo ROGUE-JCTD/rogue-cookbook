@@ -3,6 +3,7 @@ geonode_pkgs =  "build-essential libxml2-dev libxslt-dev libjpeg-dev zlib1g-dev 
 geonode_pkgs.each do |pkg|
   package pkg do
     action :install
+    retries 8
   end
 end
 
