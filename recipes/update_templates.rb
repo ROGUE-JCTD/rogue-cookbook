@@ -1,4 +1,5 @@
 include_recipe 'rogue::tomcat_overrides'
+include_recipe 'rogue::rabbitmq_overrides'
 
 rogue_geonode node['rogue']['geonode']['location'] do
   action [:update_local_settings, :start]
