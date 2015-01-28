@@ -1,5 +1,5 @@
 
-
+node.default['nginx']['default_site_enabled']=false
 node.default['nginx']['init_style'] = "init"
 node.default['nginx']['install_method'] = 'source'
 node.default['nginx']['source']['version'] = '1.4.4'
