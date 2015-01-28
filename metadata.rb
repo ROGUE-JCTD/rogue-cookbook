@@ -18,3 +18,5 @@ depends 'postgresql', '~> 3.3.4'
 depends 'supervisord', '~> 1.0.1'
 depends 'runit','~> 1.5.10'
 depends 'rabbitmq', '~> 3.6.0'
+depends 'openssl', '~> 2.0.2'
+

@@ -95,6 +95,10 @@ execute "fix jai" do
   command "sed s/+215/-n+215/ jai_imageio-1_1-lib-linux-amd64-jdk.bin > jai_imageio-1_1-lib-linux-amd64-jdk-fixed.bin"
 end
 
+execute "update GeoNodeAuthProvider" do
+  command "sed -i 's#<baseUrl>\\([^<][^<]*\\)</baseUrl>#<baseUrl>#{node['scheme']}#{node['rogue']['networking']['application']['fqdn']}/</baseUrl>#' #{::File.join(node['rogue']['geoserver']['data_dir'], 'security/auth/geonodeAuthProvider/config.xml')}"
+end
+
 # TODO Need to auto accept the JAI terms.
 #execute "install_jai" do
 # cwd node['java']['java_home']

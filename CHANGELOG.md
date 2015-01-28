@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 [Unreleased][unreleased]
 ------------------------
+- Support for running in SSL.
 - Fix bug where the BROKER_URL was not being populated in update_templates.
 - Parameterize the CONN_MAX_AGE Django DB setting.
 

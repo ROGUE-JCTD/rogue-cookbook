@@ -1,3 +1,14 @@
+default['ssl'] = true
+default['create_self_signed_cert'] = true
+default['certs'] = []
+default['cert']['org'] = 'Org'
+default['cert']['org_unit'] = 'Org unit'
+default['cert']['country'] = 'US'
+default['scheme'] = node['ssl'] ? 'https://' : 'http://'
+
+default['java']['keystore'] = '/usr/lib/jvm/jdk1.7.0_51/jre/lib/security/cacerts'
+default['java']['keystore_password'] = 'changeit'
+
 default['rogue']['debug'] = true
 default['rogue']['version'] = 'release-1.2'
 default['rogue']['iface'] = 'eth0'
@@ -43,7 +54,7 @@ default['rogue']['geoserver']['base_url'] = '/geoserver'
 default['rogue']['geoserver']['data_dir'] = '/var/lib/geoserver_data'
 default['rogue']['geoserver']['jai']['url'] = "http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64-jdk.bin"
 default['rogue']['geoserver']['jai_io']['url'] = "http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64-jdk.bin"
-default['rogue']['geoserver']['url']= "http://#{node['rogue']['networking']['application']['fqdn']}#{node['rogue']['geoserver']['base_url']}/"
+default['rogue']['geoserver']['url']= "#{node['scheme']}#{node['rogue']['networking']['application']['fqdn']}#{node['rogue']['geoserver']['base_url']}/"
 
 default['rogue']['geoserver_data']['url'] = 'https://github.com/ROGUE-JCTD/geoserver_data.git'
 default['rogue']['geoserver_data']['branch'] = 'master'
@@ -110,7 +121,7 @@ default['rogue']['rogue-scripts']['branch'] = 'master'
 default['rogue']['rogue-scripts']['location'] = '/opt/rogue-scripts'
 default['rogue']['rogue-scripts']['url'] = 'https://github.com/ROGUE-JCTD/rogue-scripts.git'
 
-default['rogue']['rogue_geonode']['branch'] = 'release-1.2'
+default['rogue']['rogue_geonode']['branch'] =  'master'
 default['rogue']['geoserver_data']['branch'] = 'release-1.1'
 default['rogue']['django_maploom']['auto_upgrade'] = false
 default['rogue']['geoserver']['war'] = "http://jenkins.rogue.lmnsolutions.com/userContent/geoshape-2.x/geoserver.war"
@@ -122,3 +133,6 @@ default['rabbitmq']['rogue_user'] = {
         :rights =>[{ :vhost => nil, :conf => '.*', :write => '.*', :read => '.*' }]
   }
 
+default['cert']['name'] = node['rogue']['networking']['application']['fqdn']
+default['cert']['certificate'] = File.join "/etc/ssl/certs", "#{node['cert']['name']}.crt"
+default['cert']['key'] = File.join "/etc/ssl/private", "#{node['cert']['name']}.key"

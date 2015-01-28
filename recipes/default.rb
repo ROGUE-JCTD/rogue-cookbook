@@ -10,7 +10,6 @@ end
 include_recipe 'rogue::permissions'
 include_recipe 'rogue::java'
 include_recipe 'rogue::tomcat'
-include_recipe 'rogue::nginx'
 include_recipe 'rogue::geogig'
 include_recipe 'rogue::networking'
 include_recipe 'rogue::unison'
@@ -36,6 +35,8 @@ rogue_geonode node['rogue']['geonode']['location'] do
   action :install
 end
 
+include_recipe 'rogue::certs'
+include_recipe 'rogue::nginx'
 include_recipe 'rogue::geoserver_data'
 include_recipe 'rogue::geoserver'
 include_recipe 'rogue::fileservice'
