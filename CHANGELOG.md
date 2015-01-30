@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 [Unreleased][unreleased]
 ------------------------
+- Deny access to routes with un-used script extension in Nginx (asp[x], php, jsp, cgi, and pl).
 - Support for running in SSL.
 - Add security headers to prevent clickjacking and XSS in the default nginx configuration.
 - Disable the default nginx site configuration by default.

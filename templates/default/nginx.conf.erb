@@ -68,6 +68,9 @@ server {
                 alias <%=node['rogue']['rogue_geonode']['settings']['MEDIA_ROOT']%>;
         }
 
+        location ~ \.(asp|aspx|php|jsp|cgi|pl)$ {
+                deny all;
+        }
 
     <% node['rogue']['nginx']['locations'].each do |location| %>
 
