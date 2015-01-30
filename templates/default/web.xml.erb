@@ -98,7 +98,13 @@
               If a mime type matches any of the regular expressions then it will be compressed.
               -->
          <param-name>compressed-types</param-name>
+
+         <% if node['rogue']['geoserver']['gzip'] %>
          <param-value>text/.*,.*xml.*,application/json,application/x-javascript</param-value>
+         <% else %>
+         <param-value></param-value>
+         <% end %>
+
      </init-param>
    </filter>
 

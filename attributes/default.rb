@@ -52,6 +52,7 @@ default['rogue']['geoserver']['build_from_source'] = false
 default['rogue']['geoserver']['use_db_client'] = true
 default['rogue']['geoserver']['base_url'] = '/geoserver'
 default['rogue']['geoserver']['data_dir'] = '/var/lib/geoserver_data'
+default['rogue']['geoserver']['gzip'] = false
 default['rogue']['geoserver']['jai']['url'] = "http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64-jdk.bin"
 default['rogue']['geoserver']['jai_io']['url'] = "http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64-jdk.bin"
 default['rogue']['geoserver']['url']= "#{node['scheme']}#{node['rogue']['networking']['application']['fqdn']}#{node['rogue']['geoserver']['base_url']}/"
@@ -102,7 +103,6 @@ default['rogue']['geogig']['global_configuration'] = {"user"=> {"name"=>"rogue",
                                                       "bdbje"=> {"object_durability"=>"safe"}
                                                       }
 default['rogue']['geogig']['location'] = '/var/lib/geogig'
-
 
 default['rogue']['geoeserver-exts']['branch'] = '2.4.x'
 default['rogue']['geoeserver-exts']['location'] = '/var/lib/geoserver-exts'

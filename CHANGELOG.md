@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 [Unreleased][unreleased]
 ------------------------
+- Disable gzip compression in Geoserver (needed because of a known GeoGIG bug).
 - Add `NOTIFICATION_LOCK_LOCATION` variable to the `local_settings.py` template.
 - Deny access to routes with un-used script extension in Nginx (asp[x], php, jsp, cgi, and pl).
 - Support for running in SSL.
