@@ -114,3 +114,5 @@ BROKER_URL = '<%= "amqp://#{node['rabbitmq']['rogue_user']['name']}:#{node['rabb
 CELERY_ALWAYS_EAGER = False
 NOTIFICATION_QUEUE_ALL = not CELERY_ALWAYS_EAGER
 
+# Put notification lock files in '/var/lib/geonode' not '/'.
+NOTIFICATION_LOCK_LOCATION = '/var/lib/geonode/rogue'
