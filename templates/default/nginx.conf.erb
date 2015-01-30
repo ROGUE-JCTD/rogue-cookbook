@@ -1,8 +1,4 @@
 server_tokens off;
-add_header X-Content-Type-Options nosniff;
-add_header X-Frame-Options SAMEORIGIN;
-add_header X-XSS-Protection "1; mode=block";
-
 
 upstream django {
     # connect to this socket
@@ -35,6 +31,9 @@ server {
 	    listen 80 default_server;
 	    <% end %>
         client_max_body_size <%=node['nginx']['client_max_body_size']%>;
+        add_header X-Content-Type-Options nosniff;
+        add_header X-Frame-Options SAMEORIGIN;
+        add_header X-XSS-Protection "1; mode=block";
 
 	# the domain name it will serve for
     	server_name _;   # substitute your machine's IP address or FQDN
