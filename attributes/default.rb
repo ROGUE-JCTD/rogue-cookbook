@@ -1,5 +1,5 @@
 default['rogue']['debug'] = true
-default['rogue']['version'] = 'release-1.2'
+default['rogue']['version'] = 'release-1.2.1'
 default['rogue']['iface'] = 'eth0'
 
 if node.fetch('vagrant', false)
@@ -110,7 +110,7 @@ default['rogue']['rogue-scripts']['branch'] = 'master'
 default['rogue']['rogue-scripts']['location'] = '/opt/rogue-scripts'
 default['rogue']['rogue-scripts']['url'] = 'https://github.com/ROGUE-JCTD/rogue-scripts.git'
 
-default['rogue']['rogue_geonode']['branch'] = 'release-1.2'
+default['rogue']['rogue_geonode']['branch'] = 'release-1.3'
 default['rogue']['geoserver_data']['branch'] = 'release-1.1'
 default['rogue']['django_maploom']['auto_upgrade'] = false
 default['rogue']['geoserver']['war'] = "http://jenkins.rogue.lmnsolutions.com/userContent/geoshape-2.x/geoserver.war"
