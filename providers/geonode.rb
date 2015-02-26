@@ -181,7 +181,7 @@ action :load_data do
   execute "load_data_#{new_resource.name}" do
     command django_command('loaddata', new_resource.fixtures)
     cwd new_resource.rogue_geonode_location
-    only_if { new_resource.fixtures }
+    only_if { !new_resource.fixtures.empty? }
     ignore_failure true
   end
   new_resource.updated_by_last_action(true)
