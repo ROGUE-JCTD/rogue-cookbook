@@ -36,6 +36,11 @@ CLASSIFICATION_TEXT_COLOR = '<%= @settings['CLASSIFICATION_TEXT_COLOR'] %>'
 CLASSIFICATION_BACKGROUND_COLOR = '<%= @settings['CLASSIFICATION_BACKGROUND_COLOR'] %>'
 <% end -%>
 
+<% if @settings['CLASSIFICATION_LINK'] -%>
+CLASSIFICATION_LINK = '<%= @settings['CLASSIFICATION_LINK'] %>'
+<% end -%>
+
+
 SERVER_EMAIL = '<%= @settings['SERVER_EMAIL'] %>'
 DEFAULT_FROM_EMAIL = '<%= @settings['DEFAULT_FROM_EMAIL'] %>'
 REGISTRATION_OPEN = <%= @settings['REGISTRATION_OPEN'] ? "True":"False" %>
