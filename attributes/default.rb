@@ -10,7 +10,6 @@ default['java']['keystore'] = '/usr/lib/jvm/jdk1.7.0_51/jre/lib/security/cacerts
 default['java']['keystore_password'] = 'changeit'
 
 default['rogue']['debug'] = true
-default['rogue']['version'] = 'release-1.2'
 default['rogue']['iface'] = 'eth0'
 
 if node.fetch('vagrant', false)
