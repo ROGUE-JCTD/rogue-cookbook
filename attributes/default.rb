@@ -115,17 +115,17 @@ default['rogue']['rogue_geonode']['settings']['CLASSIFICATION_TEXT'] = nil
 default['rogue']['rogue_geonode']['settings']['CLASSIFICATION_LINK'] = nil
 
 default['rogue']['stig']['url'] = 'https://github.com/ROGUE-JCTD/stig.git'
-default['rogue']['stig']['branch'] = 'master'
+default['rogue']['stig']['branch'] = 'release-1.0'
 
-default['rogue']['rogue-scripts']['branch'] = 'master'
+default['rogue']['rogue-scripts']['branch'] = 'release-1.0'
 default['rogue']['rogue-scripts']['location'] = '/opt/rogue-scripts'
 default['rogue']['rogue-scripts']['url'] = 'https://github.com/ROGUE-JCTD/rogue-scripts.git'
 
 default['rogue']['rogue_geonode']['branch'] =  'master'
 default['rogue']['geoserver_data']['branch'] = 'release-1.1'
 default['rogue']['django_maploom']['auto_upgrade'] = false
-default['rogue']['geoserver']['war'] = "http://jenkins.rogue.lmnsolutions.com/userContent/geoshape-2.x/geoserver.war"
-default['rogue']['geogig']['url'] = 'http://jenkins.rogue.lmnsolutions.com/userContent/geoshape-2.x/geogig-cli-app-1.0.zip'
+default['rogue']['geoserver']['war'] = "http://jenkins.geoshape.org/userContent/geoshape-2.x/geoserver.war"
+default['rogue']['geogig']['url'] = 'http://jenkins.geoshape.org/userContent/geoshape-2.x/geogig-cli-app-1.0.zip'
 
 default['rabbitmq']['rogue_user'] = {
         :name => 'geoshape',
