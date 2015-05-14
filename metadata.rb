@@ -1,7 +1,7 @@
 name             'rogue'
 description      'Installs/Configures the ROGUE JCTD project'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '1.2'
+version          '1.3'
 
 depends 'nginx', '~> 2.7.4'
 depends 'apt', '~> 2.2'

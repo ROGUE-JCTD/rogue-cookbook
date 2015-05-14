@@ -121,7 +121,11 @@ default['rogue']['rogue-scripts']['branch'] = 'release-1.0'
 default['rogue']['rogue-scripts']['location'] = '/opt/rogue-scripts'
 default['rogue']['rogue-scripts']['url'] = 'https://github.com/ROGUE-JCTD/rogue-scripts.git'
 
-default['rogue']['rogue_geonode']['branch'] =  'master'
+######################################################################################
+# Note: this ['rogue_geonode']['branch'] version needs to get bumped up when making a new geoshape release. 
+#       It should be the release tag on the rogue_geonode repo
+######################################################################################
+default['rogue']['rogue_geonode']['branch'] =  'release-1.4'
 default['rogue']['geoserver_data']['branch'] = 'release-1.1'
 default['rogue']['django_maploom']['auto_upgrade'] = false
 default['rogue']['geoserver']['war'] = "http://jenkins.geoshape.org/userContent/geoshape-2.x/geoserver.war"

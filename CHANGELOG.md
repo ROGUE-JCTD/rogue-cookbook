@@ -8,6 +8,9 @@ All notable changes to this project will be documented in this file.
 
 [1.3] - 2015-05-13
 ------------------
+- Updated war file downloads through geoshape.org
+- Pegged stigs and rogue-scripts repos to a release
+- Removed unused rogue version variable from default.rb
 - Support for django-classification-banner, 1.0.5
 - Update negation logic when loading fixtures to not run when given an empty array.
 - Fix typo in the default 'REGISTRATION_OPEN' variable.
