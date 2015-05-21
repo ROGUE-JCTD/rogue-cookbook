@@ -16,6 +16,8 @@ define :war do
     remote_file tmp_file do
       source remote_file_location
       action :create
+      retries 10
+      retry_delay 1
     end
 
     service 'tomcat' do

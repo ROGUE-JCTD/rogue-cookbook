@@ -16,6 +16,8 @@ end
 
 remote_file "#{Chef::Config[:file_cache_path]}/geogig-cli-app-1.0.zip" do
   source node['rogue']['geogig']['url']
+  retries 10
+  retry_delay 1
   not_if { node['rogue']['geogig']['build_from_source'] }
   notifies "run", "bash[unzip_geogig]", "immediately"
 end
