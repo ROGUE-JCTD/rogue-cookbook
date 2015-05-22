@@ -6,8 +6,10 @@ All notable changes to this project will be documented in this file.
 ------------------------
 
 
-[1.3] - 2015-05-13
+[1.3] - 2015-22-13
 ------------------
+- Bumped version of geoshape to 1.4
+- Removed notifications to rogue@lmnsolutions.com
 - Updated war file downloads through geoshape.org
 - Pegged stigs and rogue-scripts repos to a release
 - Removed unused rogue version variable from default.rb
