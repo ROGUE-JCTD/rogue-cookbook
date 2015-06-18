@@ -126,7 +126,7 @@ default['rogue']['rogue-scripts']['url'] = 'https://github.com/ROGUE-JCTD/rogue-
 #       It should be the release tag on the rogue_geonode repo
 ######################################################################################
 default['rogue']['rogue_geonode']['branch'] =  'master' #'release-1.4'
-default['rogue']['geoserver_data']['branch'] = 'release-1.1'
+default['rogue']['geoserver_data']['branch'] = 'master' #'release-1.1'
 default['rogue']['django_maploom']['auto_upgrade'] = false
 default['rogue']['geoserver']['war'] = "http://jenkins.geoshape.org/userContent/geoshape-2.x/geoserver.war"
 default['rogue']['geogig']['url'] = 'http://jenkins.geoshape.org/userContent/geoshape-2.x/geogig-cli-app-1.0.zip'
