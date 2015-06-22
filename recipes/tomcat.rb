@@ -4,7 +4,8 @@ include_recipe 'tomcat::default'
 group "tomcat7" do
   action :modify
   append true
-  members ["unison", "rogue"]
+  # users that can write to the geoserver_data folder 
+  members ["unison", "rogue", "www-data"]
 end
 
 directory node['tomcat']['home'] do
