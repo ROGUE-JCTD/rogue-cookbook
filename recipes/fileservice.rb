@@ -1,5 +1,5 @@
 war 'file-service.war' do
-  remote_file_location "http://jenkins.rogue.lmnsolutions.com/userContent/file-service.war"
+  remote_file_location "http://jenkins.geoshape.org/userContent/file-service.war"
   action :deploy
   notifies :create, "directory[file_service_store]", :immediately
 end

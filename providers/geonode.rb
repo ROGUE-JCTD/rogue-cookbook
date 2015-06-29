@@ -68,7 +68,7 @@ action :install do
       action :create
     end
 
-    osgeo_library = '/usr/lib/python2.6/dist-packages/'
+    osgeo_library = '/usr/lib/python2.7/dist-packages/'
     site_packages = ::File.join(new_resource.virtual_env_location, 'lib/python2.7/site-packages/')
 
     bash "add_virtual_path" do
@@ -76,9 +76,13 @@ action :install do
       #only_if { ::File.exists? osgeo_library and !::File.exists? ::File.join(site_packages, '_virtualenv_path_extensions.pth')}
       cwd site_packages
     end
-
+    
     bash "downgrade_pip" do
       code "#{new_resource.virtual_env_location}/bin/easy_install pip==1.4.1"
+    end
+    
+    bash "downgrade_global_pip" do
+      code "easy_install pip==1.4.1"
     end
 
     for pkg in new_resource.python_packages do
@@ -104,6 +108,7 @@ action :install do
       repository node['rogue']['rogue_geonode']['url']
       revision branch
       action :sync
+      timeout 1500
     end
 
     Chef::Log.debug "Installing ROGUE using PIP"
@@ -115,7 +120,7 @@ action :install do
 
     python_pip pip_install do
       virtualenv new_resource.virtual_env_location
-      options "--use-mirrors -e"
+      options "-e"
     end
 
     python_pip node['rogue']['django_maploom']['url'] do
