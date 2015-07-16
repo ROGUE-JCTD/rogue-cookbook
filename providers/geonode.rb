@@ -81,10 +81,6 @@ action :install do
       code "#{new_resource.virtual_env_location}/bin/easy_install pip==1.4.1"
     end
     
-    bash "downgrade_global_pip" do
-      code "easy_install pip==1.4.1"
-    end
-    
     for pkg in new_resource.python_packages do
       python_pip pkg do
         virtualenv new_resource.virtual_env_location
