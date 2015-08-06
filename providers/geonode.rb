@@ -68,28 +68,65 @@ action :install do
       action :create
     end
 
-    osgeo_library = '/usr/lib/python2.7/dist-packages/'
-    site_packages = ::File.join(new_resource.virtual_env_location, 'lib/python2.7/site-packages/')
-
-    bash "add_virtual_path" do
-      code "echo #{osgeo_library} > #{site_packages}_virtualenv_path_extensions.pth"
-      #only_if { ::File.exists? osgeo_library and !::File.exists? ::File.join(site_packages, '_virtualenv_path_extensions.pth')}
-      cwd site_packages
-    end
+#    osgeo_library = '/usr/lib/python2.7/dist-packages/'
+#    site_packages = ::File.join(new_resource.virtual_env_location, 'lib/python2.7/site-packages/')
+#
+#    bash "add_virtual_path" do
+#      code "echo #{osgeo_library} > #{site_packages}_virtualenv_path_extensions.pth"
+#      #only_if { ::File.exists? osgeo_library and !::File.exists? ::File.join(site_packages, '_virtualenv_path_extensions.pth')}
+#      cwd site_packages
+#    end
     
     bash "downgrade_pip" do
       code "#{new_resource.virtual_env_location}/bin/easy_install pip==1.4.1"
     end
     
-    bash "downgrade_global_pip" do
-      code "easy_install pip==1.4.1"
+    for pkg in new_resource.python_packages do
+      python_pip pkg do
+        virtualenv new_resource.virtual_env_location
+      end
+    bash "downgrade_pip" do
+      code "#{new_resource.virtual_env_location}/bin/easy_install pip==1.4.1"
     end
-
+ 
     for pkg in new_resource.python_packages do
       python_pip pkg do
         virtualenv new_resource.virtual_env_location
       end
     end
+    
+    bash "local_httplib2_install" do
+      code "#{new_resource.virtual_env_location}/bin/pip install httplib2"
+    end
+    
+    bash "link1" do
+      code "ln -s /usr/lib/python2.7/site-packages/osgeo /var/lib/geonode/lib/python2.7/site-packages/osgeo"
+    end
+
+    bash "link2" do
+      code "ln -s /usr/lib/python2.7/site-packages/gdalconst.py /var/lib/geonode/lib/python2.7/site-packages/gdalconst.py"
+    end
+
+    bash "link3" do
+      code "ln -s /usr/lib/python2.7/site-packages/gdalconst.pyc /var/lib/geonode/lib/python2.7/site-packages/gdalconst.pyc"
+    end
+    
+    bash "link4" do
+      code "ln -s /usr/lib/python2.7/site-packages/gdalnumeric.py /var/lib/geonode/lib/python2.7/site-packages/gdalnumeric.py"
+    end
+    
+    bash "link5" do
+      code "ln -s /usr/lib/python2.7/site-packages/gdalnumeric.pyc /var/lib/geonode/lib/python2.7/site-packages/gdalnumeric.pyc"
+    end
+    
+    bash "link6" do
+      code "ln -s /usr/lib/python2.7/site-packages/gdal.py /var/lib/geonode/lib/python2.7/site-packages/gdal.py"
+    end
+    
+    bash "link7" do
+      code "ln -s /usr/lib/python2.7/site-packages/gdal.pyc /var/lib/geonode/lib/python2.7/site-packages/gdal.pyc"
+    end
+  end
 
     bash "virtual_env permissions" do
       code "chmod 570 #{new_resource.virtual_env_location} -R && chown www-data:#{node['rogue']['user']['username']} #{new_resource.virtual_env_location} -R"
