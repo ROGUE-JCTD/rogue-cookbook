@@ -29,20 +29,20 @@ node['certs'].each do |cert|
   end
 
   execute "add cert to python" do
-#    command "cat #{cert} >> #{node['rogue']['geonode']['location']}local/lib/python2.7/site-packages/httplib2/cacerts.txt"
-    command "cat #{cert} >> /usr/lib/python2.7/dist-packages/httplib2/cacerts.txt"
+    command "cat #{cert} >> #{node['rogue']['geonode']['location']}local/lib/python2.7/site-packages/httplib2/cacerts.txt"
+#    command "cat #{cert} >> /usr/lib/python2.7/dist-packages/httplib2/cacerts.txt"
     not_if <<-EOH
       awk '
       # read A, the supposed subset file
       FNR == NR {a[$0]; next}
       # process file B
       $0 in a {delete a[$0]}
-      END {if (length(a) == 0) {exit 0} else {exit 1}}' /usr/lib/python2.7/dist-packages/httplib2/cacerts.txt
+#      END {if (length(a) == 0) {exit 0} else {exit 1}}' /usr/lib/python2.7/dist-packages/httplib2/cacerts.txt
+      END {if (length(a) == 0) {exit 0} else {exit 1}}' #{cert} #{node['rogue']['geonode']['location']}local/lib/python2.7/site-packages/httplib2/cacerts.txt
+
     EOH
   end
   
-#      END {if (length(a) == 0) {exit 0} else {exit 1}}' #{cert} #{node['rogue']['geonode']['location']}local/lib/python2.7/site-packages/httplib2/cacerts.txt  
-
   execute "import #{basename} cert" do
     command "keytool -import -trustcacerts -alias #{basename} -file #{cert} -keystore #{node['java']['keystore']} -storepass #{node['java']['keystore_password']} -noprompt"
     only_if { File.exists?("#{node['java']['keystore']}") }
