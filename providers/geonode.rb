@@ -85,6 +85,8 @@ action :install do
       python_pip pkg do
         virtualenv new_resource.virtual_env_location
       end
+    end
+      
     bash "downgrade_pip" do
       code "#{new_resource.virtual_env_location}/bin/easy_install pip==1.4.1"
     end
@@ -95,39 +97,55 @@ action :install do
       end
     end
     
-    bash "local_httplib2_install" do
-      code "#{new_resource.virtual_env_location}/bin/pip install httplib2"
-    end
-    
-    bash "link1" do
-      code "ln -s /usr/lib/python2.7/site-packages/osgeo /var/lib/geonode/lib/python2.7/site-packages/osgeo"
-    end
+     httplib2_path = '/var/lib/geonode/lib/python2.7/site-packages/httplib2'
+     bash "local_httplib2_install" do
+        code "#{new_resource.virtual_env_location}/bin/pip install httplib2"
+        not_if {::File.exist? httplib2_path}
+      end
+      
+      link1_file = '/var/lib/geonode/lib/python2.7/site-packages/osgeo'
+      bash "link1" do
+      	code "ln -s /usr/lib/python2.7/site-packages/osgeo /var/lib/geonode/lib/python2.7/site-packages/osgeo"
+      	not_if {::File.exist? link1_file}
+      end
+      
+        link2_file = '/var/lib/geonode/lib/python2.7/site-packages/gdalconst.py'   
+        bash "link2" do
+            code "ln -s /usr/lib/python2.7/site-packages/gdalconst.py /var/lib/geonode/lib/python2.7/site-packages/gdalconst.py"
+            not_if {::File.exist? link2_file}
+        end
 
-    bash "link2" do
-      code "ln -s /usr/lib/python2.7/site-packages/gdalconst.py /var/lib/geonode/lib/python2.7/site-packages/gdalconst.py"
-    end
+        link3_file = '/var/lib/geonode/lib/python2.7/site-packages/gdalconst.pyc'
+        bash "link3" do
+        	code "ln -s /usr/lib/python2.7/site-packages/gdalconst.pyc /var/lib/geonode/lib/python2.7/site-packages/gdalconst.pyc"
+          not_if {::File.exist? link3_file}
+        end
 
-    bash "link3" do
-      code "ln -s /usr/lib/python2.7/site-packages/gdalconst.pyc /var/lib/geonode/lib/python2.7/site-packages/gdalconst.pyc"
-    end
-    
-    bash "link4" do
-      code "ln -s /usr/lib/python2.7/site-packages/gdalnumeric.py /var/lib/geonode/lib/python2.7/site-packages/gdalnumeric.py"
-    end
-    
-    bash "link5" do
-      code "ln -s /usr/lib/python2.7/site-packages/gdalnumeric.pyc /var/lib/geonode/lib/python2.7/site-packages/gdalnumeric.pyc"
-    end
-    
-    bash "link6" do
-      code "ln -s /usr/lib/python2.7/site-packages/gdal.py /var/lib/geonode/lib/python2.7/site-packages/gdal.py"
-    end
-    
-    bash "link7" do
-      code "ln -s /usr/lib/python2.7/site-packages/gdal.pyc /var/lib/geonode/lib/python2.7/site-packages/gdal.pyc"
-    end
+        link4_file = '/var/lib/geonode/lib/python2.7/site-packages/gdalnumeric.py'
+        bash "link4" do
+            code "ln -s /usr/lib/python2.7/site-packages/gdalnumeric.py /var/lib/geonode/lib/python2.7/site-packages/gdalnumeric.py"
+            not_if {::File.exist? link4_file}
+        end
+
+        link5_file = '/var/lib/geonode/lib/python2.7/site-packages/gdalnumeric.pyc'
+        bash "link5" do
+            code "ln -s /usr/lib/python2.7/site-packages/gdalnumeric.pyc /var/lib/geonode/lib/python2.7/site-packages/gdalnumeric.pyc"
+            not_if {::File.exist? link5_file}
+        end
+
+        link6_file = '/var/lib/geonode/lib/python2.7/site-packages/gdal.py'
+        bash "link6" do
+            code "ln -s /usr/lib/python2.7/site-packages/gdal.py /var/lib/geonode/lib/python2.7/site-packages/gdal.py"
+            not_if {::File.exist? link6_file}
+        end
+
+        link7_file = '/var/lib/geonode/lib/python2.7/site-packages/gdal.pyc'   
+        bash "link7" do
+            code "ln -s /usr/lib/python2.7/site-packages/gdal.pyc /var/lib/geonode/lib/python2.7/site-packages/gdal.pyc"
+            not_if {::File.exist? link7_file}
+        end
   end
-
+   
     bash "virtual_env permissions" do
       code "chmod 570 #{new_resource.virtual_env_location} -R && chown www-data:#{node['rogue']['user']['username']} #{new_resource.virtual_env_location} -R"
     end
@@ -199,9 +217,7 @@ action :install do
       autorestart true
       action :supervise
     end
-
   end
-end
 
 action :sync_db do
   execute "sync_db_#{new_resource.rogue_geonode_location}" do
@@ -298,8 +314,6 @@ action :build_html_docs do
     code "source #{new_resource.virtual_env_location}/bin/activate && cd #{new_resource.rogue_geonode_location}/docs && make html && chmod 574 build -R && chown www-data:#{node['rogue']['user']['username']} build -R"
     only_if { node['rogue']['install_docs'] }
   end
-
-
 end
 
 def test()
