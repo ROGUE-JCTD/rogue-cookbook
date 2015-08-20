@@ -1,0 +1,71 @@
+apt_repository "opengeo" do
+  uri 'http://apt.opengeo.org/suite/v4/ubuntu/'
+  distribution 'lucid'
+  components ['main']
+  key 'http://apt.opengeo.org/gpg.key'
+end
+
+execute "apt-get install -y gdebi-core" do
+end
+
+apt_package 'libgdal'
+
+package "proj-bin" do
+  options "--download-only"
+end
+
+package "libproj-dev" do
+  options "--download-only"
+end
+
+package "libgdal-dev" do
+  options "--download-only"
+end
+
+package "libgdal1h" do
+  options "--download-only"
+end
+
+execute "apt-get purge -y libgdal" do
+end
+
+execute 'libgdal1h_gdebi' do
+command "gdebi -n /var/cache/apt/archives/libgdal1h_1.10.1+dfsg-5ubuntu1_amd64.deb"
+end
+
+execute "apt-get purge -y libgdal1h" do
+end
+
+execute 'gdebi_libgdal-dev' do
+command "gdebi -n /var/cache/apt/archives/libgdal-dev_1.10.1+dfsg-5ubuntu1_amd64.deb"
+end
+
+execute "apt-get purge -y libgdal-dev" do
+end
+
+execute 'gdebi_libproj-dev' do
+command "gdebi -n /var/cache/apt/archives/libproj-dev_4.8.0-3+opengeo_amd64.deb"
+end
+
+execute "apt-get purge -y libproj-dev" do
+end
+
+execute 'libgdal_install' do
+  command 'dpkg -i --force-overwrite /var/cache/apt/archives/libgdal_1.9.2-3+opengeo_amd64.deb'
+end
+
+execute "libgdal1h_1" do
+  command 'dpkg -i --force-overwrite /var/cache/apt/archives/libgdal1h_1.10.1+dfsg-5ubuntu1_amd64.deb'
+end
+
+execute "apt-get install -f -y" do
+end
+
+execute 'gdal_dev_force' do
+  command 'dpkg -i --force-overwrite /var/cache/apt/archives/libgdal-dev_1.10.1+dfsg-5ubuntu1_amd64.deb'
+end
+
+apt_package "libproj-dev"
+apt_package "proj-bin"
+apt_package "libxml2-dev"
+apt_package "libgeos-dev"

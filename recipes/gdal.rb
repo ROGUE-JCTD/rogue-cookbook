@@ -1,12 +1,9 @@
 apt_repository "opengeo" do
-  uri 'http://apt.opengeo.org/suite/v4/ubuntu/'
-  distribution 'lucid'
+  uri 'https://apt.boundlessgeo.com/suite/v45/ubuntu'
+  distribution 'trusty'
   components ['main']
-  key 'http://apt.opengeo.org/gpg.key'
+  key 'https://apt.boundlessgeo.com/gpg.key'
 end
-
-apt_package 'libgdal'
-
-# Install dependencies
-pkgs = "libgdal-dev libproj-dev libxml2-dev libgeos-dev".split
-pkgs.each { |pkg| package pkg }
+execute 'echo "deb https://apt.boundlessgeo.com/suite/v45/ubuntu/ trusty main" > /etc/apt/sources.list.d/opengeo.list'
+execute 'apt-get update'
+execute 'apt-get install -y postgresql-9.3-postgis-2.1'

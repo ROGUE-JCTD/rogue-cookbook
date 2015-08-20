@@ -7,9 +7,10 @@ git geoserver_data_dir do
   not_if do File.exists? node['rogue']['geoserver']['data_dir'] end
 end
 
-dirs = "#{node['rogue']['geoserver']['data_dir']} #{File.join(node['rogue']['geoserver']['data_dir'], 'geogig')} #{File.join(node['rogue']['geoserver']['data_dir'], 'file-service-store')}"
 geogig = File.join(node['rogue']['geoserver']['data_dir'], 'geogig')
 file_store = File.join(node['rogue']['geoserver']['data_dir'],'file-service-store')
+workspaces = File.join(node['rogue']['geoserver']['data_dir'],'workspaces')
+
 
 # move the geoserver data dir to the correct location
 execute "copy_geoserver_data_dir" do
@@ -32,17 +33,25 @@ end
 
 execute "change_perms" do
   command <<-EOH
-    chown -R #{node['tomcat']['user']}:#{node['tomcat']['group']} #{dirs}
-    chmod g+s #{geogig} #{file_store}
-    chmod -R 775 #{node['rogue']['geoserver']['data_dir']} #{dirs}
+    # all files/folders under data_dir tomcat7:tomcat7 with 775
+    chown -R #{node['tomcat']['user']}:#{node['tomcat']['group']} #{node['rogue']['geoserver']['data_dir']}
+    chmod -R 775 #{node['rogue']['geoserver']['data_dir']}
 
-    find #{geogig} -type d -print0 | xargs -0 chmod 775
+    # all files/folders created under the specified directories should inherit the group permisions 
+    chmod g+s #{geogig}
+    chmod g+s #{file_store}
+    
+    # new folders created under workspaces folder (and any existing folder under workspace) should inherit 
+    # the group of this workspaces folder (tomcat7) and that group should have rwx by default. This will 
+    # allow gsschema service which is ran as www-data user & group (which is member of the tomcat7 group)
+    # to write schema.xsd files to the workspaces folder. 
+    find #{workspaces} -type d -print0 | xargs -0 chmod g+s
+    find #{workspaces} -type d -print0 | xargs -0 setfacl -d -m g::rwx
+
     find #{geogig} -type f -print0 | xargs -0 chmod 664
-
-    chown #{node['tomcat']['user']}:#{node['tomcat']['group']} -R #{geogig}
     find #{geogig} -type d -print0 | xargs -0 setfacl -d -m g::rwx
     find #{geogig} -type d -print0 | xargs -0 setfacl -d -m o::rx
-    chown #{node['tomcat']['user']}:#{node['tomcat']['group']} -R #{file_store}
+
     chmod 664 #{file_store}/*
   EOH
   user 'root'

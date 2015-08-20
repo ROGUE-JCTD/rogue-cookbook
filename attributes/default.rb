@@ -24,6 +24,7 @@ default['unison']['user'] = {:username=>'unison',
                             :password=>'$1$oqU7lFMn$xYYGAjusAQ59R.NBEAwH7.'
                             }
 
+default['postgresql']['version'] = "9.3"
 default['rogue']['postgresql']['user'] = 'postgres'
 default['rogue']['postgresql']['password'] = node.fetch('postgresql',{}).fetch('password', {}).fetch('postgres', 'rogue')
 default['rogue']['postgresql']['port'] = node.fetch('postgresql',{}).fetch('config', {}).fetch('port', '5432')

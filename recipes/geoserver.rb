@@ -41,11 +41,11 @@ template "geoserver_db_client_settings" do
   notifies :restart, "service[tomcat]", :immediately
 end
 
-# hard coding this version because it works but the most recent snapshot is not working.
-# url is: http://ares.boundlessgeo.com/geoserver/2.5.x/community-latest/geoserver-2.5-SNAPSHOT-python-plugin.zip
+# downloaded from http://ares.boundlessgeo.com/geoserver/2.6.x/community-latest/geoserver-2.6-SNAPSHOT-python-plugin.zip
+# saved to https://github.com/ROGUE-JCTD/rogue-cookbook/tree/master/files/default
 
-cookbook_file "geoserver-2.5-SNAPSHOT-python-plugin.zip" do
-  path File.join('/tmp', 'geoserver-2.5-SNAPSHOT-python-plugin.zip')
+cookbook_file "geoserver-2.6-SNAPSHOT-python-plugin.zip" do
+  path File.join('/tmp', 'geoserver-2.6-SNAPSHOT-python-plugin.zip')
   owner node['tomcat']['user']
   group node['tomcat']['group']
   mode 00644
@@ -58,9 +58,29 @@ bash "install_geoscript_python_plugin" do
   user "root"
   cwd "/tmp"
   code <<-EOH
-  unzip geoserver-2.5-SNAPSHOT-python-plugin.zip -d #{::File.join(node['tomcat']['webapp_dir'], 'geoserver/WEB-INF/lib/')}
+  unzip geoserver-2.6-SNAPSHOT-python-plugin.zip -d #{::File.join(node['tomcat']['webapp_dir'], 'geoserver/WEB-INF/lib/')}
   chown #{node['tomcat']['user']}:#{node['tomcat']['user']} #{::File.join(node['tomcat']['webapp_dir'], 'geoserver/WEB-INF/lib/*')}
-  rm -rf geoserver-2.5-SNAPSHOT-python-plugin.zip
+  rm -rf geoserver-2.6-SNAPSHOT-python-plugin.zip
+  EOH
+end
+
+cookbook_file "geoserver-2.6-SNAPSHOT-mbtiles-plugin.zip" do
+  path File.join('/tmp', 'geoserver-2.6-SNAPSHOT-mbtiles-plugin.zip')
+  owner node['tomcat']['user']
+  group node['tomcat']['group']
+  mode 00644
+  retry_delay 15
+  retries 8
+  action :create
+end
+
+bash "install_mbtiles_plugin" do
+  user "root"
+  cwd "/tmp"
+  code <<-EOH
+  unzip geoserver-2.6-SNAPSHOT-mbtiles-plugin.zip -d #{::File.join(node['tomcat']['webapp_dir'], 'geoserver/WEB-INF/lib/')}
+  chown #{node['tomcat']['user']}:#{node['tomcat']['user']} #{::File.join(node['tomcat']['webapp_dir'], 'geoserver/WEB-INF/lib/*')}
+  rm -rf geoserver-2.6-SNAPSHOT-mbtiles-plugin.zip
   EOH
 end
 
