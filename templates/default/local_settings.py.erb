@@ -123,4 +123,4 @@ NOTIFICATION_QUEUE_ALL = not CELERY_ALWAYS_EAGER
 NOTIFICATION_LOCK_LOCATION = '/var/lib/geonode/rogue'
 
 SLACK_ENABLED = <%= @settings['SLACK_ENABLED'] ? "True": "False" %>
-SLACK_WEBHOOK_URLS = [<%= @settings['SLACK_WEBHOOK_URL'] %>]
+SLACK_WEBHOOK_URLS = ['<%= @settings['SLACK_WEBHOOK_URL'] %>']
