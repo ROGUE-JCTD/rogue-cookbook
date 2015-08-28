@@ -114,6 +114,8 @@ default['rogue']['rogue_geonode']['settings']['CLASSIFICATION_TEXT_COLOR'] = nil
 default['rogue']['rogue_geonode']['settings']['CLASSIFICATION_BACKGROUND_COLOR'] = nil
 default['rogue']['rogue_geonode']['settings']['CLASSIFICATION_TEXT'] = nil
 default['rogue']['rogue_geonode']['settings']['CLASSIFICATION_LINK'] = nil
+default['rogue']['rogue_geonode']['settings']['SLACK_ENABLED'] = false
+default['rogue']['rogue_geonode']['settings']['SLACK_WEBHOOK_URL'] = nil
 
 default['rogue']['stig']['url'] = 'https://github.com/ROGUE-JCTD/stig.git'
 default['rogue']['stig']['branch'] = 'release-1.0'

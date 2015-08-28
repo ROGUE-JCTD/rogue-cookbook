@@ -77,6 +77,8 @@ Attributes
 - `node['rogue']['rogue_geonode']['settings']` - ROGUE_GEONODE settings (loaded into local_settings.py).
 - `node['rogue']['rogue_geonode']['settings']['ALLOWED_HOSTS']` = An array of hosts allowed to make requests to GeoNode.
 - `node['rogue']['rogue_geonode']['settings']['PROXY_ALLOWED_HOSTS']` = An array of hosts that the GeoNode can forward requests to.
+- `node['rogue']['rogue_geonode']['settings']['SLACK_ENABLED']` = Enable slack contrib app
+- `node['rogue']['rogue_geonode']['settings']['SLACK_WEBHOOK_URL']` = Slack webhook url.
 - `node['rogue']['ssh']['public_key']` = A public key used for the rogue user to support file synchronization.
 - `node['rogue']['ssh']['public_key_remote_file']` = The location where to store the public key on the guest machine.
 - `node['unison']['user']` = A hash with the username and password for the `unison` user.
