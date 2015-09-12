@@ -57,6 +57,12 @@
             <param-value><%= node['rogue']['geoserver']['data_dir'] %></param-value>
         </context-param>
     <% end %>
+    
+    <!-- changes ported from geoserver 2.8.x to 2.6.x requires white listing of these filters/configs -->
+    <context-param>
+       <param-name>GEOSERVER_XSTREAM_WHITELIST</param-name>
+        <param-value>org.geonode.security.*</param-value>
+    </context-param>    
 
     <!-- pick up all spring application contexts -->
     <context-param>
