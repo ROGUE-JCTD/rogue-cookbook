@@ -124,3 +124,6 @@ NOTIFICATION_LOCK_LOCATION = '/var/lib/geonode/rogue'
 
 SLACK_ENABLED = <%= @settings['SLACK_ENABLED'] ? "True": "False" %>
 SLACK_WEBHOOK_URLS = ['<%= @settings['SLACK_WEBHOOK_URL'] %>']
+
+# Enable CORS (https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS)
+CORS_ENABLED = <%= @settings['CORS_ENABLED'] ? "True": "False" %>
