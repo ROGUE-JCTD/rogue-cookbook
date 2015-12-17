@@ -132,8 +132,8 @@ default['rogue']['rogue-scripts']['url'] = 'https://github.com/ROGUE-JCTD/rogue-
 default['rogue']['rogue_geonode']['branch'] =  'release-1.5' #master
 default['rogue']['geoserver_data']['branch'] = 'release-1.2' #master
 default['rogue']['django_maploom']['auto_upgrade'] = false
-default['rogue']['geoserver']['war'] = "https://s3.amazonaws.com/geoshape-dependencies/geoserver.war"
-default['rogue']['geogig']['url'] = 'https://s3.amazonaws.com/geoshape-dependencies/geogig-cli-app-1.0.zip'
+default['rogue']['geoserver']['war'] = "http://files.geoshape.org/geoserver.war"
+default['rogue']['geogig']['url'] = 'http://files.geoshape.org/geogig-cli-app-1.0.zip'
 
 default['rabbitmq']['rogue_user'] = {
         :name => 'geoshape',

@@ -1,5 +1,5 @@
 war 'file-service.war' do
-  remote_file_location "https://s3.amazonaws.com/geoshape-dependencies/file-service.war"
+  remote_file_location "http://files.geoshape.org/file-service.war"
   action :deploy
   notifies :create, "directory[file_service_store]", :immediately
 end
