@@ -66,7 +66,7 @@ default['rogue']['django_maploom']['url'] = "git+https://github.com/ROGUE-JCTD/d
 
 default['rogue']['rogue_geonode']['python_packages'] = ["uwsgi", "psycopg2"]
 default['rogue']['rogue_geonode']['location'] = File.join(node['rogue']['geonode']['location'], 'rogue_geonode')
-default['rogue']['rogue_geonode']['url'] = 'https://github.com/ROGUE-JCTD/rogue_geonode.git'
+default['rogue']['rogue_geonode']['url'] = 'https://github.com/boundlessgeo/rogue_geonode.git'
 default['rogue']['rogue_geonode']['fixtures'] = ['sample_admin.json',]
 default['rogue']['rogue_geonode']['settings']['ALLOWED_HOSTS'] = [node['rogue']['networking']['application']['address'], 'localhost', node['rogue']['networking']['application']['fqdn']]
 default['rogue']['rogue_geonode']['settings']['PROXY_ALLOWED_HOSTS'] = ['*', node['rogue']['networking']['application']['address'], '.lmnsolutions.com', '.openstreetmap.org']
@@ -126,7 +126,7 @@ default['rogue']['rogue-scripts']['location'] = '/opt/rogue-scripts'
 default['rogue']['rogue-scripts']['url'] = 'https://github.com/ROGUE-JCTD/rogue-scripts.git'
 
 ######################################################################################
-# Note: this ['rogue_geonode']['branch'] version needs to get bumped up when making a new geoshape release. 
+# Note: this ['rogue_geonode']['branch'] version needs to get bumped up when making a new geoshape release.
 #       It should be the release tag on the rogue_geonode repo
 ######################################################################################
 default['rogue']['rogue_geonode']['branch'] =  'release-1.5' #master
