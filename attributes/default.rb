@@ -1,40 +1,62 @@
-default['ssl'] = true
-default['create_self_signed_cert'] = true
-default['certs'] = []
-default['cert']['org'] = 'Org'
-default['cert']['org_unit'] = 'Org unit'
-default['cert']['country'] = 'US'
+default['ssl'] = false
+default['cleartext_passwords'] = true
+default['update_hostfile'] = false
+default['create_self_signed_cert'] = false
 default['scheme'] = node['ssl'] ? 'https://' : 'http://'
 
-default['java']['keystore'] = '/usr/lib/jvm/jdk1.7.0_51/jre/lib/security/cacerts'
+node.set['build-essential']['compile_time'] = true
+default['java']['keystore'] = '/usr/lib/jvm/default-java/jre/lib/security/cacerts'
 default['java']['keystore_password'] = 'changeit'
 
 default['rogue']['debug'] = true
-default['rogue']['iface'] = 'eth0'
 
-if node.fetch('vagrant', false)
-    default['rogue']['iface'] = 'eth1'
+# default['rogue']['ip'] = 
+  # if node.fetch('vagrant', false)
+    # node['network']['interfaces']['eth1']['addresses'].detect{|k,v| v[:family] == "inet" }.first
+  # else
+    # node['ipaddress']
+  # end
+
+default['rogue']['ip'] = node['network']['interfaces']['eth1']['addresses'].detect{|k,v| v[:family] == "inet" }.first
+default['rogue']['geonode']['admin_user'] = 'admin'
+
+if node.cleartext_passwords
+  default['rogue']['postgresql']['password'] = "rogue"
+  default['rogue']['geoserver']['password_hash'] = "crypt1:Z22ZwbZyJpL3kt3rZrM3PmY38jsMFYdx"
+  default['rogue']['geoserver']['root_user']['password'] = "M(cqp{V1"
+  default['rogue']['geoserver']['root_user']['password_hash'] = "3Zjy2QR4bEl30tvwy1GAB7LtA1epMyLg"
+  default['rogue']['geoserver']['root_user']['password_digest'] = "digest1:Fu1u5BV1etI1vCxYbIUgWwr1ZtiNYld6hiazyVSPu8nCxTtvNiUO9CkH+m/eu4C8"
+  default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['PASSWORD'] = "geoserver"
+  default['rogue']['geonode']['default_database_password'] = 'geonode'
+  default['rogue']['geonode']['geonode_imports_database_password'] = 'geonode'
+  default['rogue']['geonode']['admin_password'] = 'admin'
+  default['rogue']['geonode']['admin_password_hash'] = 'sha1$a1ddf$1e14be2baa49df74672c93fa283ba549f56254b7'
+  default['rabbitmq']['rogue_password'] = 'geoshape'
+else
+  # Default chef vault structure for all credentials
+  default['rogue']['postgresql']['password'] = {:vault => 'geonode', :item => 'postgresql', :field => 'password'}
+  default['rogue']['geoserver']['password_hash'] = {:vault => 'geonode', :item => 'geoserver', :field => 'password_hash'}
+  default['rogue']['geoserver']['root_user']['password'] = {:vault => 'geonode', :item => 'geoserver', :field => 'root_user_password'}
+  default['rogue']['geoserver']['root_user']['password_hash'] = {:vault => 'geonode', :item => 'geoserver', :field => 'root_user_password_hash'}
+  default['rogue']['geoserver']['root_user']['password_digest'] = {:vault => 'geonode', :item => 'geoserver', :field => 'root_user_password_digest'}
+  default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['PASSWORD'] = {:vault => 'geonode', :item => 'geoserver', :field => 'password'}
+  default['rogue']['geonode']['default_database_password'] = {:vault => 'geonode', :item => 'default_db', :field => 'password'}
+  default['rogue']['geonode']['geonode_imports_database_password'] = {:vault => 'geonode', :item => 'geonode_imports_db', :field => 'password'}
+  default['rogue']['geonode']['admin_password'] = {:vault => 'geonode', :item => 'geonode', :field => 'password'}
+  default['rogue']['geonode']['admin_password_hash'] = {:vault => 'geonode', :item => 'geonode', :field => 'password_hash'}
+  default['rabbitmq']['rogue_password'] = {:vault => 'geonode', :item => 'rabbitmq', :field => 'password'}
 end
 
-default['rogue']['user'] = {:username=>'rogue',
-                            :password=>'$1$oqU7lFMn$xYYGAjusAQ59R.NBEAwH7.'
-                            }
+default['rogue']['user']['username'] = 'rogue'
+default['rogue']['unison']['username'] = 'unison'
 
-default['unison']['user'] = {:username=>'unison',
-                            :password=>'$1$oqU7lFMn$xYYGAjusAQ59R.NBEAwH7.'
-                            }
-
-default['postgresql']['version'] = "9.3"
 default['rogue']['postgresql']['user'] = 'postgres'
-default['rogue']['postgresql']['password'] = node.fetch('postgresql',{}).fetch('password', {}).fetch('postgres', 'rogue')
-default['rogue']['postgresql']['port'] = node.fetch('postgresql',{}).fetch('config', {}).fetch('port', '5432')
-
+default['rogue']['postgresql']['port'] = 5432
 
 default['rogue']['ssh']['public_key'] = ''
 default['rogue']['ssh']['public_key_remote_file'] = '/root/.ssh/id_rsa.pub'
 default['rogue']['install_docs'] = true
 default['rogue']['logging']['location'] = '/var/log/rogue'
-default['rogue']['ip'] = node['network']['interfaces'][node['rogue']['iface']]['addresses'].detect{|k,v| v['family'] == "inet" }[0]
 default['rogue']['setup_db'] = true
 default['rogue']['aws_rds'] = false
 default['rogue']['networking']['application']['hostname'] = 'rogue-geoserver'
@@ -45,8 +67,17 @@ default['rogue']['networking']['application']['netmask'] = nil
 
 default['rogue']['networking']['database']['hostname'] = 'rogue-database'
 default['rogue']['networking']['database']['address'] = '127.0.0.1'
+default['rogue']['networking']['database']['port'] = 5432
+default['rogue']['networking']['database']['user'] = 'geonode'
 default['rogue']['networking']['database']['gateway'] = nil
 default['rogue']['networking']['database']['netmask'] = nil
+
+default['rogue']['networking']['geonode_imports_database']['hostname'] = 'rogue-database'
+default['rogue']['networking']['geonode_imports_database']['address'] = '127.0.0.1'
+default['rogue']['networking']['geonode_imports_database']['port'] = 5432
+default['rogue']['networking']['geonode_imports_database']['user'] = 'geonode_import'
+default['rogue']['networking']['geonode_imports_database']['gateway'] = nil
+default['rogue']['networking']['geonode_imports_database']['netmask'] = nil
 
 default['rogue']['geoserver']['build_from_source'] = false
 default['rogue']['geoserver']['use_db_client'] = true
@@ -60,12 +91,12 @@ default['rogue']['geoserver']['url']= "#{node['scheme']}#{node['rogue']['network
 default['rogue']['geoserver_data']['url'] = 'https://github.com/ROGUE-JCTD/geoserver_data.git'
 default['rogue']['geoserver_data']['branch'] = 'master'
 default['rogue']['geonode']['location'] = '/var/lib/geonode/'
-default['rogue']['interpreter'] = ::File.join(node['rogue']['geonode']['location'], 'bin/python')
+default['rogue']['interpreter'] = "#{node['rogue']['geonode']['location']}/bin/python"
 default['rogue']['django_maploom']['auto_upgrade'] = true
 default['rogue']['django_maploom']['url'] = "git+https://github.com/ROGUE-JCTD/django-maploom.git#egg=django-maploom"
 
 default['rogue']['rogue_geonode']['python_packages'] = ["uwsgi", "psycopg2"]
-default['rogue']['rogue_geonode']['location'] = File.join(node['rogue']['geonode']['location'], 'rogue_geonode')
+default['rogue']['rogue_geonode']['location'] = "#{node['rogue']['geonode']['location']}/rogue_geonode"
 default['rogue']['rogue_geonode']['url'] = 'https://github.com/boundlessgeo/rogue_geonode.git'
 default['rogue']['rogue_geonode']['fixtures'] = ['sample_admin.json',]
 default['rogue']['rogue_geonode']['settings']['ALLOWED_HOSTS'] = [node['rogue']['networking']['application']['address'], 'localhost', node['rogue']['networking']['application']['fqdn']]
@@ -78,9 +109,8 @@ default['rogue']['rogue_geonode']['settings']['SITEURL'] = "http://#{node['rogue
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['LOCATION'] = node['rogue']['geoserver']['url']
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['PUBLIC_LOCATION'] = node['rogue']['geoserver']['url']
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['DATASTORE'] = ""
-default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIG_DATASTORE_DIR'] = ::File.join(node['rogue']['geoserver']['data_dir'], 'geogig')
+default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['GEOGIG_DATASTORE_DIR'] = "#{node['rogue']['geoserver']['data_dir']}/geogig"
 default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['USER'] = "admin"
-default['rogue']['rogue_geonode']['settings']['OGC_SERVER']['PASSWORD'] = "geoserver"
 default['rogue']['rogue_geonode']['settings']['UPLOADER']['BACKEND'] = 'geonode.importer'
 default['rogue']['rogue_geonode']['settings']['STATIC_ROOT'] = '/var/www/rogue'
 default['rogue']['rogue_geonode']['settings']['MEDIA_ROOT'] = '/var/www/rogue/media'
@@ -88,20 +118,19 @@ default['rogue']['nginx']['locations'] = {}
 default['nginx']['client_max_body_size']='150M'
 
 default['rogue']['rogue_geonode']['settings']['DATABASES'] = {
-    :default=>{:name=>'geonode', :user=>'geonode', :password=>'geonode', :host=>'rogue-database', :port=>'5432', :conn_max_age=>60},
-    :geonode_imports=>{:name=>'geonode_imports', :user=>'geonode', :password=>'geonode', :host=>'rogue-database', :port=>'5432', :conn_max_age=>60}
-    }
+  :default=>{:name=>'geonode', :user=>node['rogue']['networking']['database']['user'], :password=>node.rogue.geonode.default_database_password, :host=>node['rogue']['networking']['database']['address'], :port=>node['rogue']['networking']['database']['port'], :conn_max_age=>60},
+  :geonode_imports=>{:name=>'geonode_imports', :user=>node['rogue']['networking']['geonode_imports_database']['user'], :password=>node.rogue.geonode.geonode_imports_database_password, :host=>node['rogue']['networking']['geonode_imports_database']['address'], :port=>node['rogue']['networking']['geonode_imports_database']['port'], :conn_max_age=>60}
+}
 default['rogue']['geogig']['build_from_source'] = false
 default['rogue']['geogig']['branch'] = 'SprintRelease'
+default['rogue']['geogig']['url'] = 'https://github.com/locationtech/geogig.git' if node['rogue']['geogig']['build_from_source']
 
-if node['rogue']['geogig']['build_from_source']
-default['rogue']['geogig']['url'] = 'https://github.com/locationtech/geogig.git'
-end
+default['rogue']['geogig']['global_configuration'] = {
+  "user"=> {"name"=>"rogue",
+  "email"=>"rogue@lmnsolutions.com"},
+  "bdbje"=> {"object_durability"=>"safe"}
+}
 
-default['rogue']['geogig']['global_configuration'] = {"user"=> {"name"=>"rogue",
-                                                                "email"=>"rogue@lmnsolutions.com"},
-                                                      "bdbje"=> {"object_durability"=>"safe"}
-                                                      }
 default['rogue']['geogig']['location'] = '/var/lib/geogig'
 
 default['rogue']['geoeserver-exts']['branch'] = '2.4.x'
@@ -126,21 +155,26 @@ default['rogue']['rogue-scripts']['location'] = '/opt/rogue-scripts'
 default['rogue']['rogue-scripts']['url'] = 'https://github.com/ROGUE-JCTD/rogue-scripts.git'
 
 ######################################################################################
-# Note: this ['rogue_geonode']['branch'] version needs to get bumped up when making a new geoshape release.
+# Note: this ['rogue_geonode']['branch'] version needs to get bumped up when making a new geoshape release. 
 #       It should be the release tag on the rogue_geonode repo
 ######################################################################################
 default['rogue']['rogue_geonode']['branch'] =  'master' #release-1.5
 default['rogue']['geoserver_data']['branch'] = 'release-1.2' #master
 default['rogue']['django_maploom']['auto_upgrade'] = false
-default['rogue']['geoserver']['war'] = "http://files.geoshape.org/geoserver.war"
-default['rogue']['geogig']['url'] = 'http://files.geoshape.org/geogig-cli-app-1.0.zip'
+default['rogue']['geoserver']['war'] = "https://s3.amazonaws.com/boundlessps-public/geoshape/src/geoserver/2.8/geoserver.war"
+default['rogue']['geogig']['url'] = 'https://s3.amazonaws.com/boundlessps-public/geoshape/src/geogig-cli-app-1.0.zip'
 
 default['rabbitmq']['rogue_user'] = {
-        :name => 'geoshape',
-        :password => 'geoshape',
-        :rights =>[{ :vhost => nil, :conf => '.*', :write => '.*', :read => '.*' }]
-  }
+  :name => 'geoshape',
+  :password => node.rabbitmq.rogue_password,
+  :rights =>[{ :vhost => nil, :conf => '.*', :write => '.*', :read => '.*' }]
+}
 
 default['cert']['name'] = node['rogue']['networking']['application']['fqdn']
-default['cert']['certificate'] = File.join "/etc/ssl/certs", "#{node['cert']['name']}.crt"
-default['cert']['key'] = File.join "/etc/ssl/private", "#{node['cert']['name']}.key"
+default['cert']['key_name'] = node['rogue']['networking']['application']['fqdn']
+default['cert']['certificate'] = "/etc/ssl/certs/#{node['cert']['name']}.crt"
+default['cert']['key'] = "/etc/ssl/private/#{node['cert']['key_name']}.key"
+default['cert']['org'] = 'Org'
+default['cert']['org_unit'] = 'Org unit'
+default['cert']['country'] = 'US'
+default['certs'] = []

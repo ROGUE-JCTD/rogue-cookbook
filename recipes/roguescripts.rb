@@ -5,11 +5,11 @@ git node['rogue']['rogue-scripts']['location'] do
 end
 
 file "/etc/profile.d/rogue-scripts.sh" do
-  content "export PATH=$PATH:#{::File.join(node['rogue']['rogue-scripts']['location'],'bin')}"
-  mode 00755
-  action :create
+  content "export PATH=$PATH:#{node['rogue']['rogue-scripts']['location']}/bin"
+  mode 0755
 end
 
 bash "Update path" do
-  code "export PATH=$PATH:#{::File.join(node['rogue']['rogue-scripts']['location'],'bin')}"
+  code "export PATH=$PATH:#{node['rogue']['rogue-scripts']['location']}/bin"
+  not_if "echo $PATH | grep #{node['rogue']['rogue-scripts']['location']}/bin"
 end

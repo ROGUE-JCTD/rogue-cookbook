@@ -1,2 +1,16 @@
 source 'https://api.berkshelf.com'
-metadata
+cookbook 'postgresql', :git => "https://github.com/amirahav/postgresql.git", :ref => "9.5"
+cookbook 'tomcat', :git => "https://github.com/amirahav/tomcat.git", :ref => "archive"
+cookbook 'rogue' , path: '.'
+cookbook 'chef-vault'
+cookbook 'java'
+cookbook 'nginx'
+cookbook 'apt'
+cookbook 'build-essential'
+cookbook 'git'
+cookbook 'python'
+cookbook 'openssl'
+cookbook 'database'
+cookbook 'supervisord'
+cookbook 'runit'
+cookbook 'rabbitmq'

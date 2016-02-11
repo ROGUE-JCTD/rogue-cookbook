@@ -2,7 +2,7 @@
 
 virtualenv = <%= node['rogue']['geonode']['location'] %>
 
-logto = <%= File.join(node['rogue']['logging']['location'] , 'rogue_geonode.log') %>
+logto = <%= node['rogue']['logging']['location'] %>/rogue_geonode.log
 log-maxsize = 20971520
 
 uid = www-data
