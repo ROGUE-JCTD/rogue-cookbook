@@ -4,12 +4,11 @@ git geoserver_data_dir do
   user 'root'
   action :sync
   revision node['rogue']['geoserver_data']['branch']
-  not_if do File.exists? node['rogue']['geoserver']['data_dir'] end
 end
 
-geogig = File.join(node['rogue']['geoserver']['data_dir'], 'geogig')
-file_store = File.join(node['rogue']['geoserver']['data_dir'],'file-service-store')
-workspaces = File.join(node['rogue']['geoserver']['data_dir'],'workspaces')
+geogig = "#{node['rogue']['geoserver']['data_dir']}/geogig"
+file_store = "#{node['rogue']['geoserver']['data_dir']}/file-service-store"
+workspaces = "#{node['rogue']['geoserver']['data_dir']}/workspaces"
 
 
 # move the geoserver data dir to the correct location
@@ -17,8 +16,7 @@ execute "copy_geoserver_data_dir" do
   command <<-EOH
     cp -R #{geoserver_data_dir} #{node['rogue']['geoserver']['data_dir']}
   EOH
-  action :run
-  only_if  do !geoserver_data_dir.eql? node['rogue']['geoserver']['data_dir'] and File.exists? geoserver_data_dir and !File.exists? node['rogue']['geoserver']['data_dir'] end
+  only_if  do !geoserver_data_dir.eql? node['rogue']['geoserver']['data_dir'] and Dir.exists? geoserver_data_dir and !Dir.exists? node['rogue']['geoserver']['data_dir'] end
   notifies :create, "directory[#{file_store}]", :immediately
   notifies :run, "execute[change_perms]", :immediately
   user 'root'
@@ -27,8 +25,7 @@ end
 directory file_store do
   owner node['tomcat']['user']
   group node['tomcat']['group']
-  action :create
-  not_if { File.exists? file_store }
+  action :nothing
 end
 
 execute "change_perms" do

@@ -1,14 +1,36 @@
+postgres_password = node.rogue.postgresql.password
+geonode_password = node['rogue']['rogue_geonode']['settings']['DATABASES'][:default][:password]
+imports_password = node['rogue']['rogue_geonode']['settings']['DATABASES'][:geonode_imports][:password]
+
+unless node.cleartext_passwords
+  include_recipe 'chef-vault'
+
+  postgres_password = chef_vault_item(postgres_password[:vault], postgres_password[:item])[postgres_password[:field]]
+  geonode_password = chef_vault_item(geonode_password[:vault], geonode_password[:item])[geonode_password[:field]]
+  imports_password = chef_vault_item(imports_password[:vault], imports_password[:item])[imports_password[:field]]
+end
+
+include_recipe 'postgresql::apt_pgdg_postgresql'
+include_recipe 'postgresql::ruby'
+
 postgresql_connection_info = {
-  :host     => node['rogue']['networking']['database']['hostname'],
+  :host     => node['rogue']['networking']['database']['address'],
   :port     => node['rogue']['postgresql']['port'],
   :username => node['rogue']['postgresql']['user'],
-  :password => node['rogue']['postgresql']['password']
+  :password => postgres_password
 }
 
-gem_package "pg" do
-  action :install
-  not_if {File.exist?("/opt/chef")}
-end
+# package "libpq-dev"
+# include_recipe 'postgresql::ruby'
+
+# gem_package "pg" do
+  # not_if {File.exist?("/opt/chef/embedded/bin/gem")}
+# end
+
+# chef_gem "pg" do
+  # compile_time false
+  # only_if {File.exist?("/opt/chef/embedded/bin/gem")}
+# end
 
 geonode_connection_info = node['rogue']['rogue_geonode']['settings']['DATABASES']['default']
 geonode_imports_connection_info = node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports']
@@ -16,14 +38,14 @@ geonode_imports_connection_info = node['rogue']['rogue_geonode']['settings']['DA
 # Create the GeoNode user
 postgresql_database_user geonode_connection_info[:user] do
   connection postgresql_connection_info
-  password geonode_connection_info[:password]
+  password geonode_password
   action :create
 end
 
 # Grant Postgres privileges to geonode.  Necessary for AWS RDS.
 bash 'grant privileges' do
   code <<-EOH
-  PGPASSWORD='#{postgresql_connection_info[:password]}' psql --host='#{postgresql_connection_info[:host]}' --port=5432 --username postgres -c "GRANT geonode to postgres;"
+  PGPASSWORD='#{postgresql_connection_info[:password]}' psql --host='#{postgresql_connection_info[:host]}' --port=5432 --username #{postgresql_connection_info[:username]} -c "GRANT geonode to #{postgresql_connection_info[:username]};"
   EOH
   only_if { node['rogue']['aws_rds'] }
 end
@@ -33,24 +55,35 @@ postgresql_database geonode_connection_info[:name] do
   connection postgresql_connection_info
   owner geonode_connection_info[:user]
   encoding 'UTF8'
-  collation 'en_US.utf8'
-  template 'template0'
   action :create
 end
 
 # Create the GeoNode imports user
 postgresql_database_user geonode_imports_connection_info[:user] do
   connection postgresql_connection_info
-  password geonode_imports_connection_info[:password]
+  password imports_password
   action :create
 end
 
 # Create the GeoNode imports db
 postgresql_database geonode_imports_connection_info[:name] do
   connection postgresql_connection_info
-  template node.fetch('postgis', {}).fetch('template_name', 'template_postgis')
   owner geonode_imports_connection_info[:user]
   action :create
+end
+
+postgresql_database 'Create postgis extension' do
+  connection postgresql_connection_info
+  database_name geonode_imports_connection_info[:name]
+  sql 'create extension if not exists postgis;'
+  action :query
+end
+
+postgresql_database 'Create postgis_topology extension' do
+  connection postgresql_connection_info
+  database_name geonode_imports_connection_info[:name]
+  sql 'create extension if not exists postgis_topology;'
+  action :query
 end
 
 postgresql_database 'set user' do

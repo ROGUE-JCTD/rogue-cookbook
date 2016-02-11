@@ -6,7 +6,7 @@ CELERYD_NODES="worker1"
 #CELERYD_NODES="worker1 worker2 worker3"
 
 # Absolute or relative path to the 'celery' command:
-CELERY_BIN="<%= node['rogue']['geonode']['location']%>bin/celery"
+CELERY_BIN="<%= @location %>bin/celery"
 
 # App instance to use
 # comment out this line if you don't use an app
@@ -15,7 +15,7 @@ CELERY_APP="geoshape.celery_app"
 #CELERY_APP="proj.tasks:app"
 
 # Where to chdir at start.
-CELERYD_CHDIR="<% node['rogue']['rogue_geonode']['location'] %>"
+CELERYD_CHDIR="<%= @location %>"
 
 # Extra command-line arguments to the worker
 CELERYD_OPTS="--time-limit=300 --concurrency=8 -E"

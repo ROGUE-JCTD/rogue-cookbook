@@ -2,7 +2,7 @@
 
 # The geonode location.
 SITEURL = '<%= @settings['SITEURL'] %>'
-DEBUG = <%= node['rogue']['debug'] ? "True":"False" %>
+DEBUG = <%= @debug ? "True":"False" %>
 
 ALLOWED_HOSTS = (
 <% @settings['ALLOWED_HOSTS'].each do |host| %>
@@ -54,7 +54,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': '<%= @database[:name] %>',
         'USER': '<%= @database[:user] %>',
-        'PASSWORD': '<%= @database[:password] %>',
+        'PASSWORD': '<%= @database_password %>',
         'HOST': '<%= @database[:host] %>',
         'PORT': '<%= @database[:port] %>',
         'CONN_MAX_AGE': <%= @database[:conn_max_age] %>,
@@ -65,7 +65,7 @@ DATABASES = {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': '<%= @data_store[:name] %>',
         'USER': '<%= @data_store[:user] %>',
-        'PASSWORD': '<%= @data_store[:password] %>',
+        'PASSWORD': '<%= @data_store_password %>',
         'HOST': '<%= @data_store[:host] %>',
         'PORT': '<%= @data_store[:port] %>',
         'CONN_MAX_AGE': <%= @data_store[:conn_max_age] %>,
@@ -80,7 +80,7 @@ OGC_SERVER = {
         'LOCATION': '<%= @settings['OGC_SERVER']['LOCATION'] %>',
         'PUBLIC_LOCATION': '<%= @settings['OGC_SERVER']['PUBLIC_LOCATION'] %>',
         'USER': '<%= @settings['OGC_SERVER']['USER'] %>',
-        'PASSWORD': '<%= @settings['OGC_SERVER']['PASSWORD'] %>',
+        'PASSWORD': '<%= @geoserver_password %>',
         'MAPFISH_PRINT_ENABLED': True,
         'PRINT_NG_ENABLED': True,
         'GEONODE_SECURITY_ENABLED': True,
@@ -115,7 +115,7 @@ CATALOGUE = {
 }
 
 
-BROKER_URL = '<%= "amqp://#{node['rabbitmq']['rogue_user']['name']}:#{node['rabbitmq']['rogue_user']['password']}@#{node['rabbitmq']['address']}:#{node['rabbitmq']['port']}" %>'
+BROKER_URL = '<%= "amqp://#{@rabbitmq_username}:#{@rabbitmq_password}@#{@rabbitmq_address}:#{@rabbitmq_port}" %>'
 CELERY_ALWAYS_EAGER = False
 NOTIFICATION_QUEUE_ALL = not CELERY_ALWAYS_EAGER
 

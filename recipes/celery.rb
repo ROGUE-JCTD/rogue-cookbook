@@ -1,6 +1,9 @@
 template "/etc/default/celeryd" do
   source "celery/config.erb"
-  mode 0755
+  mode 0644
+  variables(
+    :location => node['rogue']['geonode']['location']
+  )
 end
 
 template "/etc/init.d/celeryd" do

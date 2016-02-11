@@ -16,3 +16,9 @@ attribute :logging_location, :kind_of => String, :default => node['rogue']['logg
 attribute :settings, :kind_of => Array, :default => node['rogue']['rogue_geonode']['settings']
 attribute :site_domain, :kind_of => String, :default => node['rogue']['networking']['application']['fqdn']
 attribute :site_name, :kind_of => String, :default => 'ROGUE'
+attribute :geoserver_password, :kind_of => String, :required => false
+attribute :rabbitmq_password, :kind_of => String, :required => false
+attribute :data_store_password, :kind_of => String, :required => false
+attribute :database_password, :kind_of => String, :required => false
+attribute :geonode_admin_password_hash, :kind_of => String
+attribute :geonode_admin_user, :kind_of => String, :default => node['rogue']['geonode']['admin_user']

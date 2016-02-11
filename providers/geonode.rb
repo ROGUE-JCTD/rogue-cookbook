@@ -1,5 +1,8 @@
 require 'json'
 require 'net/http'
+require 'net/https'
+
+include Chef::Mixin::ShellOut
 
 def whyrun_supported?
   true
@@ -12,45 +15,33 @@ def django_command(cmd, options=[])
 end
 
 def set_perms(directory, perm=570)
-  bash "set_file_permissions" do
-    code "chmod #{perm} #{directory} -R && chown www-data:#{node['rogue']['user']['username']} #{directory} -R"
-  end
+  execute "chmod #{perm} #{directory} -R && chown www-data:#{node['rogue']['user']['username']} #{directory} -R"
 end
 
 def collect_static
-  directory new_resource.settings['STATIC_ROOT'] do
-    group "rogue"
-    owner "www-data"
-    mode 0755
-  end
-
-  directory new_resource.settings['MEDIA_ROOT'] do
-    group "rogue"
-    owner "www-data"
-    mode 0755
-  end
-
-  directory new_resource.settings['MEDIA_ROOT'] + "/thumbs" do
-    group "rogue"
-    owner "www-data"
-    mode 0755
-  end
+  set_perms(new_resource.settings['STATIC_ROOT'], 775)
+  set_perms(new_resource.settings['MEDIA_ROOT'], 775)
 
   execute "collect_static" do
     command django_command('collectstatic', ['--noinput'])
     cwd new_resource.rogue_geonode_location
   end
-
-  set_perms(new_resource.settings['STATIC_ROOT'], 775)
-  set_perms(new_resource.settings['MEDIA_ROOT'], 775)
-
 end
 
 def local_settings(template_variables={})
-  variables = {:database => node['rogue']['rogue_geonode']['settings']['DATABASES']['default'],
-                :data_store => node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports'],
-                :settings => new_resource.settings
-               }.merge(template_variables)
+  variables = {
+    :database => node['rogue']['rogue_geonode']['settings']['DATABASES']['default'],
+    :data_store => node['rogue']['rogue_geonode']['settings']['DATABASES']['geonode_imports'],
+    :data_store_password => new_resource.data_store_password,
+    :database_password => new_resource.database_password,
+    :geoserver_password => new_resource.geoserver_password,
+    :debug => node['rogue']['debug'],
+    :rabbitmq_username => node['rabbitmq']['rogue_user'][:name],
+    :rabbitmq_password => new_resource.rabbitmq_password,
+    :rabbitmq_address => node['rabbitmq']['address'],
+    :rabbitmq_port => node['rabbitmq']['port'],
+    :settings => new_resource.settings
+  }.merge(template_variables)
 
   template "rogue_geonode_config" do
     path "#{new_resource.rogue_geonode_location}/geoshape/local_settings.py"
@@ -79,6 +70,7 @@ action :install do
     
     bash "downgrade_pip" do
       code "#{new_resource.virtual_env_location}/bin/easy_install pip==1.4.1"
+      not_if "#{new_resource.virtual_env_location}/bin/pip -V | grep 1.4.1"
     end
     
     for pkg in new_resource.python_packages do
@@ -89,6 +81,7 @@ action :install do
       
     bash "downgrade_pip" do
       code "#{new_resource.virtual_env_location}/bin/easy_install pip==1.4.1"
+      not_if "#{new_resource.virtual_env_location}/bin/pip -V | grep 1.4.1"
     end
  
     for pkg in new_resource.python_packages do
@@ -96,54 +89,50 @@ action :install do
         virtualenv new_resource.virtual_env_location
       end
     end
-    
-     httplib2_path = '/var/lib/geonode/lib/python2.7/site-packages/httplib2'
+
      bash "local_httplib2_install" do
         code "#{new_resource.virtual_env_location}/bin/pip install httplib2"
-        not_if {::File.exist? httplib2_path}
+        not_if {::File.exists?("/var/lib/geonode/lib/python2.7/site-packages/httplib2")}
+      end
+
+      if node.create_self_signed_cert && !node.certs.empty?
+        cacerts = "#{node.rogue.geonode.location}local/lib/python2.7/site-packages/httplib2/cacerts.txt"
+
+        node.certs.each{ |cert|
+          execute "cat #{cert} >> #{cacerts}" do
+            not_if {IO.read(cacerts).include?(IO.read(cert))}
+            only_if "test -f #{cacerts}"
+          end
+        }
+      end
+
+      link '/var/lib/geonode/lib/python2.7/site-packages/osgeo' do
+        to '/usr/lib/python2.7/dist-packages/osgeo'
+      end
+        
+      link '/var/lib/geonode/lib/python2.7/site-packages/gdalconst.py' do
+        to '/usr/lib/python2.7/dist-packages/gdalconst.py'
+      end
+
+      link '/var/lib/geonode/lib/python2.7/site-packages/gdalconst.pyc' do
+        to '/usr/lib/python2.7/dist-packages/gdalconst.pyc'
+      end
+
+      link '/var/lib/geonode/lib/python2.7/site-packages/gdalnumeric.py' do
+        to '/usr/lib/python2.7/dist-packages/gdalnumeric.py'
+      end
+
+      link '/var/lib/geonode/lib/python2.7/site-packages/gdalnumeric.pyc' do
+        to '/usr/lib/python2.7/dist-packages/gdalnumeric.pyc'
+      end
+
+      link '/var/lib/geonode/lib/python2.7/site-packages/gdal.py' do
+        to '/usr/lib/python2.7/dist-packages/gdal.py'
       end
       
-      link1_file = '/var/lib/geonode/lib/python2.7/site-packages/osgeo'
-      bash "link1" do
-      	code "ln -s /usr/lib/python2.7/site-packages/osgeo /var/lib/geonode/lib/python2.7/site-packages/osgeo"
-      	not_if {::File.exist? link1_file}
+      link '/var/lib/geonode/lib/python2.7/site-packages/gdal.pyc' do
+        to '/usr/lib/python2.7/dist-packages/gdal.pyc'
       end
-      
-        link2_file = '/var/lib/geonode/lib/python2.7/site-packages/gdalconst.py'   
-        bash "link2" do
-            code "ln -s /usr/lib/python2.7/site-packages/gdalconst.py /var/lib/geonode/lib/python2.7/site-packages/gdalconst.py"
-            not_if {::File.exist? link2_file}
-        end
-
-        link3_file = '/var/lib/geonode/lib/python2.7/site-packages/gdalconst.pyc'
-        bash "link3" do
-        	code "ln -s /usr/lib/python2.7/site-packages/gdalconst.pyc /var/lib/geonode/lib/python2.7/site-packages/gdalconst.pyc"
-          not_if {::File.exist? link3_file}
-        end
-
-        link4_file = '/var/lib/geonode/lib/python2.7/site-packages/gdalnumeric.py'
-        bash "link4" do
-            code "ln -s /usr/lib/python2.7/site-packages/gdalnumeric.py /var/lib/geonode/lib/python2.7/site-packages/gdalnumeric.py"
-            not_if {::File.exist? link4_file}
-        end
-
-        link5_file = '/var/lib/geonode/lib/python2.7/site-packages/gdalnumeric.pyc'
-        bash "link5" do
-            code "ln -s /usr/lib/python2.7/site-packages/gdalnumeric.pyc /var/lib/geonode/lib/python2.7/site-packages/gdalnumeric.pyc"
-            not_if {::File.exist? link5_file}
-        end
-
-        link6_file = '/var/lib/geonode/lib/python2.7/site-packages/gdal.py'
-        bash "link6" do
-            code "ln -s /usr/lib/python2.7/site-packages/gdal.py /var/lib/geonode/lib/python2.7/site-packages/gdal.py"
-            not_if {::File.exist? link6_file}
-        end
-
-        link7_file = '/var/lib/geonode/lib/python2.7/site-packages/gdal.pyc'   
-        bash "link7" do
-            code "ln -s /usr/lib/python2.7/site-packages/gdal.pyc /var/lib/geonode/lib/python2.7/site-packages/gdal.pyc"
-            not_if {::File.exist? link7_file}
-        end
   end
    
     bash "virtual_env permissions" do
@@ -176,6 +165,7 @@ action :install do
     python_pip pip_install do
       virtualenv new_resource.virtual_env_location
       options "-e"
+      not_if "find /var/lib/geonode/lib/python2.7/site-packages -name geonode_*egg-info | grep geonode_"
     end
 
     python_pip node['rogue']['django_maploom']['url'] do
@@ -236,13 +226,24 @@ action :update_site do
 end
 
 action :load_data do
-  execute "load_data_#{new_resource.name}" do
-    command django_command('loaddata', new_resource.fixtures)
-    cwd new_resource.rogue_geonode_location
-    only_if { !new_resource.fixtures.empty? }
-    ignore_failure true
+  if !new_resource.fixtures.empty?
+    template "#{node['rogue']['geonode']['location']}lib/python2.7/site-packages/geonode/people/fixtures/sample_admin.json" do
+      source "geonode_users.json.erb"
+      variables(
+        :password_hash => new_resource.geonode_admin_password_hash,
+        :username => new_resource.geonode_admin_user
+      )
+    end
+
+    execute "load_data_#{new_resource.name}" do
+      command django_command('loaddata', new_resource.fixtures)
+      cwd new_resource.rogue_geonode_location
+      only_if { !new_resource.fixtures.empty? }
+      ignore_failure true
+    end
+
+    new_resource.updated_by_last_action(true)
   end
-  new_resource.updated_by_last_action(true)
 end
 
 action :update_local_settings do
@@ -262,6 +263,12 @@ action :start do
     execute "start_rogue-celery" do
       command 'supervisorctl start rogue-celery'
       not_if "supervisorctl status rogue-celery | grep RUNNING"
+      not_if "service celeryd status | grep running"
+    end
+
+    service "celeryd" do
+      action :start
+      not_if "service celeryd status | grep running"
     end
 end
 
@@ -269,50 +276,84 @@ action :stop do
     execute "stop_rogue" do
       command 'supervisorctl stop rogue'
     end
+
+    execute "stop_rogue-celery" do
+      command 'supervisorctl stop rogue-celery'
+      returns [0, 1]
+    end
+
+    service "celeryd" do
+      action :stop
+    end
 end
 
 action :update_layers do
-  execute "update_layers" do
-    command django_command('updatelayers', ['--ignore-errors'])
-    cwd new_resource.rogue_geonode_location
-    action :run
-    retries 8
+  cmd = shell_out("cd #{new_resource.rogue_geonode_location} && #{django_command('updatelayers', ['--ignore-errors'])}")
+  if cmd.exitstatus == 0
+    Chef::Log.info("update_layers #{cmd.stdout}")
+    new_resource.updated_by_last_action(true)
+  else
+    Chef::Log.error("failed to run update_layers. Error: #{cmd.stderr}")
+    
+    if node.ssl && !node.certs.empty?
+      cacerts = "#{node.rogue.geonode.location}local/lib/python2.7/site-packages/httplib2/cacerts.txt"
+      node.certs.each{ |cert|
+        `cat #{cert} >> #{cacerts}` if !IO.read(cacerts).include?(IO.read(cert))
+      }
+    end
+
+    `service nginx restart`
+    `service tomcat7 restart && sleep 20`
+
+    update_layers = shell_out("cd #{new_resource.rogue_geonode_location} && #{django_command('updatelayers', ['--ignore-errors'])}")
+    Chef::Log.error("Retried update_layers stderr: #{update_layers.stderr}. stdout: #{update_layers.stdout}")
+    new_resource.updated_by_last_action(true) if update_layers.exitstatus == 0
   end
-  new_resource.updated_by_last_action(true)
+
+  # execute "update_layers" do
+    # command django_command('updatelayers', ['--ignore-errors'])
+    # cwd new_resource.rogue_geonode_location
+    # action :run
+    # retries 8
+  # end
 end
 
-action :create_postgis_datastore do
-  template "/tmp/newDataStore.xml" do
-    source "newDataSource.xml.erb"
-    variables ({ :settings => new_resource.settings })
+action :create_postgis_datastore do  
+  uri = URI.parse("#{new_resource.settings['OGC_SERVER']['LOCATION']}rest/workspaces/geonode/datastores.json")
+  http = Net::HTTP.new(uri.host, uri.port)
+
+  if node.ssl
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
   end
 
-  credentials = new_resource.settings["OGC_SERVER"]["USER"] + ':' + new_resource.settings["OGC_SERVER"]["PASSWORD"]
-  bash "create_geonode_imports_datastore" do
-    code "curl -v -u #{credentials} -XPOST -H 'Content-type: text/xml' -d @/tmp/newDataStore.xml #{new_resource.settings['OGC_SERVER']['LOCATION']}rest/workspaces/geonode/datastores.xml"
-    ignore_failure true
-    not_if do
-  	  uri = URI.parse("#{new_resource.settings['OGC_SERVER']['LOCATION']}rest/workspaces/geonode/datastores.json")
-  	  req = Net::HTTP::Get.new(uri.to_s)
-  	  req.basic_auth new_resource.settings['OGC_SERVER']['USER'], new_resource.settings['OGC_SERVER']['PASSWORD']
-  	  resp = Net::HTTP.new(uri.host, uri.port).start{|http| http.request(req)}
-  	  resp.body.include? 'geonode_imports'
+  req = Net::HTTP::Get.new(uri.request_uri)
+  req.basic_auth(new_resource.settings['OGC_SERVER']['USER'], new_resource.geoserver_password)
+  resp = http.request(req)
+
+  unless resp.body.include?('geonode_imports')
+    template "#{Chef::Config[:file_cache_path]}/newDataStore.xml" do
+      source "newDataSource.xml.erb"
+      variables ({ :settings => new_resource.settings, :data_store_password => new_resource.data_store_password })
     end
-    retries 8
-    retry_delay 10
-  end
 
-  file "/tmp/newDataStore.xml" do
-    action :delete
-  end
+    credentials = "#{new_resource.settings["OGC_SERVER"]["USER"]}:'#{new_resource.geoserver_password}'"
 
-  new_resource.updated_by_last_action(true)
+    bash "create_geonode_imports_datastore" do
+      code "curl -v -u #{credentials} -XPOST -H 'Content-type: text/xml' -d @#{Chef::Config[:file_cache_path]}/newDataStore.xml #{new_resource.settings['OGC_SERVER']['LOCATION']}rest/workspaces/geonode/datastores.xml"
+      retries 8
+      retry_delay 10
+    end
+
+    new_resource.updated_by_last_action(true)
+  end
 end
 
 action :build_html_docs do
   bash "build docs" do
     code "source #{new_resource.virtual_env_location}/bin/activate && cd #{new_resource.rogue_geonode_location}/docs && make html && chmod 574 build -R && chown www-data:#{node['rogue']['user']['username']} build -R"
     only_if { node['rogue']['install_docs'] }
+    not_if { ::Dir.exists?("#{new_resource.rogue_geonode_location}/docs/build/html") }
   end
 end
 

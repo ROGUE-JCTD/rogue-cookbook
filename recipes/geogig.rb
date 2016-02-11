@@ -7,7 +7,7 @@ end
 
 execute "install_GeoGig" do
   command "mvn clean install -DskipTests"
-  cwd ::File.join(node['rogue']['geogig']['location'], 'src/parent')
+  cwd "#{node['rogue']['geogig']['location']}/src/parent"
   user 'root'
   action :run
   retries 1
@@ -37,9 +37,9 @@ end
 
 
 if node['rogue']['geogig']['build_from_source']
-  geogig_home = File.join(node['rogue']['geogig']['location'], 'src/cli-app/target/geogig')
+  geogig_home = "#{node['rogue']['geogig']['location']}/src/cli-app/target/geogig"
 else
-  geogig_home = File.join(node['rogue']['geogig']['location'])
+  geogig_home = node['rogue']['geogig']['location']
 end
 
 file "/etc/profile.d/geogig.sh" do
@@ -51,8 +51,9 @@ end
 node['rogue']['geogig']['global_configuration'].each do |section, values|
     values.each do |key, value|
       bash "geogig global config #{section}.#{key} #{value}" do
-        code "#{File.join(geogig_home, '/bin/geogig')} config --global #{section}.#{key} #{value}"
-        user node['tomcat']['user']
+        code "#{geogig_home}/bin/geogig config --global #{section}.#{key} #{value}"
+        user "rogue"
+        not_if "su rogue -c '#{geogig_home}/bin/geogig config --global --get #{section}.#{key} | grep #{value}'"
       end
     end
 end
@@ -66,7 +67,7 @@ end
 
 execute "build the geoserver_ext" do
   command "mvn clean install -DskipTests"
-  cwd ::File.join(node['rogue']['geoeserver-exts']['location'], 'geogig')
+  cwd "#{node['rogue']['geoeserver-exts']['location']}/geogig"
   user 'root'
   action :run
   only_if { node['rogue']['geogig']['build_from_source'] }

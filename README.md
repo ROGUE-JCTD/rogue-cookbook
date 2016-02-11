@@ -2,6 +2,14 @@ ROGUE Cookbook
 ===============
 A stand-alone chef cookbook for the ROGUE-JCTD project.  This cookbook can be used to install and configure all of the ROGUE components.
 
+Getting started
+---------------
+To create a VM from this cookbook, you will need the [Vagrant Berkshelf Plugin](https://github.com/berkshelf/vagrant-berkshelf) and [vagrant-omnibus](https://github.com/chef/vagrant-omnibus). Once these are installed, getting the VM up and running is as easy as invoking
+```
+$ vagrant up
+```
+When this has finished running, GeoNode will be available at http://192.168.99.101/.
+
 Requirements
 ------------
 Chef community cookbook requirements.

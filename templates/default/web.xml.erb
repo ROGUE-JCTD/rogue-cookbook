@@ -47,14 +47,14 @@
 
     <context-param>
       <param-name>PROXY_BASE_URL</param-name>
-      <param-value><%=node['rogue']['geoserver']['url']%></param-value>
+      <param-value><%= @url %></param-value>
     </context-param>
 
 
-    <% if node['rogue']['geoserver']['data_dir'] %>
+    <% if @data_dir %>
         <context-param>
            <param-name>GEOSERVER_DATA_DIR</param-name>
-            <param-value><%= node['rogue']['geoserver']['data_dir'] %></param-value>
+            <param-value><%= @data_dir %></param-value>
         </context-param>
     <% end %>
     
@@ -89,7 +89,7 @@
 
    <filter>
     <filter-name>Set Character Encoding</filter-name>
-    <filter-class>org.vfny.geoserver.filters.SetCharacterEncodingFilter</filter-class>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
     <init-param>
       <param-name>encoding</param-name>
       <param-value>UTF-8</param-value>
@@ -105,7 +105,7 @@
               -->
          <param-name>compressed-types</param-name>
 
-         <% if node['rogue']['geoserver']['gzip'] %>
+         <% if @enable_gzip %>
          <param-value>text/.*,.*xml.*,application/json,application/x-javascript</param-value>
          <% else %>
          <param-value></param-value>

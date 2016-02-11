@@ -9,7 +9,7 @@
     <connectionParameters>
         <entry key="Connection timeout">20</entry>
         <entry key="port"><%= @settings['DATABASES']['geonode_imports']['port'] %></entry>
-        <entry key="passwd"><%= @settings['DATABASES']['geonode_imports']['password'] %></entry>
+        <entry key="passwd"><%= @data_store_password %></entry>
         <entry key="dbtype">postgis</entry>
         <entry key="host"><%= @settings['DATABASES']['geonode_imports']['host'] %></entry>
         <entry key="validate connections">true</entry>
